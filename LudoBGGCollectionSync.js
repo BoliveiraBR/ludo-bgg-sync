@@ -2,6 +2,7 @@
 
 // --- Dependências
 const fs = require('fs');
+require('dotenv').config();
 const axios = require('axios');
 const xml2js = require('xml2js');
 const getAccessToken = require('./ludopediaOAuth');
@@ -190,8 +191,8 @@ function compareBaseCollectionsByName(bggCollection, ludoCollection) {
 // -------------------- Execução Principal --------------------
 
 async function main() {
-  // const accessToken = await getAccessToken(); // quando quiser usar OAuth real
-  const accessToken = '697d3533041480e6cea91a762f559065'; // ⚠️ token temporário
+  const accessToken = await getAccessToken(); // quando quiser usar OAuth real
+  const accessToken = process.env.LUDO_TOKEN;
   await getBGGCollection();
   await getLudopediaCollectionWithToken(accessToken);
   compareBaseCollectionsByName(allBGGCollection, allLudoCollection);
