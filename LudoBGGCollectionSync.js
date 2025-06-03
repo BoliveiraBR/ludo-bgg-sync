@@ -7,7 +7,7 @@ const axios = require('axios');
 const xml2js = require('xml2js');
 const getAccessToken = require('./ludopediaOAuth');
 
-const ID_BGG = 'acemanbr';
+const ID_BGG = process.env.ID_BGG;
 const parser = new xml2js.Parser();
 
 let allBGGCollection = [];
@@ -144,6 +144,31 @@ function printCollectionStats(name, collection) {
   console.log('');
 }
 
+
+// -------------------- Carregar coleções de arquivo --------------------
+
+function loadBGGCollectionFromFile() {
+  try {
+    let data = fs.readFileSync('BGGCollection.txt', { encoding: 'utf8' });
+    data = data.replace(/^\uFEFF/, ''); // remove BOM
+    return JSON.parse(data);
+  } catch (error) {
+    console.error('❌ Erro ao carregar BGGCollection.txt:', error.message);
+    return [];
+  }
+}
+
+function loadLudopediaCollectionFromFile() {
+  try {
+    let data = fs.readFileSync('LudopediaCollection.txt', { encoding: 'utf8' });
+    data = data.replace(/^\uFEFF/, ''); // remove BOM
+    return JSON.parse(data);
+  } catch (error) {
+    console.error('❌ Erro ao carregar LudopediaCollection.txt:', error.message);
+    return [];
+  }
+}
+
 // -------------------- Compara Jogos pelo Nome --------------------
 
 function compareBaseCollectionsByName(bggCollection, ludoCollection) {
@@ -191,11 +216,13 @@ function compareBaseCollectionsByName(bggCollection, ludoCollection) {
 // -------------------- Execução Principal --------------------
 
 async function main() {
-  const accessToken = await getAccessToken(); // quando quiser usar OAuth real
-  const accessToken = process.env.LUDO_TOKEN;
-  await getBGGCollection();
-  await getLudopediaCollectionWithToken(accessToken);
-  compareBaseCollectionsByName(allBGGCollection, allLudoCollection);
+  //const accessToken = await getAccessToken(); // quando quiser usar OAuth real
+  const accessToken = process.env.LUDO_ACCESS_TOKEN;
+  // await getBGGCollection();
+  // await getLudopediaCollectionWithToken(accessToken);
+  const bggFromFile = loadBGGCollectionFromFile();
+  const ludoFromFile = loadLudopediaCollectionFromFile();
+  compareBaseCollectionsByName(bggFromFile, ludoFromFile);
   //printCollectionStats('BGG', allBGGCollection);
   //printCollectionStats('Ludopedia', allLudoCollection);
 }
