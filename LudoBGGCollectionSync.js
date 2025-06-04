@@ -10,6 +10,11 @@ const getAccessToken = require('./ludopediaOAuth');
 const ID_BGG = process.env.ID_BGG;
 const parser = new xml2js.Parser();
 
+const {
+  buscarMatchesViaChatGPT,
+  getBaseNames
+} = require('./ChatGPTMatch');
+
 let allBGGCollection = [];
 let allLudoCollection = [];
 
@@ -216,6 +221,7 @@ function compareBaseCollectionsByName(bggCollection, ludoCollection) {
 // -------------------- Execução Principal --------------------
 
 async function main() {
+  /*
   //const accessToken = await getAccessToken(); // quando quiser usar OAuth real
   const accessToken = process.env.LUDO_ACCESS_TOKEN;
   // await getBGGCollection();
@@ -224,7 +230,62 @@ async function main() {
   const ludoFromFile = loadLudopediaCollectionFromFile();
   compareBaseCollectionsByName(bggFromFile, ludoFromFile);
   //printCollectionStats('BGG', allBGGCollection);
-  //printCollectionStats('Ludopedia', allLudoCollection);
+  //printCollectionStats('Ludopedia', allLudoCollection);*/
+
+  const bggFromFile = loadBGGCollectionFromFile();
+  const ludoFromFile = loadLudopediaCollectionFromFile();
+
+  compareBaseCollectionsByName(bggFromFile, ludoFromFile);
+
+  const bggNames = getBaseNames(bggFromFile, 'subtype', 'base');
+  const ludoNames = getBaseNames(ludoFromFile, 'type', 'base');
+
+  const bggSet = new Set(bggNames.map(n => n.toLowerCase()));
+  const ludoSet = new Set(ludoNames.map(n => n.toLowerCase()));
+
+  const onlyInBGG = bggNames.filter(n => !ludoSet.has(n.toLowerCase()));
+  const onlyInLudo = ludoNames.filter(n => !bggSet.has(n.toLowerCase()));
+
+  const matches = [...bggNames.filter(n => ludoSet.has(n.toLowerCase()))];
+
+  const extraMatches = await buscarMatchesViaChatGPT(onlyInBGG, onlyInLudo);
+
+// Atualiza os sets removendo os jogos encontrados via ChatGPT
+const matchedFromBGG = new Set(extraMatches.map(m => m[1].toLowerCase()));
+const matchedFromLudo = new Set(extraMatches.map(m => m[0].toLowerCase()));
+
+const updatedOnlyInBGG = onlyInBGG.filter(n => !matchedFromBGG.has(n.toLowerCase()));
+const updatedOnlyInLudo = onlyInLudo.filter(n => !matchedFromLudo.has(n.toLowerCase()));
+
+const allMatches = [...matches, ...extraMatches];
+
+// 📝 Atualizar arquivo CollectionComparison.txt
+const outputLines = [];
+
+outputLines.push('🧩 Jogos em comum:');
+allMatches.forEach(name => {
+  if (Array.isArray(name)) {
+    outputLines.push(`- ${name[0]} ⇄ ${name[1]}`);
+  } else {
+    outputLines.push(`- ${name}`);
+  }
+});
+outputLines.push('');
+
+outputLines.push('📘 Somente no BGG:');
+updatedOnlyInBGG.forEach(name => outputLines.push(`- ${name}`));
+outputLines.push('');
+
+outputLines.push('📙 Somente na Ludopedia:');
+updatedOnlyInLudo.forEach(name => outputLines.push(`- ${name}`));
+
+fs.writeFileSync('CollectionComparison.txt', '\uFEFF' + outputLines.join('\n'), { encoding: 'utf8' });
+
+console.log(`\n🔁 ${extraMatches.length} matches extras sugeridos via ChatGPT`);
+console.log(`✔ Total de jogos base em comum: ${allMatches.length}`);
+console.log(`📘 Somente no BGG: ${updatedOnlyInBGG.length}`);
+console.log(`📙 Somente na Ludopedia: ${updatedOnlyInLudo.length}`);
+console.log('📄 Resultado salvo em CollectionComparison.txt');
 }
 
 main();

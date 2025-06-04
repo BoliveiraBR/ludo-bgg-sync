@@ -3,7 +3,7 @@
     "axios": "^1.4.0",
     "cors-anywhere": "^0.4.4",
     "dotenv": "^16.5.0",
-    "openai": "^5.1.0",
+    "openai": "^4.104.0",
     "xml2js": "^0.6.0"
   },
   "name": "bgg-ludopedia-sync",
