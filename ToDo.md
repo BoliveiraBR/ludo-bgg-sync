@@ -12,7 +12,6 @@
 
 ### Média Prioridade
 - [ ] Adicionar suporte a comparação de partidas jogadas
-- [ ] Implementar interface CLI mais amigável
 - [ ] Adicionar progress bars para operações longas
 - [ ] Criar sistema de backup automático dos arquivos de coleção
 - [ ] Adicionar validação de schema para dados das APIs

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BGG-Ludopedia Sync</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .loading { opacity: 0.5; pointer-events: none; }
+        .game-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .game-item {
+            padding: 5px 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .game-item.expansion {
+            background-color: #f8f9fa;
+        }
+        .game-type-badge {
+            font-size: 0.8em;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 5px;
+        }
+        .badge-base {
+            background-color: #e7f5ff;
+            color: #1971c2;
+        }
+        .badge-expansion {
+            background-color: #fff3bf;
+            color: #e67700;
+        }
+        .filter-link {
+            color: inherit;
+            text-decoration: none;
+        }
+        .filter-link:hover {
+            color: #0d6efd;
+            text-decoration: underline;
+        }
+        .filter-link.active {
+            color: #0d6efd;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <span class="navbar-brand">🎲 BGG-Ludopedia Sync</span>
+            <button class="btn btn-link text-white" id="configBtn" title="Configurações">
+                <i class="bi bi-gear-fill"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Modal de Configurações -->
+    <div class="modal fade" id="configModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Configurações</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="configForm">
+                        <div class="mb-3">
+                            <label for="bggUser" class="form-label">Usuário BGG</label>
+                            <input type="text" class="form-control" id="bggUser" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Access Token Ludopedia</label>
+                            <div class="d-flex gap-2">
+                                <input type="text" class="form-control" id="ludoToken" readonly>
+                                <button type="button" class="btn btn-primary" id="ludoAuthBtn">
+                                    <i class="bi bi-box-arrow-in-right"></i>
+                                    Acesso Ludopedia
+                                </button>
+                            </div>
+                            <small class="text-muted">Token será atualizado após autenticação na Ludopedia</small>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="saveConfigBtn">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <!-- Opções de Carregamento -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Carregar Coleções</h5>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="loadType" id="loadFile" value="file" checked>
+                            <label class="form-check-label" for="loadFile">
+                                Carregar do arquivo
+                            </label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="loadType" id="loadApi" value="api">
+                            <label class="form-check-label" for="loadApi">
+                                Carregar via API
+                            </label>
+                        </div>
+                        <button id="loadBtn" class="btn btn-primary">
+                            Carregar Coleções
+                        </button>
+                        <div id="loadingIndicator" class="mt-2" style="display: none;">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Carregando...</span>
+                            </div>
+                            <span class="ms-2">Carregando coleções...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visualização das Coleções -->
+        <div class="row">
+            <!-- Coleção BGG -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Coleção BGG</h5>
+                        <div class="d-flex justify-content-between mb-2">
+                            <small>
+                                <a href="#" class="filter-link" data-collection="bgg" data-filter="all">
+                                    Total: <span id="bggTotal">0</span> jogos
+                                </a>
+                            </small>
+                            <div>
+                                <small>
+                                    <a href="#" class="filter-link" data-collection="bgg" data-filter="base">
+                                        Base: <span id="bggBase">0</span>
+                                    </a>
+                                </small>
+                                <small class="ms-2">
+                                    <a href="#" class="filter-link" data-collection="bgg" data-filter="expansion">
+                                        Expansões: <span id="bggExp">0</span>
+                                    </a>
+                                </small>
+                            </div>
+                        </div>
+                        <div id="bggList" class="game-list">
+                            <!-- Lista de jogos do BGG será inserida aqui -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coleção Ludopedia -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Coleção Ludopedia</h5>
+                        <div class="d-flex justify-content-between mb-2">
+                            <small>
+                                <a href="#" class="filter-link" data-collection="ludo" data-filter="all">
+                                    Total: <span id="ludoTotal">0</span> jogos
+                                </a>
+                            </small>
+                            <div>
+                                <small>
+                                    <a href="#" class="filter-link" data-collection="ludo" data-filter="base">
+                                        Base: <span id="ludoBase">0</span>
+                                    </a>
+                                </small>
+                                <small class="ms-2">
+                                    <a href="#" class="filter-link" data-collection="ludo" data-filter="expansion">
+                                        Expansões: <span id="ludoExp">0</span>
+                                    </a>
+                                </small>
+                            </div>
+                        </div>
+                        <div id="ludoList" class="game-list">
+                            <!-- Lista de jogos da Ludopedia será inserida aqui -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="results" class="row mt-4" style="display: none;">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">🎯 Matches</h5>
+                        <div id="matchesList" class="list-group">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">⚠️ Diferenças</h5>
+                        <div id="differencesList" class="list-group">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Configuração do modal
+        const configModal = new bootstrap.Modal(document.getElementById('configModal'));
+        
+        // Estado global para armazenar as coleções
+        let currentState = {
+            bggCollection: [],
+            ludoCollection: [],
+            filters: {
+                bgg: 'all',
+                ludo: 'all'
+            }
+        };
+
+        // Adiciona listeners para os links de filtro
+        document.querySelectorAll('.filter-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const collection = e.target.closest('[data-collection]').dataset.collection;
+                const filter = e.target.closest('[data-filter]').dataset.filter;
+                
+                // Atualiza estado do filtro
+                currentState.filters[collection] = filter;
+                
+                // Atualiza visual dos links
+                document.querySelectorAll(`[data-collection="${collection}"]`).forEach(el => {
+                    el.classList.toggle('active', el.dataset.filter === filter);
+                });
+                
+                // Reexibe a lista filtrada
+                updateGameList(collection);
+            });
+        });
+
+        // Função para atualizar a lista de jogos com filtro
+        function updateGameList(collection) {
+            const filter = currentState.filters[collection];
+            const games = currentState[collection === 'bgg' ? 'bggCollection' : 'ludoCollection'];
+            const listElement = document.getElementById(collection === 'bgg' ? 'bggList' : 'ludoList');
+            
+            const filteredGames = games.filter(game => {
+                if (filter === 'all') return true;
+                return filter === 'expansion' ? game.isExpansion : !game.isExpansion;
+            });
+            
+            listElement.innerHTML = filteredGames
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map(game => `
+                    <div class="game-item ${game.isExpansion ? 'expansion' : ''}">
+                        ${game.name}
+                        <span class="game-type-badge badge-${game.isExpansion ? 'expansion' : 'base'}">
+                            ${game.isExpansion ? 'Expansão' : 'Base'}
+                        </span>
+                    </div>
+                `).join('');
+        }
+
+        document.getElementById('loadBtn').addEventListener('click', async () => {
+            const loadType = document.querySelector('input[name="loadType"]:checked').value;
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const loadBtn = document.getElementById('loadBtn');
+
+            try {
+                loadBtn.disabled = true;
+                loadingIndicator.style.display = 'block';
+
+                const response = await fetch('/api/collections', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ loadType })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erro ao carregar coleções');
+                }
+
+                const data = await response.json();
+                displayCollections(data.bggCollection, data.ludoCollection);
+            } catch (error) {
+                alert('Erro: ' + error.message);
+            } finally {
+                loadBtn.disabled = false;
+                loadingIndicator.style.display = 'none';
+            }
+        });
+
+        function displayCollections(bggCollection, ludoCollection) {
+            // Atualiza o estado global
+            currentState.bggCollection = bggCollection;
+            currentState.ludoCollection = ludoCollection;
+            
+            // Contadores BGG
+            const bggBase = bggCollection.filter(g => !g.isExpansion).length;
+            const bggExp = bggCollection.filter(g => g.isExpansion).length;
+            document.getElementById('bggTotal').textContent = bggCollection.length;
+            document.getElementById('bggBase').textContent = bggBase;
+            document.getElementById('bggExp').textContent = bggExp;
+
+            // Contadores Ludopedia
+            const ludoBase = ludoCollection.filter(g => !g.isExpansion).length;
+            const ludoExp = ludoCollection.filter(g => g.isExpansion).length;
+            document.getElementById('ludoTotal').textContent = ludoCollection.length;
+            document.getElementById('ludoBase').textContent = ludoBase;
+            document.getElementById('ludoExp').textContent = ludoExp;
+
+            // Atualiza as listas usando os filtros atuais
+            updateGameList('bgg');
+            updateGameList('ludo');
+        }
+
+        // Carrega as configurações ao iniciar
+        async function loadConfig() {
+            try {
+                const response = await fetch('/api/config');
+                if (!response.ok) throw new Error('Erro ao carregar configurações');
+                
+                const config = await response.json();
+                document.getElementById('bggUser').value = config.BGG_USER || '';
+                document.getElementById('ludoUser').value = config.LUDO_USER || '';
+                document.getElementById('ludoToken').value = config.LUDO_ACCESS_TOKEN || '';
+            } catch (error) {
+                console.error('Error loading config:', error);
+            }
+        }
+
+        // Abre o modal de configurações
+        document.getElementById('configBtn').addEventListener('click', () => {
+            loadConfig();
+            configModal.show();
+        });
+
+        // Inicia autenticação Ludopedia
+        document.getElementById('ludoAuthBtn').addEventListener('click', async () => {
+            try {
+                const response = await fetch('/api/auth/ludopedia');
+                if (!response.ok) throw new Error('Erro ao iniciar autenticação');
+                
+                const { authUrl } = await response.json();
+                const authWindow = window.open(authUrl, 'LudopediaAuth', 
+                    'width=600,height=800,menubar=no,toolbar=no');
+                
+                // Escuta a mensagem de sucesso
+                window.addEventListener('message', async (event) => {
+                    if (event.data.type === 'AUTH_SUCCESS') {
+                        authWindow.close();
+                        document.getElementById('ludoToken').value = event.data.token;
+                        await loadConfig();
+                    }
+                }, { once: true });
+            } catch (error) {
+                console.error('Error starting auth:', error);
+                alert('Erro ao iniciar autenticação: ' + error.message);
+            }
+        });
+
+        // Salva as configurações
+        document.getElementById('saveConfigBtn').addEventListener('click', async () => {
+            const bggUser = document.getElementById('bggUser').value;
+            const ludoToken = document.getElementById('ludoToken').value;
+
+            try {
+                const response = await fetch('/api/config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        BGG_USER: bggUser,
+                        LUDO_ACCESS_TOKEN: ludoToken
+                    })
+                });
+
+                if (!response.ok) throw new Error('Erro ao salvar configurações');
+                configModal.hide();
+            } catch (error) {
+                console.error('Error saving config:', error);
+                alert('Erro ao salvar configurações: ' + error.message);
+            }
+        });
+
+        // Carrega as configurações iniciais
+        loadConfig();
+    </script>
+</body>
+</html>
