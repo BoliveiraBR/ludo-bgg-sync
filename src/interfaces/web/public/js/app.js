@@ -4,6 +4,7 @@ let bggTotal, bggBase, bggExp, ludoTotal, ludoBase, ludoExp;
 let configModal, configBtn, saveConfigBtn, ludoAuthBtn, bggUserInput, ludoTokenInput, ludoUserDisplay;
 let selectAllMatches, acceptMatchesBtn, matchesList, compareWithAIBtn, aiMatchesList;
 let perfectMatchesCount, onlyBGGCount, onlyLudoCount, previousMatchesCount;
+let manualBggList, manualLudoList, manualBggCount, manualLudoCount, acceptManualMatchBtn;
 let isLoading = false;
 let currentBGGGames = [];
 let currentLudoGames = [];
@@ -11,6 +12,8 @@ let currentMatches = [];
 let currentAIMatches = [];
 let selectedMatches = new Set();
 let selectedAIMatches = new Set();
+let selectedManualBggGame = null;
+let selectedManualLudoGame = null;
 
 // Inicializar elementos quando o DOM estiver carregado
 document.addEventListener('DOMContentLoaded', () => {
@@ -50,6 +53,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Elementos da aba de pareamento com AI
     compareWithAIBtn = document.getElementById('compareWithAIBtn');
     aiMatchesList = document.getElementById('aiMatchesList');
+
+    // Elementos da seção Manual Matching
+    manualBggList = document.getElementById('manualBggList');
+    manualLudoList = document.getElementById('manualLudoList');
+    manualBggCount = document.getElementById('manualBggCount');
+    manualLudoCount = document.getElementById('manualLudoCount');
+    acceptManualMatchBtn = document.getElementById('acceptManualMatchBtn');
 
     // Configurar event listeners
     configBtn.addEventListener('click', () => {
@@ -156,6 +166,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event listeners do pareamento com AI
     document.getElementById('selectAllAIMatches')?.addEventListener('change', handleSelectAllAIMatches);
     document.getElementById('acceptAIMatchesBtn')?.addEventListener('click', handleAcceptAIMatches);
+    
+    // Event listeners do pareamento manual
+    acceptManualMatchBtn?.addEventListener('click', handleAcceptManualMatch);
     
     // Event listener para o botão "Comparar com AI"
     const compareAIBtn = document.getElementById('compareWithAIBtn');
@@ -462,6 +475,9 @@ async function findMatches() {
 
         // Renderizar matches
         renderMatches();
+        
+        // Renderizar listas manuais
+        renderManualLists(data.onlyInBGG, data.onlyInLudo);
     } catch (error) {
         console.error('Error finding matches:', error);
         alert('Erro ao buscar matches: ' + error.message);
@@ -742,6 +758,139 @@ function updateAIAcceptButtonState() {
     const acceptAIMatchesBtn = document.getElementById('acceptAIMatchesBtn');
     if (acceptAIMatchesBtn) {
         acceptAIMatchesBtn.disabled = selectedAIMatches.size === 0;
+    }
+}
+
+// Funções de Manual Matching
+function renderManualLists(onlyBGGGames, onlyLudoGames) {
+    // Renderizar lista BGG
+    renderManualGameList(onlyBGGGames, manualBggList, 'bgg');
+    manualBggCount.textContent = onlyBGGGames.length;
+    
+    // Renderizar lista Ludopedia
+    renderManualGameList(onlyLudoGames, manualLudoList, 'ludo');
+    manualLudoCount.textContent = onlyLudoGames.length;
+    
+    // Reset selections
+    selectedManualBggGame = null;
+    selectedManualLudoGame = null;
+    updateManualAcceptButtonState();
+}
+
+function renderManualGameList(games, container, type) {
+    container.innerHTML = '';
+    
+    if (games.length === 0) {
+        container.innerHTML = `
+            <div class="alert alert-info m-2">
+                <i class="bi bi-info-circle"></i>
+                Nenhum jogo encontrado apenas nesta coleção.
+            </div>`;
+        return;
+    }
+    
+    games.forEach((game, index) => {
+        const div = document.createElement('div');
+        div.className = 'manual-game-item';
+        
+        const radioId = `manual-${type}-${index}`;
+        div.innerHTML = `
+            <div class="d-flex align-items-center">
+                <input class="form-check-input manual-game-radio" type="radio" 
+                       name="manual-${type}" value="${index}" id="${radioId}">
+                <label class="form-check-label flex-grow-1" for="${radioId}">
+                    ${game.name}
+                    ${game.isExpansion ? '<span class="game-type-badge badge-expansion">Expansão</span>' : ''}
+                </label>
+            </div>
+        `;
+        
+        container.appendChild(div);
+        
+        // Event listener para seleção
+        const radio = div.querySelector('.manual-game-radio');
+        radio.addEventListener('change', () => {
+            if (type === 'bgg') {
+                selectedManualBggGame = game;
+                // Remove visual selection from all items
+                container.querySelectorAll('.manual-game-item').forEach(item => item.classList.remove('selected'));
+                div.classList.add('selected');
+            } else {
+                selectedManualLudoGame = game;
+                // Remove visual selection from all items
+                container.querySelectorAll('.manual-game-item').forEach(item => item.classList.remove('selected'));
+                div.classList.add('selected');
+            }
+            updateManualAcceptButtonState();
+        });
+        
+        // Event listener para click no item
+        div.addEventListener('click', (e) => {
+            if (e.target.type !== 'radio') {
+                radio.checked = true;
+                radio.dispatchEvent(new Event('change'));
+            }
+        });
+    });
+}
+
+function updateManualAcceptButtonState() {
+    if (acceptManualMatchBtn) {
+        acceptManualMatchBtn.disabled = !selectedManualBggGame || !selectedManualLudoGame;
+    }
+}
+
+async function handleAcceptManualMatch() {
+    if (!selectedManualBggGame || !selectedManualLudoGame) {
+        alert('Selecione um jogo de cada lista');
+        return;
+    }
+    
+    try {
+        const manualMatch = {
+            bggId: selectedManualBggGame.id,
+            ludoId: selectedManualLudoGame.id,
+            bggName: selectedManualBggGame.name,
+            ludoName: selectedManualLudoGame.name,
+            confidence: 'manual',
+            reasoning: 'Match manual criado pelo usuário'
+        };
+        
+        const response = await fetch('/api/save-manual-match', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ match: manualMatch })
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+        }
+        
+        alert('Match manual criado com sucesso!');
+        
+        // Reset selections
+        selectedManualBggGame = null;
+        selectedManualLudoGame = null;
+        
+        // Clear radio selections
+        document.querySelectorAll('input[name="manual-bgg"]').forEach(radio => radio.checked = false);
+        document.querySelectorAll('input[name="manual-ludo"]').forEach(radio => radio.checked = false);
+        
+        // Remove visual selections
+        manualBggList.querySelectorAll('.manual-game-item').forEach(item => item.classList.remove('selected'));
+        manualLudoList.querySelectorAll('.manual-game-item').forEach(item => item.classList.remove('selected'));
+        
+        updateManualAcceptButtonState();
+        
+        // Recarregar matches para atualizar estatísticas e listas
+        findMatches();
+        
+    } catch (error) {
+        console.error('Error creating manual match:', error);
+        alert('Erro ao criar match manual: ' + error.message);
     }
 }
 

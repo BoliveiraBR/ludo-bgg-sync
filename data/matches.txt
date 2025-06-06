@@ -1234,5 +1234,13 @@
     "bggName": "Time's Up! Edición Amarilla",
     "ludoName": "Time's Up! Party",
     "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "227072",
+    "ludoId": 15130,
+    "bggName": "The Chameleon",
+    "ludoName": "Infiltrado",
+    "confidence": "manual",
+    "reasoning": "Match manual criado pelo usuário"
   }
 ]

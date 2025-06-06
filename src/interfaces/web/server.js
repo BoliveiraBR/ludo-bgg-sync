@@ -549,6 +549,34 @@ app.post('/api/match-collections-ai', async (req, res) => {
   }
 });
 
+// Rota para salvar matches regulares aceitos
+app.post('/api/accept-matches', async (req, res) => {
+  try {
+    const { matches } = req.body;
+    const matchesPath = path.join(__dirname, '../../../data/matches.txt');
+
+    // Ler matches existentes ou criar array vazio
+    let existingMatches = [];
+    try {
+      const content = await fs.readFile(matchesPath, 'utf8');
+      existingMatches = JSON.parse(content);
+    } catch (error) {
+      console.log('Arquivo de matches não encontrado, será criado um novo');
+    }
+
+    // Adicionar novos matches
+    existingMatches.push(...matches);
+
+    // Salvar arquivo atualizado
+    await fs.writeFile(matchesPath, JSON.stringify(existingMatches, null, 2));
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error saving matches:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Rota para salvar matches da AI
 app.post('/api/save-matches-ai', async (req, res) => {
   try {
@@ -573,6 +601,49 @@ app.post('/api/save-matches-ai', async (req, res) => {
     res.json({ success: true });
   } catch (error) {
     console.error('Error saving AI matches:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Rota para salvar match manual
+app.post('/api/save-manual-match', async (req, res) => {
+  try {
+    const { match } = req.body;
+    const matchesPath = path.join(__dirname, '../../../data/matches.txt');
+
+    // Validar dados do match
+    if (!match || !match.bggId || !match.ludoId || !match.bggName || !match.ludoName) {
+      return res.status(400).json({ error: 'Dados do match inválidos' });
+    }
+
+    // Ler matches existentes ou criar array vazio
+    let existingMatches = [];
+    try {
+      const content = await fs.readFile(matchesPath, 'utf8');
+      existingMatches = JSON.parse(content);
+    } catch (error) {
+      console.log('Arquivo de matches não encontrado, será criado um novo');
+    }
+
+    // Verificar se o match já existe (evitar duplicatas)
+    const matchExists = existingMatches.some(existingMatch => 
+      existingMatch.bggId === match.bggId && existingMatch.ludoId === match.ludoId
+    );
+
+    if (matchExists) {
+      return res.status(409).json({ error: 'Este match já existe' });
+    }
+
+    // Adicionar novo match manual
+    existingMatches.push(match);
+
+    // Salvar arquivo atualizado
+    await fs.writeFile(matchesPath, JSON.stringify(existingMatches, null, 2));
+
+    console.log(`✅ Match manual salvo: ${match.bggName} ↔ ${match.ludoName}`);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error saving manual match:', error);
     res.status(500).json({ error: error.message });
   }
 });

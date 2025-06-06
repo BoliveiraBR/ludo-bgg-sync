@@ -113,6 +113,22 @@
             border: none;
             box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075), 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
         }
+        .manual-game-item {
+            padding: 8px 12px;
+            border-bottom: 1px solid #dee2e6;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .manual-game-item:hover {
+            background-color: #f8f9fa;
+        }
+        .manual-game-item.selected {
+            background-color: #e7f3ff;
+            border-left: 3px solid #0d6efd;
+        }
+        .manual-game-radio {
+            margin-right: 8px;
+        }
     </style>
 </head>
 <body>
@@ -406,6 +422,66 @@
                                 </div>
                                 <div id="aiMatchesList" class="game-list">
                                     <!-- Lista de matches da AI será inserida aqui -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção Matches Manuais -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <i class="bi bi-hand-index"></i>
+                                    Matches Manuais
+                                </h5>
+                                
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <p class="text-muted mb-0">Selecione um jogo de cada lista para criar um match manual.</p>
+                                    <button class="btn btn-primary" id="acceptManualMatchBtn" disabled>
+                                        <i class="bi bi-check2-all"></i>
+                                        Aceitar Selecionados
+                                    </button>
+                                </div>
+                                
+                                <div class="row">
+                                    <!-- Somente BGG -->
+                                    <div class="col-md-6">
+                                        <div class="card bg-light">
+                                            <div class="card-header">
+                                                <h6 class="mb-0">
+                                                    <i class="bi bi-dice-6-fill text-warning"></i>
+                                                    Somente BGG
+                                                    <span class="badge bg-warning" id="manualBggCount">0</span>
+                                                </h6>
+                                            </div>
+                                            <div class="card-body p-0">
+                                                <div id="manualBggList" class="game-list" style="max-height: 300px;">
+                                                    <!-- Lista de jogos somente BGG será inserida aqui -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Somente Ludopedia -->
+                                    <div class="col-md-6">
+                                        <div class="card bg-light">
+                                            <div class="card-header">
+                                                <h6 class="mb-0">
+                                                    <i class="bi bi-puzzle-fill text-info"></i>
+                                                    Somente Ludopedia
+                                                    <span class="badge bg-info" id="manualLudoCount">0</span>
+                                                </h6>
+                                            </div>
+                                            <div class="card-body p-0">
+                                                <div id="manualLudoList" class="game-list" style="max-height: 300px;">
+                                                    <!-- Lista de jogos somente Ludopedia será inserida aqui -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
