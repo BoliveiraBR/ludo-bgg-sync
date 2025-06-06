@@ -546,10 +546,10 @@ async function findAIMatches() {
         compareWithAIBtn.disabled = true;
         
         // Mostrar mensagem de status inicial
-        aiStatusMessage.textContent = 'Iniciando análise com ChatGPT...';
+        //aiStatusMessage.textContent = 'Aguardando análise do ChatGPT...';
         aiStatusMessage.style.display = 'block';
         
-        aiStatusMessage.textContent = 'Preparando dados para análise...';
+        //aiStatusMessage.textContent = 'Preparando dados para análise...';
         const response = await fetch('/api/match-collections-ai', {
             method: 'POST',
             headers: {
