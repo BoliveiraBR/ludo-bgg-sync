@@ -12,7 +12,9 @@ const fs = require('fs').promises;
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(express.json());
+// Aumentar limite do body parser
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Rota principal
@@ -89,9 +91,21 @@ app.post('/api/collections', async (req, res) => {
         ludoApi.fetchCollection()
       ]);
     } else {
+      // Carregar credenciais do arquivo
+      const credentialsPath = path.join(__dirname, '../../../data/credentials.txt');
+      const credentials = JSON.parse(await fs.readFile(credentialsPath, 'utf8'));
+
+      if (!credentials.BGG_USER || !credentials.LUDO_USER) {
+        throw new Error('Credenciais de usuário não encontradas');
+      }
+
+      // Carregar do arquivo usando os nomes específicos dos usuários
+      const bggFilename = `BGGCollection-${credentials.BGG_USER}.txt`;
+      const ludoFilename = `LudopediaCollection-${credentials.LUDO_USER}.txt`;
+
       // Carregar do arquivo
-      bggCollection = CollectionLoader.loadFromFile('BGGCollection.txt');
-      ludoCollection = CollectionLoader.loadFromFile('LudopediaCollection.txt');
+      bggCollection = CollectionLoader.loadFromFile(bggFilename);
+      ludoCollection = CollectionLoader.loadFromFile(ludoFilename);
     }
     
     // Garante que os campos de tipo estejam consistentes
@@ -205,12 +219,29 @@ app.get('/callback', async (req, res) => {
     const credentialsPath = path.join(__dirname, '../../../data/credentials.txt');
     const credentials = JSON.parse(await fs.readFile(credentialsPath, 'utf8'));
     credentials.LUDO_ACCESS_TOKEN = tokenResponse.data.access_token;
+
+    // Buscar o usuário da Ludopedia
+    try {
+      const userResponse = await axios.get('https://ludopedia.com.br/api/v1/me', {
+        headers: {
+          Authorization: `Bearer ${tokenResponse.data.access_token}`
+        }
+      });
+      credentials.LUDO_USER = userResponse.data.usuario;
+    } catch (error) {
+      console.error('Erro ao buscar usuário da Ludopedia:', error);
+    }
+
     await fs.writeFile(credentialsPath, JSON.stringify(credentials, null, 2));
 
     // Fecha a janela e notifica a janela principal
     res.send(`
       <script>
-        window.opener.postMessage({ type: 'AUTH_SUCCESS', token: '${tokenResponse.data.access_token}' }, '*');
+        window.opener.postMessage({ 
+          type: 'AUTH_SUCCESS', 
+          token: '${tokenResponse.data.access_token}',
+          user: '${credentials.LUDO_USER || ''}'
+        }, '*');
         window.close();
       </script>
     `);
@@ -234,6 +265,34 @@ app.get('/callback', async (req, res) => {
         </body>
       </html>
     `);
+  }
+});
+
+// Rota para salvar coleções
+app.post('/api/save-collections', async (req, res) => {
+  try {
+    // Carregar credenciais do arquivo
+    const credentialsPath = path.join(__dirname, '../../../data/credentials.txt');
+    const credentials = JSON.parse(await fs.readFile(credentialsPath, 'utf8'));
+
+    if (!credentials.BGG_USER || !credentials.LUDO_USER) {
+      throw new Error('Credenciais de usuário não encontradas');
+    }
+
+    const { bggCollection, ludoCollection } = req.body;
+
+    // Define os nomes dos arquivos com os usernames
+    const bggFilename = `BGGCollection-${credentials.BGG_USER}.txt`;
+    const ludoFilename = `LudopediaCollection-${credentials.LUDO_USER}.txt`;
+
+    // Salva as coleções
+    CollectionLoader.saveToFile(bggCollection, bggFilename);
+    CollectionLoader.saveToFile(ludoCollection, ludoFilename);
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error saving collections:', error);
+    res.status(500).json({ error: error.message });
   }
 });
 

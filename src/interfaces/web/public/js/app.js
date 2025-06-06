@@ -1,13 +1,16 @@
 // Declaração de variáveis globais
-let loadBtn, loadingIndicator, bggList, ludoList;
+let loadBtn, loadingIndicator, bggList, ludoList, saveBtn;
 let bggTotal, bggBase, bggExp, ludoTotal, ludoBase, ludoExp;
-let configModal, configBtn, saveConfigBtn, ludoAuthBtn, bggUserInput, ludoTokenInput;
+let configModal, configBtn, saveConfigBtn, ludoAuthBtn, bggUserInput, ludoTokenInput, ludoUserDisplay;
 let isLoading = false;
+let currentBGGGames = [];
+let currentLudoGames = [];
 
 // Inicializar elementos quando o DOM estiver carregado
 document.addEventListener('DOMContentLoaded', () => {
     // Elementos da UI
     loadBtn = document.getElementById('loadBtn');
+    saveBtn = document.getElementById('saveBtn');
     loadingIndicator = document.getElementById('loadingIndicator');
     bggList = document.getElementById('bggList');
     ludoList = document.getElementById('ludoList');
@@ -27,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ludoAuthBtn = document.getElementById('ludoAuthBtn');
     bggUserInput = document.getElementById('bggUser');
     ludoTokenInput = document.getElementById('ludoToken');
+    ludoUserDisplay = document.getElementById('ludoUserDisplay');
 
     // Configurar event listeners
     configBtn.addEventListener('click', () => {
@@ -37,6 +41,36 @@ document.addEventListener('DOMContentLoaded', () => {
     saveConfigBtn.addEventListener('click', saveConfig);
     ludoAuthBtn.addEventListener('click', startLudopediaAuth);
     loadBtn.addEventListener('click', loadCollections);
+    saveBtn.addEventListener('click', saveCollections);
+
+    // Adicionar listeners para filtros
+    document.querySelectorAll('.filter-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const collection = e.target.closest('.filter-link').dataset.collection;
+            const filter = e.target.closest('.filter-link').dataset.filter;
+            
+            // Remove active class from all links in this collection
+            document.querySelectorAll(`.filter-link[data-collection="${collection}"]`)
+                .forEach(el => el.classList.remove('active'));
+            
+            // Add active class to clicked link
+            e.target.closest('.filter-link').classList.add('active');
+            
+            // Apply filter
+            const games = collection === 'bgg' ? currentBGGGames : currentLudoGames;
+            const container = collection === 'bgg' ? bggList : ludoList;
+            
+            if (filter === 'all') {
+                renderGameList(games, container);
+            } else {
+                const filtered = games.filter(game => 
+                    filter === 'base' ? !game.isExpansion : game.isExpansion
+                );
+                renderGameList(filtered, container);
+            }
+        });
+    });
 
     // Carregar configurações iniciais
     loadConfig();
@@ -66,7 +100,10 @@ function updateStats(collection, type) {
 
 function renderGameList(games, container) {
     container.innerHTML = '';
-    games.forEach(game => {
+    // Sort games alphabetically by name
+    const sortedGames = [...games].sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
+    
+    sortedGames.forEach(game => {
         const div = document.createElement('div');
         div.className = `game-item ${game.isExpansion ? 'expansion' : ''}`;
         div.innerHTML = `
@@ -90,14 +127,12 @@ async function loadConfig() {
         const data = await response.json();
         console.log('Dados recebidos:', data);
         
-        console.log('Elementos do form:', {
-            bggUserInput: bggUserInput?.id,
-            ludoTokenInput: ludoTokenInput?.id
-        });
-        
         if (bggUserInput && ludoTokenInput) {
             bggUserInput.value = data.BGG_USER || '';
             ludoTokenInput.value = data.LUDO_ACCESS_TOKEN || '';
+            if (data.LUDO_USER && ludoUserDisplay) {
+                ludoUserDisplay.textContent = `Usuário: ${data.LUDO_USER}`;
+            }
             console.log('Configurações aplicadas aos campos');
         } else {
             console.error('Elementos do form não encontrados');
@@ -117,7 +152,8 @@ async function saveConfig() {
             },
             body: JSON.stringify({
                 BGG_USER: bggUserInput.value,
-                LUDO_ACCESS_TOKEN: ludoTokenInput.value
+                LUDO_ACCESS_TOKEN: ludoTokenInput.value,
+                LUDO_USER: ludoUserDisplay.textContent.replace('Usuário: ', '')
             })
         });
 
@@ -147,6 +183,9 @@ async function startLudopediaAuth() {
             if (event.data.type === 'AUTH_SUCCESS') {
                 authWindow.close();
                 ludoTokenInput.value = event.data.token;
+                if (event.data.user) {
+                    ludoUserDisplay.textContent = `Usuário: ${event.data.user}`;
+                }
                 await saveConfig();
             }
         }, { once: true });
@@ -156,10 +195,49 @@ async function startLudopediaAuth() {
     }
 }
 
-// Carregar coleções
+// Função para salvar as coleções
+async function saveCollections() {
+    if (!currentBGGGames.length && !currentLudoGames.length) {
+        alert('Nenhuma coleção carregada para salvar');
+        return;
+    }
+
+    try {
+        setLoading(true);
+        saveBtn.disabled = true;
+
+        const response = await fetch('/api/save-collections', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                bggCollection: currentBGGGames,
+                ludoCollection: currentLudoGames
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        alert('Coleções salvas com sucesso!');
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Erro ao salvar coleções: ' + error.message);
+    } finally {
+        setLoading(false);
+        if (currentBGGGames.length || currentLudoGames.length) {
+            saveBtn.disabled = false;
+        }
+    }
+}
+
+// Atualizar loadCollections para habilitar o botão de salvar quando carregar via API
 async function loadCollections() {
     try {
         setLoading(true);
+        saveBtn.disabled = true;
         const loadType = document.querySelector('input[name="loadType"]:checked').value;
         
         const response = await fetch('/api/collections', {
@@ -176,9 +254,24 @@ async function loadCollections() {
 
         const data = await response.json();
         
+        // Store the collections
+        currentBGGGames = data.bggCollection;
+        currentLudoGames = data.ludoCollection;
+        
+        // Habilitar botão de salvar se carregou via API
+        saveBtn.disabled = !(loadType === 'api' && (currentBGGGames.length || currentLudoGames.length));
+        
         // Atualizar UI
         updateStats(data.bggCollection, 'bgg');
         updateStats(data.ludoCollection, 'ludo');
+        
+        // Reset filters to "all" and render full lists
+        document.querySelectorAll('.filter-link[data-filter="all"]').forEach(link => {
+            link.classList.add('active');
+        });
+        document.querySelectorAll('.filter-link[data-filter="base"], .filter-link[data-filter="expansion"]').forEach(link => {
+            link.classList.remove('active');
+        });
         
         renderGameList(data.bggCollection, bggList);
         renderGameList(data.ludoCollection, ludoList);
@@ -186,6 +279,7 @@ async function loadCollections() {
     } catch (error) {
         console.error('Error:', error);
         alert('Erro ao carregar coleções: ' + error.message);
+        saveBtn.disabled = true;
     } finally {
         setLoading(false);
     }
