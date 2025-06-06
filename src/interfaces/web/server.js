@@ -502,10 +502,11 @@ app.post('/api/match-collections-ai', async (req, res) => {
           const keys = Object.keys(match);
           if (keys.length >= 2) {
             ludoName = match[keys[0]];
-            bggName = match[keys[1]];        } else {
-          // Match da AI em formato não reconhecido, mas será aceito
-          return match; // Retornar como está
-        }
+            bggName = match[keys[1]];
+          } else {
+            // Match da AI em formato não reconhecido, mas será aceito
+            return match; // Retornar como está
+          }
         }
         
         // Buscar jogos nas coleções de forma flexível

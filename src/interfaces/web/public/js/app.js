@@ -681,7 +681,7 @@ async function handleAcceptAIMatches() {
         }
 
         // Enviar para o servidor
-        const response = await fetch('/api/accept-matches', {
+        const response = await fetch('/api/save-matches-ai', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

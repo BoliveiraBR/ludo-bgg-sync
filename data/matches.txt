@@ -808,5 +808,13 @@
     "ludoId": 35767,
     "bggName": "Twilight Inscription",
     "ludoName": "Twilight Inscription"
+  },
+  {
+    "bggId": "231664",
+    "ludoId": 14694,
+    "bggName": "Fast Forward: FEAR",
+    "ludoName": "Fear",
+    "confidence": 1,
+    "reasoning": "Match sugerido pela AI: \"fear\" ↔ \"fast forward: fear\""
   }
 ]
