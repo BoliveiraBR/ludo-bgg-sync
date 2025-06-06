@@ -108,9 +108,9 @@ class ChatGPTMatcher {
 
   /**
    * Busca matches possíveis entre jogos do BGG e Ludopedia usando ChatGPT
-   * @param {string[]} bggGames Array com nomes dos jogos do BGG
-   * @param {string[]} ludoGames Array com nomes dos jogos da Ludopedia
-   * @returns {Promise<Array<[string, string]>>} Array de pares [nomeLudo, nomeBGG] que são prováveis matches
+   * @param {Array<{id: string, name: string}>} bggGames Array com objetos {id, name} dos jogos do BGG
+   * @param {Array<{id: string, name: string}>} ludoGames Array com objetos {id, name} dos jogos da Ludopedia
+   * @returns {Promise<Array<{bggId: string, bggName: string, ludoId: string, ludoName: string}>>} Array de matches com IDs e nomes
    */
   async findMatches(bggGames, ludoGames) {
     try {
@@ -126,12 +126,18 @@ class ChatGPTMatcher {
       console.log(`📊 Analisando ${bggGames.length} jogos do BGG e ${ludoGames.length} jogos da Ludopedia`);
       console.log('🔄 Preparando dados para análise...');
 
+      // Extrair apenas os nomes para o prompt (ChatGPT vai comparar apenas os nomes)
+      const bggNames = bggGames.map(game => game.name);
+      const ludoNames = ludoGames.map(game => game.name);
+
       const prompt = `Analise estas duas listas de jogos e encontre prováveis matches, 
-        considerando variações de nome, traduções e edições diferentes:
+        considerando variações de nome, traduções e edições diferentes.
         
-        BGG: ${JSON.stringify(bggGames)}
+        IMPORTANTE: Compare apenas os NOMES dos jogos, ignorando qualquer ID que possa aparecer.
         
-        Ludopedia: ${JSON.stringify(ludoGames)}
+        BGG: ${JSON.stringify(bggNames)}
+        
+        Ludopedia: ${JSON.stringify(ludoNames)}
         
         Retorne apenas os matches encontrados no formato JSON array de arrays: 
         [[nomeLudopedia, nomeBGG], ...]`;
@@ -178,10 +184,10 @@ class ChatGPTMatcher {
         throw new Error('Não foi possível extrair JSON válido da resposta do ChatGPT');
       }
       
-      let matches;
+      let rawMatches;
       try {
-        matches = JSON.parse(cleanJson);
-        if (!Array.isArray(matches)) {
+        rawMatches = JSON.parse(cleanJson);
+        if (!Array.isArray(rawMatches)) {
           throw new Error('Formato inválido: resposta deve ser um array');
         }
       } catch (parseError) {
@@ -189,8 +195,38 @@ class ChatGPTMatcher {
         throw new Error('Erro ao processar resposta do ChatGPT: ' + parseError.message);
       }
 
-      console.log(`✨ ${matches.length} matches potenciais encontrados via ChatGPT`);
-        return matches;
+      // Criar mapas para busca rápida por nome
+      const bggGameMap = new Map(bggGames.map(game => [game.name.toLowerCase().trim(), game]));
+      const ludoGameMap = new Map(ludoGames.map(game => [game.name.toLowerCase().trim(), game]));
+
+      // Converter matches do ChatGPT para incluir IDs
+      const matches = [];
+      for (const rawMatch of rawMatches) {
+        if (!Array.isArray(rawMatch) || rawMatch.length !== 2) {
+          console.warn('⚠️ Match inválido ignorado:', rawMatch);
+          continue;
+        }
+
+        const [ludoName, bggName] = rawMatch;
+        const bggGame = bggGameMap.get(bggName.toLowerCase().trim());
+        const ludoGame = ludoGameMap.get(ludoName.toLowerCase().trim());
+
+        if (bggGame && ludoGame) {
+          matches.push({
+            bggId: bggGame.id,
+            bggName: bggGame.name,
+            ludoId: ludoGame.id,
+            ludoName: ludoGame.name
+          });
+        } else {
+          console.warn(`⚠️ Match não encontrado nas coleções: "${ludoName}" ↔ "${bggName}"`);
+          if (!bggGame) console.warn(`   BGG não encontrado: "${bggName}"`);
+          if (!ludoGame) console.warn(`   Ludopedia não encontrado: "${ludoName}"`);
+        }
+      }
+
+      console.log(`✨ ${matches.length} matches válidos processados (de ${rawMatches.length} do ChatGPT)`);
+      return matches;
 
     } catch (error) {
       console.error('❌ Erro ao buscar matches via ChatGPT:', error.message);

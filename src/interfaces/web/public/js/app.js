@@ -604,7 +604,7 @@ function renderAIMatches() {
     
     currentAIMatches.forEach((match, index) => {
         // Skip invalid matches
-        if (!match || !match.bggGame || !match.ludoGame) {
+        if (!match || !match.bgg || !match.ludopedia) {
             console.warn('Invalid AI match found:', match);
             return;
         }
@@ -612,9 +612,9 @@ function renderAIMatches() {
         const div = document.createElement('div');
         div.className = 'match-item' + (match.exactMatch ? ' perfect-match' : '');
         
-        // Use optional chaining and nullish coalescing to safely access properties
-        const bggName = match.bggGame?.name ?? 'Unknown BGG Game';
-        const ludoName = match.ludoGame?.name ?? 'Unknown Ludo Game';
+        // Use the correct property names: bgg and ludopedia
+        const bggName = match.bgg?.name ?? 'Unknown BGG Game';
+        const ludoName = match.ludopedia?.name ?? 'Unknown Ludo Game';
         
         div.innerHTML = `
             <div class="form-check">
@@ -660,16 +660,16 @@ async function handleAcceptAIMatches() {
     try {
         const selectedPairs = Array.from(selectedAIMatches).map(index => {
             const match = currentAIMatches[index];
-            // Validate the match object before including it
-            if (!match?.bggGame?.id || !match?.ludoGame?.id) {
+            // Validate the match object before including it - use correct property names
+            if (!match?.bgg?.id || !match?.ludopedia?.id) {
                 console.warn('Invalid AI match found:', match);
                 return null;
             }
             return {
-                bggId: match.bggGame.id,
-                ludoId: match.ludoGame.id,
-                bggName: match.bggGame.name,
-                ludoName: match.ludoGame.name,
+                bggId: match.bgg.id,
+                ludoId: match.ludopedia.id,
+                bggName: match.bgg.name,
+                ludoName: match.ludopedia.name,
                 confidence: match.confidence,
                 reasoning: match.reasoning
             };
@@ -694,15 +694,24 @@ async function handleAcceptAIMatches() {
         }
 
         alert('Matches de AI aceitos com sucesso!');
+        
+        // Remover os matches aceitos da lista atual
+        const selectedIndices = Array.from(selectedAIMatches).sort((a, b) => b - a); // Ordem decrescente para não afetar os índices
+        selectedIndices.forEach(index => {
+            currentAIMatches.splice(index, 1);
+        });
+        
         // Limpar seleções
         selectedAIMatches.clear();
         document.getElementById('selectAllAIMatches').checked = false;
         updateAIAcceptButtonState();
         
-        // Recarregar matches
+        // Renderizar novamente a lista de matches da AI (sem os aceitos)
+        renderAIMatches();
+        
+        // Recarregar matches regulares para atualizar estatísticas
         findMatches();
     } catch (error) {
-        console.error('Error accepting AI matches:', error);
         alert('Erro ao aceitar matches de AI: ' + error.message);
     }
 }
