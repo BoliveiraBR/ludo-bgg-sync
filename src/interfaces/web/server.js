@@ -343,7 +343,8 @@ ludoCollection = ludoCollection.filter(ludoGame => {
     // Usar o matcher para comparar as coleções restantes
     const comparison = CollectionMatcher.compareCollections(bggCollection, ludoCollection);
     
-    // Mapa de nomes normalizados para objetos de jogo para acesso mais eficiente
+    // Criar mapas com TODOS os jogos (base + expansões) para ter acesso completo
+    // porque o CollectionMatcher pode retornar qualquer tipo de jogo
     const bggGameMap = new Map(
       bggCollection.map(game => [game.name.trim().toLowerCase(), game])
     );
@@ -385,11 +386,12 @@ ludoCollection = ludoCollection.filter(ludoGame => {
       .map(name => bggGameMap.get(name))
       .filter(game => {
         if (!game || !game.name) return false;
-        // Se o jogo tem um match em matches.txt, verificar se o par NÃO existe na coleção atual
+        // Se o jogo tem um match em matches.txt, removê-lo da lista "Somente BGG"
         const matchedLudoId = matchPairs.get(game.id);
-        if (!matchedLudoId) return true; // Manter se não tem match
-        // Só remover se o par existir na coleção atual
-        return !ludoCollection.some(ludoGame => ludoGame.id === matchedLudoId);
+        if (matchedLudoId) {
+          return false; // Remover todos os jogos que já foram pareados anteriormente
+        }
+        return true; // Manter apenas jogos que nunca foram pareados
       })
       .map(game => ({
         id: game.id,
@@ -402,11 +404,13 @@ ludoCollection = ludoCollection.filter(ludoGame => {
       .map(name => ludoGameMap.get(name))
       .filter(game => {
         if (!game || !game.name) return false;
-        // Se o jogo tem um match em matches.txt, verificar se o par NÃO existe na coleção atual
+        
+        // Se o jogo tem um match em matches.txt, removê-lo da lista "Somente Ludopedia"
         const matchedBggId = matchPairs.get(game.id);
-        if (!matchedBggId) return true; // Manter se não tem match
-        // Só remover se o par existir na coleção atual
-        return !bggCollection.some(bggGame => bggGame.id === matchedBggId);
+        if (matchedBggId) {
+          return false; // Remover todos os jogos que já foram pareados anteriormente
+        }
+        return true; // Manter apenas jogos que nunca foram pareados
       })
       .map(game => ({
         id: game.id,
@@ -414,7 +418,7 @@ ludoCollection = ludoCollection.filter(ludoGame => {
         type: game.type,
         isExpansion: game.isExpansion
       }));
-
+    
     res.json({
       matches,
       onlyInBGG,
@@ -498,11 +502,10 @@ app.post('/api/match-collections-ai', async (req, res) => {
           const keys = Object.keys(match);
           if (keys.length >= 2) {
             ludoName = match[keys[0]];
-            bggName = match[keys[1]];
-          } else {
-            console.log('🤖 Match da AI em formato não reconhecido, mas será aceito:', match);
-            return match; // Retornar como está
-          }
+            bggName = match[keys[1]];        } else {
+          // Match da AI em formato não reconhecido, mas será aceito
+          return match; // Retornar como está
+        }
         }
         
         // Buscar jogos nas coleções de forma flexível
