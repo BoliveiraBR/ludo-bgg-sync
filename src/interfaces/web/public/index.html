@@ -45,6 +45,40 @@
             color: #0d6efd;
             font-weight: bold;
         }
+        .match-item {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .match-item:hover {
+            background-color: #f8f9fa;
+        }
+        .match-names {
+            flex-grow: 1;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        .match-arrow {
+            color: #6c757d;
+            font-size: 1.2em;
+        }
+        .ai-status-message {
+            margin-top: 1rem;
+            text-align: center;
+        }
+        #aiStatusMessage {
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+        }
+        .alert i {
+            margin-right: 0.5rem;
+        }
+        .perfect-match {
+            background-color: #d1e7dd;
+        }
     </style>
 </head>
 <body>
@@ -96,125 +130,219 @@
     </div>
 
     <div class="container mt-4">
-        <!-- Opções de Carregamento -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Carregar Coleções</h5>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="loadType" id="loadFile" value="file" checked>
-                            <label class="form-check-label" for="loadFile">
-                                Carregar do arquivo
-                            </label>
-                        </div>
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="radio" name="loadType" id="loadAPI" value="api">
-                            <label class="form-check-label" for="loadAPI">
-                                Carregar via API
-                            </label>
-                        </div>
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-primary" id="loadBtn">
-                                <i class="bi bi-cloud-download"></i>
-                                Carregar Coleções
-                            </button>
-                            <button class="btn btn-success" id="saveBtn" disabled>
-                                <i class="bi bi-save"></i>
-                                Salvar
-                            </button>
-                        </div>
-                        <div id="loadingIndicator" class="mt-2" style="display: none;">
-                            <div class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">Carregando...</span>
-                            </div>
-                            <span class="ms-2">Carregando coleções...</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Tab Navigation -->
+        <ul class="nav nav-tabs mb-4" id="mainTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="collections-tab" data-bs-toggle="tab" data-bs-target="#collections" type="button" role="tab" aria-controls="collections" aria-selected="true">
+                    <i class="bi bi-collection"></i> Coleções
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="matching-tab" data-bs-toggle="tab" data-bs-target="#matching" type="button" role="tab" aria-controls="matching" aria-selected="false">
+                    <i class="bi bi-arrow-left-right"></i> Pareamento
+                </button>
+            </li>
+        </ul>
 
-        <!-- Visualização das Coleções -->
-        <div class="row">
-            <!-- Coleção BGG -->
-            <div class="col-md-6 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Coleção BGG</h5>
-                        <div class="d-flex justify-content-between mb-2">
-                            <small>
-                                <a href="#" class="filter-link" data-collection="bgg" data-filter="all">
-                                    Total: <span id="bggTotal">0</span> jogos
-                                </a>
-                            </small>
-                            <div>
-                                <small>
-                                    <a href="#" class="filter-link" data-collection="bgg" data-filter="base">
-                                        Base: <span id="bggBase">0</span>
-                                    </a>
-                                </small>
-                                <small class="ms-2">
-                                    <a href="#" class="filter-link" data-collection="bgg" data-filter="expansion">
-                                        Expansões: <span id="bggExp">0</span>
-                                    </a>
-                                </small>
+        <!-- Tab Content -->
+        <div class="tab-content" id="mainTabsContent">
+            <!-- Collections Tab -->
+            <div class="tab-pane fade show active" id="collections" role="tabpanel" aria-labelledby="collections-tab">
+                <!-- Opções de Carregamento -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Carregar Coleções</h5>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio" name="loadType" id="loadFile" value="file" checked>
+                                    <label class="form-check-label" for="loadFile">
+                                        Carregar do arquivo
+                                    </label>
+                                </div>
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="radio" name="loadType" id="loadAPI" value="api">
+                                    <label class="form-check-label" for="loadAPI">
+                                        Carregar via API
+                                    </label>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-primary" id="loadBtn">
+                                        <i class="bi bi-cloud-download"></i>
+                                        Carregar Coleções
+                                    </button>
+                                    <button class="btn btn-success" id="saveBtn" disabled>
+                                        <i class="bi bi-save"></i>
+                                        Salvar
+                                    </button>
+                                </div>
+                                <div id="loadingIndicator" class="mt-2" style="display: none;">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Carregando...</span>
+                                    </div>
+                                    <span class="ms-2">Carregando coleções...</span>
+                                </div>
                             </div>
                         </div>
-                        <div id="bggList" class="game-list">
-                            <!-- Lista de jogos do BGG será inserida aqui -->
-                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Coleção Ludopedia -->
-            <div class="col-md-6 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Coleção Ludopedia</h5>
-                        <div class="d-flex justify-content-between mb-2">
-                            <small>
-                                <a href="#" class="filter-link" data-collection="ludo" data-filter="all">
-                                    Total: <span id="ludoTotal">0</span> jogos
-                                </a>
-                            </small>
-                            <div>
-                                <small>
-                                    <a href="#" class="filter-link" data-collection="ludo" data-filter="base">
-                                        Base: <span id="ludoBase">0</span>
-                                    </a>
-                                </small>
-                                <small class="ms-2">
-                                    <a href="#" class="filter-link" data-collection="ludo" data-filter="expansion">
-                                        Expansões: <span id="ludoExp">0</span>
-                                    </a>
-                                </small>
+                <!-- Visualização das Coleções -->
+                <div class="row">
+                    <!-- Coleção BGG -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Coleção BGG</h5>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <small>
+                                        <a href="#" class="filter-link" data-collection="bgg" data-filter="all">
+                                            Total: <span id="bggTotal">0</span> jogos
+                                        </a>
+                                    </small>
+                                    <div>
+                                        <small></small>
+                                            <a href="#" class="filter-link" data-collection="bgg" data-filter="base">
+                                                Base: <span id="bggBase">0</span>
+                                            </a>
+                                        </small>
+                                        <small class="ms-2">
+                                            <a href="#" class="filter-link" data-collection="bgg" data-filter="expansion">
+                                                Expansões: <span id="bggExp">0</span>
+                                            </a>
+                                        </small>
+                                    </div>
+                                </div>
+                                <div id="bggList" class="game-list">
+                                    <!-- Lista de jogos do BGG será inserida aqui -->
+                                </div>
                             </div>
                         </div>
-                        <div id="ludoList" class="game-list">
-                            <!-- Lista de jogos da Ludopedia será inserida aqui -->
-                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
 
-        <div id="results" class="row mt-4" style="display: none;">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">🎯 Matches</h5>
-                        <div id="matchesList" class="list-group">
+                    <!-- Coleção Ludopedia -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Coleção Ludopedia</h5>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <small>
+                                        <a href="#" class="filter-link" data-collection="ludo" data-filter="all">
+                                            Total: <span id="ludoTotal">0</span> jogos
+                                        </a>
+                                    </small>
+                                    <div>
+                                        <small>
+                                            <a href="#" class="filter-link" data-collection="ludo" data-filter="base"></a>
+                                                Base: <span id="ludoBase">0</span>
+                                            </a>
+                                        </small>
+                                        <small class="ms-2">
+                                            <a href="#" class="filter-link" data-collection="ludo" data-filter="expansion">
+                                                Expansões: <span id="ludoExp">0</span>
+                                            </a>
+                                        </small>
+                                    </div>
+                                </div>
+                                <div id="ludoList" class="game-list">
+                                    <!-- Lista de jogos da Ludopedia será inserida aqui -->
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">⚠️ Diferenças</h5>
-                        <div id="differencesList" class="list-group">
+
+            <!-- Matching Tab -->
+            <div class="tab-pane fade" id="matching" role="tabpanel" aria-labelledby="matching-tab">
+                <!-- Ações de Pareamento -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="selectAllMatches">
+                                        <label class="form-check-label" for="selectAllMatches">
+                                            Selecionar Todos
+                                        </label>
+                                    </div>
+                                    <button class="btn btn-primary" id="acceptMatchesBtn" disabled>
+                                        <i class="bi bi-check2-all"></i>
+                                        Aceitar Selecionados
+                                    </button>
+                                </div>
+
+                                <!-- Estatísticas -->
+                                <div class="alert alert-info" role="alert">
+                                    <h6 class="alert-heading mb-2">Estatísticas</h6>
+                                    <div class="d-flex justify-content-between flex-wrap">
+                                        <small>Matches anteriores: <span id="previousMatches">0</span></small>
+                                        <small>Matches novos encontrados: <span id="perfectMatches">0</span></small>
+                                        <small>Somente BGG: <span id="onlyBGG">0</span></small>
+                                        <small>Somente Ludopedia: <span id="onlyLudo">0</span></small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lista de Matches -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Matches Encontrados por Nome</h5>
+                                <div id="matchesList" class="game-list">
+                                    <!-- Lista de matches será inserida aqui -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção AI Matching -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <button class="btn btn-primary w-100" id="compareWithAIBtn">
+                            <i class="bi bi-robot"></i> Comparar com AI
+                        </button>
+                        <div id="aiLoadingIndicator" class="text-center mt-3" style="display: none;">
+                            <div class="d-flex flex-column align-items-center">
+                                <div class="spinner-border text-primary mb-2" role="status">
+                                    <span class="visually-hidden">Carregando...</span>
+                                </div>
+                                <div class="ai-status-message">
+                                    <p class="text-primary mb-1">AI analisando as listas. Isso pode demorar um pouco...</p>
+                                    <p class="text-muted" id="aiStatusMessage"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Matches Sugeridos pela AI</h5>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="selectAllAIMatches">
+                                        <label class="form-check-label" for="selectAllAIMatches">
+                                            Selecionar Todos
+                                        </label>
+                                    </div>
+                                    <button class="btn btn-primary" id="acceptAIMatchesBtn" disabled>
+                                        <i class="bi bi-check2-all"></i>
+                                        Aceitar Selecionados
+                                    </button>
+                                </div>
+                                <div id="aiMatchesList" class="game-list">
+                                    <!-- Lista de matches da AI será inserida aqui -->
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

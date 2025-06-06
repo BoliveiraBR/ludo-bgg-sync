@@ -1,6 +1,19 @@
 ﻿[
   {
     "num": 1,
+    "id": 3123,
+    "name": "Age of War",
+    "year": "",
+    "link": "https://ludopedia.com.br/jogo/age-of-war",
+    "type": "base",
+    "rating": null,
+    "favorite": false,
+    "comment": "",
+    "cost": null,
+    "isExpansion": false
+  },
+  {
+    "num": 1,
     "id": 79658,
     "name": "Blend Off!",
     "year": "",
@@ -902,19 +915,6 @@
     "name": "Nova Luna",
     "year": "",
     "link": "https://ludopedia.com.br/jogo/nova-luna",
-    "type": "base",
-    "rating": null,
-    "favorite": false,
-    "comment": "",
-    "cost": null,
-    "isExpansion": false
-  },
-  {
-    "num": 1,
-    "id": 3123,
-    "name": "Age of War",
-    "year": "",
-    "link": "https://ludopedia.com.br/jogo/age-of-war",
     "type": "base",
     "rating": null,
     "favorite": false,

@@ -296,6 +296,251 @@ app.post('/api/save-collections', async (req, res) => {
   }
 });
 
+// Rota para encontrar matches entre coleções
+app.post('/api/match-collections', async (req, res) => {
+  try {
+    let { bggCollection, ludoCollection } = req.body;
+    const matchesPath = path.join(__dirname, '../../../data/matches.txt');
+
+    // Criar cópias das coleções para não interferir nas originais
+    bggCollection = [...bggCollection];
+    ludoCollection = [...ludoCollection];
+    
+    // Carregar matches prévios
+    let previousMatches = [];
+    try {
+      const content = await fs.readFile(matchesPath, 'utf8');
+      previousMatches = JSON.parse(content);
+    } catch (error) {
+      console.log('Nenhum match prévio encontrado');
+    }
+
+   // Remover jogos já pareados das listas
+const previousMatchCount = previousMatches.length;
+
+// Primeiro, criar um mapa de pares BGG-Ludo dos matches anteriores
+const matchPairs = new Map();
+previousMatches.forEach(match => {
+    matchPairs.set(match.bggId, match.ludoId);
+    matchPairs.set(match.ludoId, match.bggId);
+});
+
+// Remover apenas jogos que formam pares completos
+bggCollection = bggCollection.filter(bggGame => {
+    const matchedLudoId = matchPairs.get(bggGame.id);
+    // Manter o jogo se não tiver match ou se o par dele não existir na coleção atual
+    if (!matchedLudoId) return true;
+    return !ludoCollection.some(ludoGame => ludoGame.id === matchedLudoId);
+});
+
+ludoCollection = ludoCollection.filter(ludoGame => {
+    const matchedBggId = matchPairs.get(ludoGame.id);
+    // Manter o jogo se não tiver match ou se o par dele não existir na coleção atual
+    if (!matchedBggId) return true;
+    return !bggCollection.some(bggGame => bggGame.id === matchedBggId);
+});
+
+    // Usar o matcher para comparar as coleções restantes
+    const comparison = CollectionMatcher.compareCollections(bggCollection, ludoCollection);
+    
+    // Mapa de nomes normalizados para objetos de jogo para acesso mais eficiente
+    const bggGameMap = new Map(
+      bggCollection.map(game => [game.name.trim().toLowerCase(), game])
+    );
+    const ludoGameMap = new Map(
+      ludoCollection.map(game => [game.name.trim().toLowerCase(), game])
+    );
+
+    // Transformar matches em objetos com os jogos completos
+    const matches = comparison.matches
+      .map(normalizedName => {
+        const bggGame = bggGameMap.get(normalizedName);
+        const ludoGame = ludoGameMap.get(normalizedName);
+        
+        // Validar que ambos os jogos foram encontrados e têm as propriedades necessárias
+        if (bggGame?.name && ludoGame?.name) {
+          return {
+            bggGame: {
+              id: bggGame.id,
+              name: bggGame.name,
+              type: bggGame.type,
+              isExpansion: bggGame.isExpansion
+            },
+            ludoGame: {
+              id: ludoGame.id,
+              name: ludoGame.name,
+              type: ludoGame.type,
+              isExpansion: ludoGame.isExpansion
+            },
+            exactMatch: bggGame.name.trim() === ludoGame.name.trim()
+          };
+        }
+        return null;
+      })
+      .filter(match => match !== null);
+    
+    // Garantir que os arrays onlyIn também contenham objetos válidos e não estejam em matches.txt
+    // com um par presente na coleção atual
+    const onlyInBGG = comparison.onlyInBGG
+      .map(name => bggGameMap.get(name))
+      .filter(game => {
+        if (!game || !game.name) return false;
+        // Se o jogo tem um match em matches.txt, verificar se o par NÃO existe na coleção atual
+        const matchedLudoId = matchPairs.get(game.id);
+        if (!matchedLudoId) return true; // Manter se não tem match
+        // Só remover se o par existir na coleção atual
+        return !ludoCollection.some(ludoGame => ludoGame.id === matchedLudoId);
+      })
+      .map(game => ({
+        id: game.id,
+        name: game.name,
+        type: game.type,
+        isExpansion: game.isExpansion
+      }));
+
+    const onlyInLudo = comparison.onlyInLudo
+      .map(name => ludoGameMap.get(name))
+      .filter(game => {
+        if (!game || !game.name) return false;
+        // Se o jogo tem um match em matches.txt, verificar se o par NÃO existe na coleção atual
+        const matchedBggId = matchPairs.get(game.id);
+        if (!matchedBggId) return true; // Manter se não tem match
+        // Só remover se o par existir na coleção atual
+        return !bggCollection.some(bggGame => bggGame.id === matchedBggId);
+      })
+      .map(game => ({
+        id: game.id,
+        name: game.name,
+        type: game.type,
+        isExpansion: game.isExpansion
+      }));
+
+    res.json({
+      matches,
+      onlyInBGG,
+      onlyInLudo,
+      previousMatchCount
+    });
+  } catch (error) {
+    console.error('Error matching collections:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Rota para encontrar matches com AI entre coleções
+app.post('/api/match-collections-ai', async (req, res) => {
+  try {
+    // Verificar se a API key da OpenAI está configurada
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error('OPENAI_API_KEY não configurada. Configure a variável de ambiente OPENAI_API_KEY para usar o matching com AI.');
+    }
+
+    let { bggCollection, ludoCollection } = req.body;
+    const chatGptMatcher = new ChatGPTMatcher(process.env.OPENAI_API_KEY);
+    
+    // Criar cópias das coleções para não interferir nas originais
+    bggCollection = [...bggCollection];
+    ludoCollection = [...ludoCollection];
+
+    // Usar o matcher para comparar as coleções
+    const comparison = CollectionMatcher.compareCollections(bggCollection, ludoCollection);
+    
+    // Verificar OpenAI API key
+    if (!process.env.OPENAI_API_KEY) {
+      return res.status(400).json({
+        error: "Chave da API OpenAI não configurada. Configure a chave em .env"
+      });
+    }
+
+    // Verificar se temos jogos para comparar
+    if (comparison.onlyInBGG.length === 0 || comparison.onlyInLudo.length === 0) {
+      return res.json({ 
+        matches: [],
+        message: "Não há jogos não pareados para comparar com AI"
+      });
+    }
+
+    // Logging dos números
+    console.log('💫 Iniciando comparação com AI:');
+    console.log(`   BGG: ${comparison.onlyInBGG.length} jogos não pareados`);
+    console.log(`   Ludopedia: ${comparison.onlyInLudo.length} jogos não pareados`);
+
+    // Buscar matches adicionais usando AI
+    let aiMatches;
+    try {
+      aiMatches = await chatGptMatcher.findMatches(
+        comparison.onlyInBGG,
+        comparison.onlyInLudo
+      );
+    } catch (aiError) {
+      console.error('❌ Erro na análise da AI:', aiError);
+      return res.status(500).json({
+        error: 'Erro na análise da AI: ' + (aiError.message || 'Erro desconhecido na comunicação com ChatGPT')
+      });
+    }
+    
+    // Transformar matches em objetos com os jogos completos
+    const matches = aiMatches
+      .map(match => {
+        const bggGame = bggCollection.find(g => g.name === match.bggName);
+        const ludoGame = ludoCollection.find(g => g.name === match.ludoName);
+        
+        if (bggGame && ludoGame) {
+          return {
+            bggGame: {
+              id: bggGame.id,
+              name: bggGame.name,
+              type: bggGame.type,
+              isExpansion: bggGame.isExpansion
+            },
+            ludoGame: {
+              id: ludoGame.id,
+              name: ludoGame.name,
+              type: ludoGame.type,
+              isExpansion: ludoGame.isExpansion
+            },
+            exactMatch: false // Matches da AI nunca são considerados exatos
+          };
+        }
+        return null;
+      })
+      .filter(match => match !== null);
+
+    res.json({ matches });
+  } catch (error) {
+    console.error('Error matching collections with AI:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Rota para salvar matches da AI
+app.post('/api/save-matches-ai', async (req, res) => {
+  try {
+    const { matches } = req.body;
+    const matchesPath = path.join(__dirname, '../../../data/matches.txt');
+
+    // Ler matches existentes ou criar array vazio
+    let existingMatches = [];
+    try {
+      const content = await fs.readFile(matchesPath, 'utf8');
+      existingMatches = JSON.parse(content);
+    } catch (error) {
+      console.log('Arquivo de matches não encontrado, será criado um novo');
+    }
+
+    // Adicionar novos matches
+    existingMatches.push(...matches);
+
+    // Salvar arquivo atualizado
+    await fs.writeFile(matchesPath, JSON.stringify(existingMatches, null, 2));
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error saving AI matches:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Iniciar servidor
 app.listen(port, () => {
   console.log(`🚀 Servidor rodando em http://localhost:${port}`);
