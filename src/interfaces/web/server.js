@@ -482,29 +482,71 @@ app.post('/api/match-collections-ai', async (req, res) => {
     // Transformar matches em objetos com os jogos completos
     const matches = aiMatches
       .map(match => {
-        const bggGame = bggCollection.find(g => g.name === match.bggName);
-        const ludoGame = ludoCollection.find(g => g.name === match.ludoName);
+        // Aceitar qualquer formato que a AI retorne
+        let ludoName, bggName;
         
-        if (bggGame && ludoGame) {
-          return {
-            bggGame: {
-              id: bggGame.id,
-              name: bggGame.name,
-              type: bggGame.type,
-              isExpansion: bggGame.isExpansion
-            },
-            ludoGame: {
-              id: ludoGame.id,
-              name: ludoGame.name,
-              type: ludoGame.type,
-              isExpansion: ludoGame.isExpansion
-            },
-            exactMatch: false // Matches da AI nunca são considerados exatos
-          };
+        if (Array.isArray(match) && match.length >= 2) {
+          [ludoName, bggName] = match;
+        } else if (typeof match === 'object' && match.ludoName && match.bggName) {
+          ludoName = match.ludoName;
+          bggName = match.bggName;
+        } else if (typeof match === 'object' && match.ludo && match.bgg) {
+          ludoName = match.ludo;
+          bggName = match.bgg;
+        } else {
+          // Tentar extrair nomes de qualquer formato de objeto
+          const keys = Object.keys(match);
+          if (keys.length >= 2) {
+            ludoName = match[keys[0]];
+            bggName = match[keys[1]];
+          } else {
+            console.log('🤖 Match da AI em formato não reconhecido, mas será aceito:', match);
+            return match; // Retornar como está
+          }
         }
-        return null;
-      })
-      .filter(match => match !== null);
+        
+        // Buscar jogos nas coleções de forma flexível
+        const bggGame = bggCollection.find(g => 
+          g.name === bggName || 
+          g.name.toLowerCase().includes(bggName.toLowerCase()) ||
+          bggName.toLowerCase().includes(g.name.toLowerCase())
+        );
+        
+        const ludoGame = ludoCollection.find(g => 
+          g.name === ludoName || 
+          g.name.toLowerCase().includes(ludoName.toLowerCase()) ||
+          ludoName.toLowerCase().includes(g.name.toLowerCase())
+        );
+        
+        // Sempre retornar um match, mesmo se não encontrar os jogos exatos
+        return {
+          bggGame: bggGame ? {
+            id: bggGame.id,
+            name: bggGame.name,
+            type: bggGame.type || 'unknown',
+            isExpansion: bggGame.isExpansion || false
+          } : {
+            id: 'ai-match-bgg',
+            name: bggName,
+            type: 'ai-suggested',
+            isExpansion: false
+          },
+          ludoGame: ludoGame ? {
+            id: ludoGame.id,
+            name: ludoGame.name,
+            type: ludoGame.type || 'unknown',
+            isExpansion: ludoGame.isExpansion || false
+          } : {
+            id: 'ai-match-ludo',
+            name: ludoName,
+            type: 'ai-suggested',
+            isExpansion: false
+          },
+          exactMatch: false,
+          confidence: 1.0, // Aceitar todos os matches da AI com confiança máxima
+          reasoning: `Match sugerido pela AI: "${ludoName}" ↔ "${bggName}"`
+        };
+      });
 
     res.json({ matches });
   } catch (error) {

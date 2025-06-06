@@ -148,6 +148,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event listeners do pareamento com AI
     document.getElementById('selectAllAIMatches')?.addEventListener('change', handleSelectAllAIMatches);
     document.getElementById('acceptAIMatchesBtn')?.addEventListener('click', handleAcceptAIMatches);
+    
+    // Event listener para o botão "Comparar com AI"
+    const compareAIBtn = document.getElementById('compareWithAIBtn');
+    if (compareAIBtn) {
+        console.log('Event listener adicionado ao botão Comparar com AI');
+        compareAIBtn.addEventListener('click', findAIMatches);
+    } else {
+        console.error('Botão compareWithAIBtn não encontrado!');
+    }
 
     // Disparar findMatches quando mudar para a aba de pareamento
     document.getElementById('matching-tab')?.addEventListener('shown.bs.tab', findMatches);
@@ -463,6 +472,8 @@ function renderMatches() {
 
 // Funções de Pareamento com AI
 async function findAIMatches() {
+    console.log('🤖 findAIMatches foi chamada!');
+    
     if (!currentBGGGames.length || !currentLudoGames.length) {
         alert('Carregue ambas as coleções primeiro');
         return;
@@ -602,6 +613,58 @@ function handleSelectAllAIMatches(e) {
         }
     });
     updateAIAcceptButtonState();
+}
+
+// Função para aceitar matches de AI selecionados
+async function handleAcceptAIMatches() {
+    try {
+        const selectedPairs = Array.from(selectedAIMatches).map(index => {
+            const match = currentAIMatches[index];
+            // Validate the match object before including it
+            if (!match?.bggGame?.id || !match?.ludoGame?.id) {
+                console.warn('Invalid AI match found:', match);
+                return null;
+            }
+            return {
+                bggId: match.bggGame.id,
+                ludoId: match.ludoGame.id,
+                bggName: match.bggGame.name,
+                ludoName: match.ludoGame.name,
+                confidence: match.confidence,
+                reasoning: match.reasoning
+            };
+        }).filter(match => match !== null);
+
+        if (selectedPairs.length === 0) {
+            alert('Nenhum match de AI válido selecionado');
+            return;
+        }
+
+        // Enviar para o servidor
+        const response = await fetch('/api/accept-matches', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ matches: selectedPairs })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        alert('Matches de AI aceitos com sucesso!');
+        // Limpar seleções
+        selectedAIMatches.clear();
+        document.getElementById('selectAllAIMatches').checked = false;
+        updateAIAcceptButtonState();
+        
+        // Recarregar matches
+        findMatches();
+    } catch (error) {
+        console.error('Error accepting AI matches:', error);
+        alert('Erro ao aceitar matches de AI: ' + error.message);
+    }
 }
 
 // Funções de controle
@@ -898,145 +961,3 @@ function renderMatches() {
     });
 }
 
-// Funções de Pareamento com AI
-async function findAIMatches() {
-    if (!currentBGGGames.length || !currentLudoGames.length) {
-        alert('Carregue ambas as coleções primeiro');
-        return;
-    }
-
-    const aiLoadingIndicator = document.getElementById('aiLoadingIndicator');
-    const compareWithAIBtn = document.getElementById('compareWithAIBtn');
-    const aiMatchesListContainer = document.getElementById('aiMatchesList');
-    const aiStatusMessage = document.getElementById('aiStatusMessage');
-    
-    try {
-        // Mostrar indicador de loading e desabilitar o botão
-        aiLoadingIndicator.style.display = 'block';
-        compareWithAIBtn.disabled = true;
-        
-        // Mostrar mensagem de status inicial
-        aiStatusMessage.textContent = 'Iniciando análise com ChatGPT...';
-        aiStatusMessage.style.display = 'block';
-        
-        aiStatusMessage.textContent = 'Preparando dados para análise...';
-        const response = await fetch('/api/match-collections-ai', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                bggCollection: currentBGGGames,
-                ludoCollection: currentLudoGames
-            })
-        });
-
-        let data;
-        try {
-            aiStatusMessage.textContent = 'Processando resposta...';
-            data = await response.json();
-        } catch (parseError) {
-            throw new Error('Erro ao processar resposta do servidor');
-        }
-
-        if (!response.ok) {
-            throw new Error(data.error || `HTTP error! status: ${response.status}`);
-        }
-        
-        if (data.message) {
-            aiMatchesListContainer.innerHTML = `<div class="alert alert-info">${data.message}</div>`;
-            return;
-        }
-        
-        currentAIMatches = data.matches || [];
-        
-        // Limpar seleções anteriores
-        selectedAIMatches.clear();
-        aiMatchesList.innerHTML = '';
-
-        // Renderizar matches com AI
-        renderAIMatches();
-    } catch (error) {
-        console.error('Error finding AI matches:', error);
-        const errorMessage = error.message || 'Erro desconhecido';
-        aiMatchesListContainer.innerHTML = `
-            <div class="alert alert-danger">
-                <i class="bi bi-exclamation-triangle"></i>
-                Erro ao buscar matches com AI: ${errorMessage}
-            </div>`;
-    } finally {
-        // Esconder indicador de loading e reabilitar o botão
-        aiLoadingIndicator.style.display = 'none';
-        aiStatusMessage.style.display = 'none';
-        compareWithAIBtn.disabled = false;
-    }
-}
-
-function renderAIMatches() {
-    if (currentAIMatches.length === 0) {
-        aiMatchesList.innerHTML = `
-            <div class="alert alert-info">
-                <i class="bi bi-info-circle"></i>
-                Nenhum match encontrado pela AI.
-            </div>`;
-        return;
-    }
-
-    aiMatchesList.innerHTML = `
-        <div class="alert alert-info mb-3">
-            <i class="bi bi-robot"></i>
-            ${currentAIMatches.length} possíveis matches encontrados pela AI.
-        </div>`;
-    
-    currentAIMatches.forEach((match, index) => {
-        // Skip invalid matches
-        if (!match || !match.bggGame || !match.ludoGame) {
-            console.warn('Invalid AI match found:', match);
-            return;
-        }
-
-        const div = document.createElement('div');
-        div.className = 'match-item' + (match.exactMatch ? ' perfect-match' : '');
-        
-        // Use optional chaining and nullish coalescing to safely access properties
-        const bggName = match.bggGame?.name ?? 'Unknown BGG Game';
-        const ludoName = match.ludoGame?.name ?? 'Unknown Ludo Game';
-        
-        div.innerHTML = `
-            <div class="form-check">
-                <input class="form-check-input ai-match-checkbox" type="checkbox" 
-                       data-index="${index}" id="aimatch${index}">
-            </div>
-            <div class="match-names">
-                <span class="bgg-name">${bggName}</span>
-                <i class="bi bi-arrow-left-right match-arrow"></i>
-                <span class="ludo-name">${ludoName}</span>
-            </div>
-        `;
-        aiMatchesList.appendChild(div);
-
-        // Adicionar event listener para o checkbox
-        const checkbox = div.querySelector('.ai-match-checkbox');
-        checkbox.addEventListener('change', (e) => {
-            if (e.target.checked) {
-                selectedAIMatches.add(index);
-            } else {
-                selectedAIMatches.delete(index);
-            }
-            updateAIAcceptButtonState();
-        });
-    });
-}
-
-function handleSelectAllAIMatches(e) {
-    const checkboxes = document.querySelectorAll('.ai-match-checkbox');
-    checkboxes.forEach((checkbox, index) => {
-        checkbox.checked = e.target.checked;
-        if (e.target.checked) {
-            selectedAIMatches.add(index);
-        } else {
-            selectedAIMatches.delete(index);
-        }
-    });
-    updateAIAcceptButtonState();
-}
