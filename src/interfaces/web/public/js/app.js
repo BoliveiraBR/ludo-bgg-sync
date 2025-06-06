@@ -612,13 +612,22 @@ function renderAIMatches() {
         return;
     }
 
+    // Ordenar matches alfabeticamente pelo nome do jogo BGG
+    const sortedMatches = [...currentAIMatches]
+        .map((match, originalIndex) => ({ ...match, originalIndex }))
+        .sort((a, b) => {
+            const nameA = a.bgg?.name?.toLowerCase() ?? '';
+            const nameB = b.bgg?.name?.toLowerCase() ?? '';
+            return nameA.localeCompare(nameB, 'pt-BR');
+        });
+
     aiMatchesList.innerHTML = `
         <div class="alert alert-info mb-3">
             <i class="bi bi-robot"></i>
             ${currentAIMatches.length} possíveis matches encontrados pela AI.
         </div>`;
     
-    currentAIMatches.forEach((match, index) => {
+    sortedMatches.forEach((match, displayIndex) => {
         // Skip invalid matches
         if (!match || !match.bgg || !match.ludopedia) {
             console.warn('Invalid AI match found:', match);
@@ -632,10 +641,13 @@ function renderAIMatches() {
         const bggName = match.bgg?.name ?? 'Unknown BGG Game';
         const ludoName = match.ludopedia?.name ?? 'Unknown Ludo Game';
         
+        // Use original index for selection tracking
+        const originalIndex = match.originalIndex;
+        
         div.innerHTML = `
             <div class="form-check">
                 <input class="form-check-input ai-match-checkbox" type="checkbox" 
-                       data-index="${index}" id="aimatch${index}">
+                       data-index="${originalIndex}" id="aimatch${originalIndex}">
             </div>
             <div class="match-names">
                 <span class="bgg-name">${bggName}</span>
@@ -649,9 +661,9 @@ function renderAIMatches() {
         const checkbox = div.querySelector('.ai-match-checkbox');
         checkbox.addEventListener('change', (e) => {
             if (e.target.checked) {
-                selectedAIMatches.add(index);
+                selectedAIMatches.add(originalIndex);
             } else {
-                selectedAIMatches.delete(index);
+                selectedAIMatches.delete(originalIndex);
             }
             updateAIAcceptButtonState();
         });
@@ -763,13 +775,33 @@ function updateAIAcceptButtonState() {
 
 // Funções de Manual Matching
 function renderManualLists(onlyBGGGames, onlyLudoGames) {
+    // Criar listas combinadas: jogos únicos + jogos de matches pendentes
+    const combinedBggGames = [...onlyBGGGames];
+    const combinedLudoGames = [...onlyLudoGames];
+    
+    // Adicionar jogos dos matches pendentes que ainda não foram aceitos
+    if (currentMatches && currentMatches.length > 0) {
+        currentMatches.forEach(match => {
+            if (match.bggGame && match.ludoGame) {
+                // Verificar se o jogo BGG já não está na lista
+                if (!combinedBggGames.find(game => game.id === match.bggGame.id)) {
+                    combinedBggGames.push(match.bggGame);
+                }
+                // Verificar se o jogo Ludopedia já não está na lista
+                if (!combinedLudoGames.find(game => game.id === match.ludoGame.id)) {
+                    combinedLudoGames.push(match.ludoGame);
+                }
+            }
+        });
+    }
+    
     // Renderizar lista BGG
-    renderManualGameList(onlyBGGGames, manualBggList, 'bgg');
-    manualBggCount.textContent = onlyBGGGames.length;
+    renderManualGameList(combinedBggGames, manualBggList, 'bgg');
+    manualBggCount.textContent = combinedBggGames.length;
     
     // Renderizar lista Ludopedia
-    renderManualGameList(onlyLudoGames, manualLudoList, 'ludo');
-    manualLudoCount.textContent = onlyLudoGames.length;
+    renderManualGameList(combinedLudoGames, manualLudoList, 'ludo');
+    manualLudoCount.textContent = combinedLudoGames.length;
     
     // Reset selections
     selectedManualBggGame = null;
@@ -789,7 +821,12 @@ function renderManualGameList(games, container, type) {
         return;
     }
     
-    games.forEach((game, index) => {
+    // Ordenar jogos alfabeticamente por nome
+    const sortedGames = [...games].sort((a, b) => 
+        a.name.toLowerCase().localeCompare(b.name.toLowerCase(), 'pt-BR')
+    );
+    
+    sortedGames.forEach((game, index) => {
         const div = document.createElement('div');
         div.className = 'manual-game-item';
         
