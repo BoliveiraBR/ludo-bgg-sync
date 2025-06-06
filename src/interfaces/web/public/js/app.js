@@ -66,15 +66,23 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.filter-link').forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            const collection = e.target.closest('.filter-link').dataset.collection;
-            const filter = e.target.closest('.filter-link').dataset.filter;
+            
+            const linkElement = e.target.closest('.filter-link');
+            
+            // Verificar se o link está desabilitado
+            if (linkElement.classList.contains('disabled')) {
+                return;
+            }
+            
+            const collection = linkElement.dataset.collection;
+            const filter = linkElement.dataset.filter;
             
             // Remove active class from all links in this collection
             document.querySelectorAll(`.filter-link[data-collection="${collection}"]`)
                 .forEach(el => el.classList.remove('active'));
             
             // Add active class to clicked link
-            e.target.closest('.filter-link').classList.add('active');
+            linkElement.classList.add('active');
             
             // Apply filter
             const games = collection === 'bgg' ? currentBGGGames : currentLudoGames;
@@ -163,7 +171,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Carregar configurações iniciais
     loadConfig();
+
+    // Inicializar estado dos filtros na carga da página
+    updateFilterLinksState();
 });
+
+// Função para gerenciar estado dos links de filtro
+function updateFilterLinksState() {
+    const bggHasData = currentBGGGames && currentBGGGames.length > 0;
+    const ludoHasData = currentLudoGames && currentLudoGames.length > 0;
+    
+    // Atualizar links BGG
+    const bggLinks = document.querySelectorAll('.filter-link[data-collection="bgg"]');
+    bggLinks.forEach(link => {
+        if (bggHasData) {
+            link.classList.remove('disabled');
+        } else {
+            link.classList.add('disabled');
+        }
+    });
+    
+    // Atualizar links Ludopedia
+    const ludoLinks = document.querySelectorAll('.filter-link[data-collection="ludo"]');
+    ludoLinks.forEach(link => {
+        if (ludoHasData) {
+            link.classList.remove('disabled');
+        } else {
+            link.classList.add('disabled');
+        }
+    });
+}
 
 // Funções auxiliares
 function setLoading(loading) {
@@ -353,6 +390,9 @@ async function loadCollections() {
         // Atualizar UI
         updateStats(data.bggCollection, 'bgg');
         updateStats(data.ludoCollection, 'ludo');
+        
+        // Atualizar estado dos links de filtro
+        updateFilterLinksState();
         
         // Reset filters to "all" and render full lists
         document.querySelectorAll('.filter-link[data-filter="all"]').forEach(link => {
