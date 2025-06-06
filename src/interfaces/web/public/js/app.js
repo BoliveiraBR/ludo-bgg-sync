@@ -1,19 +1,46 @@
-// Elementos da UI
-const loadBtn = document.getElementById('loadBtn');
-const loadingIndicator = document.getElementById('loadingIndicator');
-const bggList = document.getElementById('bggList');
-const ludoList = document.getElementById('ludoList');
-
-// Estatísticas
-const bggTotal = document.getElementById('bggTotal');
-const bggBase = document.getElementById('bggBase');
-const bggExp = document.getElementById('bggExp');
-const ludoTotal = document.getElementById('ludoTotal');
-const ludoBase = document.getElementById('ludoBase');
-const ludoExp = document.getElementById('ludoExp');
-
-// Estado da aplicação
+// Declaração de variáveis globais
+let loadBtn, loadingIndicator, bggList, ludoList;
+let bggTotal, bggBase, bggExp, ludoTotal, ludoBase, ludoExp;
+let configModal, configBtn, saveConfigBtn, ludoAuthBtn, bggUserInput, ludoTokenInput;
 let isLoading = false;
+
+// Inicializar elementos quando o DOM estiver carregado
+document.addEventListener('DOMContentLoaded', () => {
+    // Elementos da UI
+    loadBtn = document.getElementById('loadBtn');
+    loadingIndicator = document.getElementById('loadingIndicator');
+    bggList = document.getElementById('bggList');
+    ludoList = document.getElementById('ludoList');
+
+    // Estatísticas
+    bggTotal = document.getElementById('bggTotal');
+    bggBase = document.getElementById('bggBase');
+    bggExp = document.getElementById('bggExp');
+    ludoTotal = document.getElementById('ludoTotal');
+    ludoBase = document.getElementById('ludoBase');
+    ludoExp = document.getElementById('ludoExp');
+
+    // Elementos do modal de configuração
+    configModal = new bootstrap.Modal(document.getElementById('configModal'));
+    configBtn = document.getElementById('configBtn');
+    saveConfigBtn = document.getElementById('saveConfigBtn');
+    ludoAuthBtn = document.getElementById('ludoAuthBtn');
+    bggUserInput = document.getElementById('bggUser');
+    ludoTokenInput = document.getElementById('ludoToken');
+
+    // Configurar event listeners
+    configBtn.addEventListener('click', () => {
+        loadConfig();
+        configModal.show();
+    });
+    
+    saveConfigBtn.addEventListener('click', saveConfig);
+    ludoAuthBtn.addEventListener('click', startLudopediaAuth);
+    loadBtn.addEventListener('click', loadCollections);
+
+    // Carregar configurações iniciais
+    loadConfig();
+});
 
 // Funções auxiliares
 function setLoading(loading) {
@@ -52,25 +79,29 @@ function renderGameList(games, container) {
     });
 }
 
-// Configurações
-const configModal = new bootstrap.Modal(document.getElementById('configModal'));
-const configBtn = document.getElementById('configBtn');
-const saveConfigBtn = document.getElementById('saveConfigBtn');
-const ludoAuthBtn = document.getElementById('ludoAuthBtn');
-const bggUserInput = document.getElementById('bggUser');
-const ludoTokenInput = document.getElementById('ludoToken');
-
 // Carregar configurações do servidor
 async function loadConfig() {
     try {
+        console.log('Carregando configurações...');
         const response = await fetch('/api/config');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
+        console.log('Dados recebidos:', data);
         
-        bggUserInput.value = data.BGG_USER || '';
-        ludoTokenInput.value = data.LUDO_ACCESS_TOKEN || '';
+        console.log('Elementos do form:', {
+            bggUserInput: bggUserInput?.id,
+            ludoTokenInput: ludoTokenInput?.id
+        });
+        
+        if (bggUserInput && ludoTokenInput) {
+            bggUserInput.value = data.BGG_USER || '';
+            ludoTokenInput.value = data.LUDO_ACCESS_TOKEN || '';
+            console.log('Configurações aplicadas aos campos');
+        } else {
+            console.error('Elementos do form não encontrados');
+        }
     } catch (error) {
         console.error('Error loading config:', error);
     }
@@ -125,8 +156,8 @@ async function startLudopediaAuth() {
     }
 }
 
-// Event listeners
-loadBtn.addEventListener('click', async () => {
+// Carregar coleções
+async function loadCollections() {
     try {
         setLoading(true);
         const loadType = document.querySelector('input[name="loadType"]:checked').value;
@@ -158,14 +189,4 @@ loadBtn.addEventListener('click', async () => {
     } finally {
         setLoading(false);
     }
-});
-
-
-// Event listeners para configurações
-configBtn.addEventListener('click', () => {
-    loadConfig();
-    configModal.show();
-});
-
-saveConfigBtn.addEventListener('click', saveConfig);
-ludoAuthBtn.addEventListener('click', startLudopediaAuth);
+}
