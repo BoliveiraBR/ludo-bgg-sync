@@ -187,6 +187,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Inicializar estado dos filtros na carga da página
     updateFilterLinksState();
+
+    // Carregar coleções automaticamente dos arquivos ao inicializar a página
+    loadCollections();
 });
 
 // Função para gerenciar estado dos links de filtro
