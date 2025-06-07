@@ -1,6 +1,7 @@
 // Declaração de variáveis globais
 let loadBtn, loadingIndicator, bggList, ludoList, saveBtn;
 let bggTotal, bggBase, bggExp, ludoTotal, ludoBase, ludoExp;
+let maxTotal, maxBase, maxExpansions; // Estatísticas da coleção
 let configModal, configBtn, saveConfigBtn, ludoAuthBtn, bggUserInput, ludoTokenInput, ludoUserDisplay;
 let selectAllMatches, acceptMatchesBtn, matchesList, compareWithAIBtn, aiMatchesList;
 let perfectMatchesCount, onlyBGGCount, onlyLudoCount, previousMatchesCount;
@@ -31,6 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
     ludoTotal = document.getElementById('ludoTotal');
     ludoBase = document.getElementById('ludoBase');
     ludoExp = document.getElementById('ludoExp');
+
+    // Estatísticas da coleção (maior valor)
+    maxTotal = document.getElementById('maxTotal');
+    maxBase = document.getElementById('maxBase');
+    maxExpansions = document.getElementById('maxExpansions');
 
     // Elementos do modal de configuração
     configModal = new bootstrap.Modal(document.getElementById('configModal'));
@@ -238,6 +244,25 @@ function updateStats(collection, type) {
         ludoBase.textContent = baseGames.length;
         ludoExp.textContent = expansions.length;
     }
+
+    // Atualizar estatísticas da coleção (maior valor)
+    updateCollectionStats();
+}
+
+function updateCollectionStats() {
+    // Obter valores atuais
+    const bggTotalVal = parseInt(bggTotal.textContent) || 0;
+    const bggBaseVal = parseInt(bggBase.textContent) || 0;
+    const bggExpVal = parseInt(bggExp.textContent) || 0;
+    
+    const ludoTotalVal = parseInt(ludoTotal.textContent) || 0;
+    const ludoBaseVal = parseInt(ludoBase.textContent) || 0;
+    const ludoExpVal = parseInt(ludoExp.textContent) || 0;
+
+    // Calcular o maior valor para cada métrica
+    maxTotal.textContent = Math.max(bggTotalVal, ludoTotalVal);
+    maxBase.textContent = Math.max(bggBaseVal, ludoBaseVal);
+    maxExpansions.textContent = Math.max(bggExpVal, ludoExpVal);
 }
 
 function renderGameList(games, container) {
