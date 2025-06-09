@@ -1130,5 +1130,122 @@
     "bggName": "6 nimmt!",
     "ludoName": "Pega em 6!",
     "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "63268",
+    "ludoId": 26124,
+    "bggName": "Dobble",
+    "ludoName": "Dobble Collector",
+    "confidence": "manual",
+    "reasoning": "Match manual criado pelo usuário"
+  },
+  {
+    "bggId": "255675",
+    "ludoId": 22209,
+    "bggName": "Exit: The Game – The Catacombs of Horror",
+    "ludoName": "Exit: As Catacumbas do Terror",
+    "confidence": "manual",
+    "reasoning": "Match manual criado pelo usuário"
+  },
+  {
+    "bggId": "341573",
+    "ludoId": 34042,
+    "bggName": "Exit: The Game – The Lord of the Rings: Shadows over Middle-earth",
+    "ludoName": "EXIT: O Jogo - Senhor dos Anéis: Sombras sobre a Terra Média",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "317372",
+    "ludoId": 31327,
+    "bggName": "Exit: The Game – The Gate Between Worlds",
+    "ludoName": "EXIT: O Jogo - O Portal entre os Mundos",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "283934",
+    "ludoId": 31802,
+    "bggName": "Exit: The Game – Theft on the Mississippi",
+    "ludoName": "EXIT: O Jogo - Roubo no Mississippi",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "295944",
+    "ludoId": 26241,
+    "bggName": "Exit: The Game – The Enchanted Forest",
+    "ludoName": "EXIT: O Jogo - A Floresta Encantada",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "295945",
+    "ludoId": 26240,
+    "bggName": "Exit: The Game – The Cemetery of the Knight",
+    "ludoName": "EXIT: O Jogo - O Cemitério do Cavaleiro",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "269968",
+    "ludoId": 25841,
+    "bggName": "Exit: The Game – The Haunted Roller Coaster",
+    "ludoName": "EXIT: O Jogo - A Montanha Russa Assombrada",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "226519",
+    "ludoId": 14677,
+    "bggName": "Exit: The Game – The House of Riddles",
+    "ludoName": "EXIT: O Jogo - A Casa dos Enigmas",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "215840",
+    "ludoId": 14394,
+    "bggName": "Exit: The Game – The Forbidden Castle",
+    "ludoName": "EXIT: O Jogo - O Castelo Proibido",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "215842",
+    "ludoId": 14393,
+    "bggName": "Exit: The Game – The Polar Station",
+    "ludoName": "EXIT: O Jogo - A Estação Polar",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "2651",
+    "ludoId": 32656,
+    "bggName": "Power Grid",
+    "ludoName": "Power Grid: Versão Energizada",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "12",
+    "ludoId": 53939,
+    "bggName": "Ra",
+    "ludoName": "RA: Pharaoh Edition",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "215471",
+    "ludoId": 33271,
+    "bggName": "Photograph",
+    "ludoName": "Fotomania",
+    "confidence": "manual",
+    "reasoning": "Match manual criado pelo usuário"
+  },
+  {
+    "bggId": "227072",
+    "ludoId": 15130,
+    "bggName": "The Chameleon",
+    "ludoName": "Infiltrado",
+    "confidence": "manual",
+    "reasoning": "Match manual criado pelo usuário"
+  },
+  {
+    "bggId": "38713",
+    "ludoId": 41162,
+    "bggName": "Time's Up! Edición Amarilla",
+    "ludoName": "Time's Up! Party",
+    "confidence": "manual",
+    "reasoning": "Match manual criado pelo usuário"
   }
 ]

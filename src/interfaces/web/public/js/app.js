@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     saveConfigBtn.addEventListener('click', saveConfig);
     ludoAuthBtn.addEventListener('click', startLudopediaAuth);
-    loadBtn.addEventListener('click', loadCollections);
+    loadBtn.addEventListener('click', loadCollectionsFromAPI);
     saveBtn.addEventListener('click', saveCollections);
 
     // Event listeners para filtros e pareamento
@@ -460,8 +460,72 @@ async function saveCollections() {
     }
 }
 
-// Atualizar loadCollections para sempre carregar via API
+// Atualizar loadCollections para carregar do arquivo por padrão
 async function loadCollections() {
+    try {
+        setLoading(true);
+        saveBtn.disabled = true;
+        
+        const response = await fetch('/api/collections', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ loadType: 'file' })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        // Store the collections
+        currentBGGGames = data.bggCollection;
+        currentLudoGames = data.ludoCollection;
+        
+        // Habilitar botão de salvar se há coleções carregadas
+        saveBtn.disabled = !(currentBGGGames.length || currentLudoGames.length);
+        
+        // Atualizar UI
+        updateStats(data.bggCollection, 'bgg');
+        updateStats(data.ludoCollection, 'ludo');
+        
+        // Atualizar estado dos links de filtro
+        updateFilterLinksState();
+        
+        // Reset filters to "all" and render full lists
+        document.querySelectorAll('.filter-link[data-filter="all"]').forEach(link => {
+            link.classList.add('active');
+        });
+        document.querySelectorAll('.filter-link[data-filter="base"], .filter-link[data-filter="expansion"]').forEach(link => {
+            link.classList.remove('active');
+        });
+        
+        renderGameList(data.bggCollection, bggList);
+        renderGameList(data.ludoCollection, ludoList);
+
+        // Procurar matches após carregar as coleções
+        if (currentBGGGames.length > 0 && currentLudoGames.length > 0) {
+            findMatches();
+        }
+        
+        // Show success message after successful load
+        if (successMessage) {
+            successMessage.style.display = 'block';
+        }
+        
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Erro ao carregar coleções: ' + error.message);
+        saveBtn.disabled = true;
+    } finally {
+        setLoading(false);
+    }
+}
+
+// Função para carregar coleções via API (quando o botão for clicado)
+async function loadCollectionsFromAPI() {
     try {
         setLoading(true);
         saveBtn.disabled = true;
@@ -517,7 +581,7 @@ async function loadCollections() {
         
     } catch (error) {
         console.error('Error:', error);
-        alert('Erro ao carregar coleções: ' + error.message);
+        alert('Erro ao carregar coleções via API: ' + error.message);
         saveBtn.disabled = true;
     } finally {
         setLoading(false);

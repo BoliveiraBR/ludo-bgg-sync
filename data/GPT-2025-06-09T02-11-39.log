@@ -1,0 +1,41 @@
+{
+  "timestamp": "2025-06-09T02:11:39.494Z",
+  "prompt": "Analise estas duas listas de jogos e encontre prováveis matches, \n        considerando variações de nome, traduções e edições diferentes.\n        \n        IMPORTANTE: Compare apenas os NOMES dos jogos, ignorando qualquer ID que possa aparecer.\n        \n        BGG: [\"The Chameleon\",\"Exit: The Game – The Cemetery of the Knight\",\"Exit: The Game – The Enchanted Forest\",\"Exit: The Game – The Forbidden Castle\",\"Exit: The Game – The Gate Between Worlds\",\"Exit: The Game – The Haunted Roller Coaster\",\"Exit: The Game – The House of Riddles\",\"Exit: The Game – The Lord of the Rings: Shadows over Middle-earth\",\"Exit: The Game – The Polar Station\",\"Exit: The Game – Theft on the Mississippi\",\"Kamasutra\",\"Photograph\",\"Power Grid\",\"Ra\",\"Time's Up! Edición Amarilla\"]\n        \n        Ludopedia: [\"Age of War\",\"Blend Off!\",\"Seaside\",\"Fotomania\",\"Nassau\",\"Kathmandu\",\"Power Grid: The Card Game\",\"Fear\",\"Time's Up! Party\",\"Finspan\",\"Zoo Vadis: Deluxe Edition\",\"Córdoba\",\"Lux Nova\",\"Sushi Go! 10th Anniversary Edition\",\"Order Overload: Cafe\",\"Robinson Crusoe: Edição de Colecionador\",\"Sky Team\",\"Dune: Guerra por Arrakis\",\"Cascadito\",\"Cascadero\",\"Regicide\",\"Lemur\",\"Glitches\",\"Glifos\",\"ProcuRatos\",\"GROVE: A 9 card solitaire game\",\"Heat: Pedal to the Metal\",\"High Score (I)\",\"Infiltrado\",\"Sea Salt & Paper\",\"Maskmen\",\"Vienna (I)\",\"Cuzco (I)\",\"Hegemony: Conduza Sua Classe À Vitória - Edição Ampliada\",\"MicroMacro: A Cidade do Crime\",\"La Granja: Deluxe Master Set\",\"Las Vegas Royale\",\"Arte Moderna\",\"Beer & Bread\",\"Decrypto: 5th Anniversary Edition\",\"Scout\",\"RA: Pharaoh Edition\",\"The Castles of Burgundy: Special Edition\",\"World Wonders\",\"Marrakesh\",\"New York City\",\"Amsterdam\",\"Hamburg\",\"Before the Guests Arrive\",\"Bananagrams\",\"Unlock!: Aventuras Lúdicas\",\"EXIT: O Jogo - Senhor dos Anéis: Sombras sobre a Terra Média\",\"EXIT: O Jogo - O Portal entre os Mundos\",\"O Dilema do Rei\",\"Witchstone\",\"Qui-Quitanda\",\"Duo Regna\",\"O Que O Quê\",\"Pandemic Iberia\",\"Twilight Inscription\",\"Wingspan: Ásia\",\"Splendor Duel\",\"Get on Board: New York & London\",\"Hive Pocket\",\"Deckscape Ameaça em Londres\",\"Canvas\",\"Power Grid: Versão Energizada\",\"Reino das Catapultas\",\"Telestrations: Na Madruga\",\"Escape Plan\",\"Nova Luna\",\"For Sale\",\"Destemidos: Normandia\",\"Star Wars: Palácio do Jabba - Um Jogo Love Letter\",\"Silver & Gold\",\"EXIT: O Jogo - Roubo no Mississippi\",\"EXIT: O Jogo - A Floresta Encantada\",\"EXIT: O Jogo - O Cemitério do Cavaleiro\",\"EXIT: O Jogo - A Montanha Russa Assombrada\",\"EXIT: O Jogo - A Casa dos Enigmas\",\"Exit: As Catacumbas do Terror\",\"EXIT: O Jogo - O Castelo Proibido\",\"Cangaço\",\"Air, Land, & Sea\",\"Caper: Europe\",\"Watergate\",\"Love Letter (2ª Edição)\",\"Pax Pamir: Segunda Edição\",\"KLASK\",\"The Game: Face to Face\",\"Ticket to Ride: Europa - 15 Anos\",\"Mamma Mia! Plus\",\"Biblios: Quill and Parchment\",\"Nanga Parbat\",\"Tumblin-Dice\",\"Duna: Imperium\",\"Skull\",\"The Red Cathedral\",\"Pablo (2ª Edição)\",\"Lisboa\",\"Paperback\",\"Dobble Collector\",\"Sintonia\",\"Black Sonata\",\"Maquis\",\"Nemo's War (Second Edition)\",\"Dobble: À Prova D'Água\",\"Pandemic Legacy: Season 0\",\"The Quacks of Quedlinburg (Quacks)\",\"Star Wars: Rebellion\",\"Salada de Pontos\",\"On Mars\",\"Star Wars: Orla Exterior\",\"Maracaibo\",\"Machi Koro: Deluxe Edition\",\"Archaeology: The New Expedition\",\"Kariba\",\"Hanabi Deluxe\",\"Pandemic Legacy: 2ª Temporada\",\"Tokyo Highway (four-player edition)\",\"Código Secreto: Dueto\",\"Bang!: The Dice Game\",\"EXIT: O Jogo - A Estação Polar\",\"The Lost Expedition\",\"Póquer de Bichos\",\"Azul Giant\",\"Rise of Augustus\",\"Sushi Roll\",\"Deep Sea Adventure\",\"A Fake Artist Goes to New York\",\"In Front of the Elevators\",\"No Thanks!\",\"The Castles of Burgundy: The Dice Game\",\"Wingspan\",\"Welcome To: Seu Lar Perfeito\",\"Pandemic 10th Anniversary\",\"Decrypto\",\"When I Dream\",\"The Mind\",\"Só Uma\",\"Targi\",\"CO2: Segunda Chance\",\"Twilight Imperium (4ª Edição)\",\"Arboretum\",\"The Grizzled: Armistício\",\"High Society\",\"The Game\",\"Qwirkle\",\"Azul\",\"Matcha\",\"HMS Dolores\",\"Battle Line\",\"Tigris & Euphrates\",\"Concordia\",\"In the Year of the Dragon: 10th Anniversary\",\"Terraforming Mars\",\"CV\",\"Coloretto\",\"Mombasa\",\"Santorini\",\"Trajan\",\"Troyes\",\"Mascarade\",\"Pyramid Arcade\",\"Die Weinhändler\",\"Xadrez\",\"Isle of Skye: De Líder a Rei\",\"Bohnanza: Por um Punhado de Feijões!\",\"Onirim: Second Edition\",\"Vinhos Deluxe Edition\",\"Tokaido - Collector's Edition\",\"Código Secreto: Imagens\",\"Capitão Sonar\",\"Patchwork\",\"The Gallerist\",\"Código Secreto\",\"Twilight Struggle\",\"Jaipur\",\"Coup\",\"Sexta-Feira\",\"Pega em 6!\",\"Agricola\",\"Viticulture - Edição Essencial\",\"Race for the Galaxy\",\"Pandemic Legacy: 1ª Temporada\",\"7 Wonders Duel\",\"Exploradores\",\"Splendor\",\"Hanabi\",\"King of Tokyo\",\"Ticket to Ride: 10th Anniversary\",\"The Resistance\",\"Noah\",\"Eldritch Horror\",\"Dixit: Odyssey\",\"Dixit\",\"Cyclades\",\"Biblios\",\"7 Wonders\"]\n        \n        Retorne apenas os matches encontrados no formato JSON array de arrays: \n        [[nomeLudopedia, nomeBGG], ...]",
+  "rawResponse": "Os matches encontrados são:\n\n[\n[\"EXIT: O Jogo - Senhor dos Anéis: Sombras sobre a Terra Média\", \"Exit: The Game – The Lord of the Rings: Shadows over Middle-earth\"],\n[\"EXIT: O Jogo - O Portal entre os Mundos\", \"Exit: The Game – The Gate Between Worlds\"],\n[\"EXIT: O Jogo - Roubo no Mississippi\", \"Exit: The Game – Theft on the Mississippi\"],\n[\"EXIT: O Jogo - A Floresta Encantada\", \"Exit: The Game – The Enchanted Forest\"],\n[\"EXIT: O Jogo - O Cemitério do Cavaleiro\", \"Exit: The Game – The Cemetery of the Knight\"],\n[\"EXIT: O Jogo - A Montanha Russa Assombrada\", \"Exit: The Game – The Haunted Roller Coaster\"],\n[\"EXIT: O Jogo - A Casa dos Enigmas\", \"Exit: The Game – The House of Riddles\"],\n[\"EXIT: O Jogo - O Castelo Proibido\", \"Exit: The Game – The Forbidden Castle\"],\n[\"EXIT: O Jogo - A Estação Polar\", \"Exit: The Game – The Polar Station\"],\n[\"Power Grid: Versão Energizada\", \"Power Grid\"],\n[\"RA: Pharaoh Edition\", \"Ra\"]\n]",
+  "fullResponse": {
+    "id": "chatcmpl-BgMGkfVePTiP8SgvfAoGwJW9dqTrm",
+    "object": "chat.completion",
+    "created": 1749435078,
+    "model": "gpt-4-0613",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Os matches encontrados são:\n\n[\n[\"EXIT: O Jogo - Senhor dos Anéis: Sombras sobre a Terra Média\", \"Exit: The Game – The Lord of the Rings: Shadows over Middle-earth\"],\n[\"EXIT: O Jogo - O Portal entre os Mundos\", \"Exit: The Game – The Gate Between Worlds\"],\n[\"EXIT: O Jogo - Roubo no Mississippi\", \"Exit: The Game – Theft on the Mississippi\"],\n[\"EXIT: O Jogo - A Floresta Encantada\", \"Exit: The Game – The Enchanted Forest\"],\n[\"EXIT: O Jogo - O Cemitério do Cavaleiro\", \"Exit: The Game – The Cemetery of the Knight\"],\n[\"EXIT: O Jogo - A Montanha Russa Assombrada\", \"Exit: The Game – The Haunted Roller Coaster\"],\n[\"EXIT: O Jogo - A Casa dos Enigmas\", \"Exit: The Game – The House of Riddles\"],\n[\"EXIT: O Jogo - O Castelo Proibido\", \"Exit: The Game – The Forbidden Castle\"],\n[\"EXIT: O Jogo - A Estação Polar\", \"Exit: The Game – The Polar Station\"],\n[\"Power Grid: Versão Energizada\", \"Power Grid\"],\n[\"RA: Pharaoh Edition\", \"Ra\"]\n]",
+          "refusal": null,
+          "annotations": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 1475,
+      "completion_tokens": 276,
+      "total_tokens": 1751,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      }
+    },
+    "service_tier": "default",
+    "system_fingerprint": null
+  }
+}
