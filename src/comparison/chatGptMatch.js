@@ -202,7 +202,7 @@ class ChatGPTMatcher {
       // Converter matches do ChatGPT para incluir IDs
       const matches = [];
  
-      
+      for (const rawMatch of rawMatches) {
         const [ludoName, bggName] = rawMatch;
         const bggGame = bggGameMap.get(bggName.toLowerCase().trim());
         const ludoGame = ludoGameMap.get(ludoName.toLowerCase().trim());
