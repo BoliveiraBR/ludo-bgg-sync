@@ -1,5 +1,23 @@
 [
   {
+    "bggId": "68448",
+    "ludoId": 8,
+    "bggName": "7 Wonders",
+    "ludoName": "7 Wonders"
+  },
+  {
+    "bggId": "173346",
+    "ludoId": 8285,
+    "bggName": "7 Wonders Duel",
+    "ludoName": "7 Wonders Duel"
+  },
+  {
+    "bggId": "155695",
+    "ludoId": 3123,
+    "bggName": "Age of War",
+    "ludoName": "Age of War"
+  },
+  {
     "bggId": "31260",
     "ludoId": 13,
     "bggName": "Agricola",
@@ -792,168 +810,10 @@
     "ludoName": "World Wonders"
   },
   {
-    "bggId": "68448",
-    "ludoId": 8,
-    "bggName": "7 Wonders",
-    "ludoName": "7 Wonders"
-  },
-  {
-    "bggId": "173346",
-    "ludoId": 8285,
-    "bggName": "7 Wonders Duel",
-    "ludoName": "7 Wonders Duel"
-  },
-  {
-    "bggId": "155695",
-    "ludoId": 3123,
-    "bggName": "Age of War",
-    "ludoName": "Age of War"
-  },
-  {
-    "bggId": "367150",
-    "ludoId": 37857,
-    "bggName": "Dune: War for Arrakis",
-    "ludoName": "Dune: Guerra por Arrakis",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "329873",
-    "ludoId": 33406,
-    "bggName": "Grove: 9 card solitaire game",
-    "ludoName": "GROVE: A 9 card solitaire game",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "341416",
-    "ludoId": 33246,
-    "bggName": "High Score",
-    "ludoName": "High Score (I)",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "368974",
-    "ludoId": 41163,
-    "bggName": "Vienna",
-    "ludoName": "Vienna (I)",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "368975",
-    "ludoId": 39596,
-    "bggName": "Cuzco",
-    "ludoName": "Cuzco (I)",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "321608",
-    "ludoId": 33119,
-    "bggName": "Hegemony: Lead Your Class to Victory",
-    "ludoName": "Hegemony: Conduza Sua Classe À Vitória - Edição Ampliada",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "318977",
-    "ludoId": 26214,
-    "bggName": "MicroMacro: Crime City",
-    "ludoName": "MicroMacro: A Cidade do Crime",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "118",
-    "ludoId": 908,
-    "bggName": "Modern Art",
-    "ludoName": "Arte Moderna",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "12",
-    "ludoId": 53939,
-    "bggName": "Ra",
-    "ludoName": "RA: Pharaoh Edition",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "334931",
-    "ludoId": 30881,
-    "bggName": "Robinson Crusoe: Adventures on the Cursed Island – Collector's Edition (Gamefound Edition)",
-    "ludoName": "Robinson Crusoe: Edição de Colecionador",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "353470",
-    "ludoId": 34608,
-    "bggName": "Star Wars: Palácio do Jabba – Um Jogo Love Letter",
-    "ludoName": "Star Wars: Palácio do Jabba - Um Jogo Love Letter",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "341573",
-    "ludoId": 34042,
-    "bggName": "Exit: The Game – The Lord of the Rings: Shadows over Middle-earth",
-    "ludoName": "EXIT: O Jogo - Senhor dos Anéis: Sombras sobre a Terra Média",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "317372",
-    "ludoId": 31327,
-    "bggName": "Exit: The Game – The Gate Between Worlds",
-    "ludoName": "EXIT: O Jogo - O Portal entre os Mundos",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "283934",
-    "ludoId": 31802,
-    "bggName": "Exit: The Game – Theft on the Mississippi",
-    "ludoName": "EXIT: O Jogo - Roubo no Mississippi",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "295944",
-    "ludoId": 26241,
-    "bggName": "Exit: The Game – The Enchanted Forest",
-    "ludoName": "EXIT: O Jogo - A Floresta Encantada",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "295945",
-    "ludoId": 26240,
-    "bggName": "Exit: The Game – The Cemetery of the Knight",
-    "ludoName": "EXIT: O Jogo - O Cemitério do Cavaleiro",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "269968",
-    "ludoId": 25841,
-    "bggName": "Exit: The Game – The Haunted Roller Coaster",
-    "ludoName": "EXIT: O Jogo - A Montanha Russa Assombrada",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "226519",
-    "ludoId": 14677,
-    "bggName": "Exit: The Game – The House of Riddles",
-    "ludoName": "EXIT: O Jogo - A Casa dos Enigmas",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "255675",
-    "ludoId": 22209,
-    "bggName": "Exit: The Game – The Catacombs of Horror",
-    "ludoName": "Exit: As Catacumbas do Terror",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "215840",
-    "ludoId": 14394,
-    "bggName": "Exit: The Game – The Forbidden Castle",
-    "ludoName": "EXIT: O Jogo - O Castelo Proibido",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "198928",
-    "ludoId": 10546,
-    "bggName": "Iberia",
-    "ludoName": "Pandemic Iberia",
+    "bggId": "368061",
+    "ludoId": 68483,
+    "bggName": "Zoo Vadis",
+    "ludoName": "Zoo Vadis: Deluxe Edition",
     "confidence": "ai-suggested"
   },
   {
@@ -964,115 +824,24 @@
     "confidence": "ai-suggested"
   },
   {
-    "bggId": "230498",
-    "ludoId": 16257,
-    "bggName": "Deckscape: The Fate of London",
-    "ludoName": "Deckscape Ameaça em Londres",
+    "bggId": "233867",
+    "ludoId": 15555,
+    "bggName": "Welcome To...",
+    "ludoName": "Welcome To: Seu Lar Perfeito",
     "confidence": "ai-suggested"
   },
   {
-    "bggId": "173761",
-    "ludoId": 8617,
-    "bggName": "Telestrations After Dark",
-    "ludoName": "Telestrations: Na Madruga",
+    "bggId": "12830",
+    "ludoId": 5598,
+    "bggName": "Weinhändler",
+    "ludoName": "Die Weinhändler",
     "confidence": "ai-suggested"
   },
   {
-    "bggId": "329841",
-    "ludoId": 29022,
-    "bggName": "Ticket to Ride: Europe – 15 Anos",
-    "ludoName": "Ticket to Ride: Europa - 15 Anos",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "16747",
-    "ludoId": 988,
-    "bggName": "Tumblin' Dice",
-    "ludoName": "Tumblin-Dice",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "218453",
-    "ludoId": 22066,
-    "bggName": "Pablo",
-    "ludoName": "Pablo (2ª Edição)",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "277085",
-    "ludoId": 22533,
-    "bggName": "Love Letter",
-    "ludoName": "Love Letter (2ª Edição)",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "256960",
-    "ludoId": 21122,
-    "bggName": "Pax Pamir: Second Edition",
-    "ludoName": "Pax Pamir: Segunda Edição",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "215842",
-    "ludoId": 14393,
-    "bggName": "Exit: The Game – The Polar Station",
-    "ludoName": "EXIT: O Jogo - A Estação Polar",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "143741",
-    "ludoId": 2060,
-    "bggName": "BANG! The Dice Game",
-    "ludoName": "Bang!: The Dice Game",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "224037",
-    "ludoId": 13677,
-    "bggName": "Código secreto dueto",
-    "ludoName": "Código Secreto: Dueto",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "274960",
-    "ludoId": 22349,
-    "bggName": "Point Salad",
-    "ludoName": "Salada de Pontos",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "221107",
-    "ludoId": 14305,
-    "bggName": "Pandemic Legacy: Segunda temporada",
-    "ludoName": "Pandemic Legacy: 2ª Temporada",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "261901",
-    "ludoId": 20049,
-    "bggName": "Tokyo Highway",
-    "ludoName": "Tokyo Highway (four-player edition)",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "137297",
-    "ludoId": 566,
-    "bggName": "Augustus",
-    "ludoName": "Rise of Augustus",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "11",
-    "ludoId": 595,
-    "bggName": "Bohnanza",
-    "ludoName": "Bohnanza: Por um Punhado de Feijões!",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "156336",
-    "ludoId": 10509,
-    "bggName": "Onirim (Second Edition)",
-    "ludoName": "Onirim: Second Edition",
+    "bggId": "183394",
+    "ludoId": 9711,
+    "bggName": "Viticulture Essential Edition",
+    "ludoName": "Viticulture - Edição Essencial",
     "confidence": "ai-suggested"
   },
   {
@@ -1083,10 +852,234 @@
     "confidence": "ai-suggested"
   },
   {
+    "bggId": "368974",
+    "ludoId": 41163,
+    "bggName": "Vienna",
+    "ludoName": "Vienna (I)",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "233078",
+    "ludoId": 14910,
+    "bggName": "Twilight Imperium: Quarta Edição",
+    "ludoName": "Twilight Imperium (4ª Edição)",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "16747",
+    "ludoId": 988,
+    "bggName": "Tumblin' Dice",
+    "ludoName": "Tumblin-Dice",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "261901",
+    "ludoId": 20049,
+    "bggName": "Tokyo Highway",
+    "ludoName": "Tokyo Highway (four-player edition)",
+    "confidence": "ai-suggested"
+  },
+  {
     "bggId": "155731",
     "ludoId": 3501,
     "bggName": "Tokaido: Collector's Edition",
     "ludoName": "Tokaido - Collector's Edition",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "329841",
+    "ludoId": 29022,
+    "bggName": "Ticket to Ride: Europe – 15 Anos",
+    "ludoName": "Ticket to Ride: Europa - 15 Anos",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "244521",
+    "ludoId": 18005,
+    "bggName": "The Quacks of Quedlinburg",
+    "ludoName": "The Quacks of Quedlinburg (Quacks)",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "173761",
+    "ludoId": 8617,
+    "bggName": "Telestrations After Dark",
+    "ludoName": "Telestrations: Na Madruga",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "353470",
+    "ludoId": 34608,
+    "bggName": "Star Wars: Palácio do Jabba – Um Jogo Love Letter",
+    "ludoName": "Star Wars: Palácio do Jabba - Um Jogo Love Letter",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "334931",
+    "ludoId": 30881,
+    "bggName": "Robinson Crusoe: Adventures on the Cursed Island – Collector's Edition (Gamefound Edition)",
+    "ludoName": "Robinson Crusoe: Edição de Colecionador",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "274960",
+    "ludoId": 22349,
+    "bggName": "Point Salad",
+    "ludoName": "Salada de Pontos",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "256960",
+    "ludoId": 21122,
+    "bggName": "Pax Pamir: Second Edition",
+    "ludoName": "Pax Pamir: Segunda Edição",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "30549",
+    "ludoId": 20517,
+    "bggName": "Pandemic: 10th Anniversary Edition",
+    "ludoName": "Pandemic 10th Anniversary",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "221107",
+    "ludoId": 14305,
+    "bggName": "Pandemic Legacy: Segunda temporada",
+    "ludoName": "Pandemic Legacy: 2ª Temporada",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "161936",
+    "ludoId": 7231,
+    "bggName": "Pandemic Legacy: Season 1",
+    "ludoName": "Pandemic Legacy: 1ª Temporada",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "218453",
+    "ludoId": 22066,
+    "bggName": "Pablo",
+    "ludoName": "Pablo (2ª Edição)",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "156336",
+    "ludoId": 10509,
+    "bggName": "Onirim (Second Edition)",
+    "ludoName": "Onirim: Second Edition",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "118",
+    "ludoId": 908,
+    "bggName": "Modern Art",
+    "ludoName": "Arte Moderna",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "318977",
+    "ludoId": 26214,
+    "bggName": "MicroMacro: Crime City",
+    "ludoName": "MicroMacro: A Cidade do Crime",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "277085",
+    "ludoId": 22533,
+    "bggName": "Love Letter",
+    "ludoName": "Love Letter (2ª Edição)",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "374595",
+    "ludoId": 54051,
+    "bggName": "Kelp: Shark vs Octopus",
+    "ludoName": "Kelp: Tubarão vs Polvo",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "198928",
+    "ludoId": 10546,
+    "bggName": "Iberia",
+    "ludoName": "Pandemic Iberia",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "341416",
+    "ludoId": 33246,
+    "bggName": "High Score",
+    "ludoName": "High Score (I)",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "321608",
+    "ludoId": 33119,
+    "bggName": "Hegemony: Lead Your Class to Victory",
+    "ludoName": "Hegemony: Conduza Sua Classe À Vitória - Edição Ampliada",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "329873",
+    "ludoId": 33406,
+    "bggName": "Grove: 9 card solitaire game",
+    "ludoName": "GROVE: A 9 card solitaire game",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "43570",
+    "ludoId": 544,
+    "bggName": "Friday",
+    "ludoName": "Sexta-Feira",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "367150",
+    "ludoId": 37857,
+    "bggName": "Dune: War for Arrakis",
+    "ludoName": "Dune: Guerra por Arrakis",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "231664",
+    "ludoId": 14694,
+    "bggName": "Fast Forward: FEAR",
+    "ludoName": "Fear",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "230498",
+    "ludoId": 16257,
+    "bggName": "Deckscape: The Fate of London",
+    "ludoName": "Deckscape Ameaça em Londres",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "368975",
+    "ludoId": 39596,
+    "bggName": "Cuzco",
+    "ludoName": "Cuzco (I)",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "158408",
+    "ludoId": 460,
+    "bggName": "Coup: 2ª edição",
+    "ludoName": "Coup",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "178900",
+    "ludoId": 8147,
+    "bggName": "Codinomes",
+    "ludoName": "Código Secreto",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "224037",
+    "ludoId": 13677,
+    "bggName": "Código secreto dueto",
+    "ludoName": "Código Secreto: Dueto",
     "confidence": "ai-suggested"
   },
   {
@@ -1104,41 +1097,6 @@
     "confidence": "ai-suggested"
   },
   {
-    "bggId": "178900",
-    "ludoId": 8147,
-    "bggName": "Codinomes",
-    "ludoName": "Código Secreto",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "158408",
-    "ludoId": 460,
-    "bggName": "Coup: 2ª edição",
-    "ludoName": "Coup",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "43570",
-    "ludoId": 544,
-    "bggName": "Friday",
-    "ludoName": "Sexta-Feira",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "183394",
-    "ludoId": 9711,
-    "bggName": "Viticulture Essential Edition",
-    "ludoName": "Viticulture - Edição Essencial",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "12830",
-    "ludoId": 5598,
-    "bggName": "Weinhändler",
-    "ludoName": "Die Weinhändler",
-    "confidence": "ai-suggested"
-  },
-  {
     "bggId": "171",
     "ludoId": 755,
     "bggName": "Chess",
@@ -1146,31 +1104,24 @@
     "confidence": "ai-suggested"
   },
   {
-    "bggId": "161936",
-    "ludoId": 7231,
-    "bggName": "Pandemic Legacy: Season 1",
-    "ludoName": "Pandemic Legacy: 1ª Temporada",
+    "bggId": "11",
+    "ludoId": 595,
+    "bggName": "Bohnanza",
+    "ludoName": "Bohnanza: Por um Punhado de Feijões!",
     "confidence": "ai-suggested"
   },
   {
-    "bggId": "30549",
-    "ludoId": 20517,
-    "bggName": "Pandemic: 10th Anniversary Edition",
-    "ludoName": "Pandemic 10th Anniversary",
+    "bggId": "143741",
+    "ludoId": 2060,
+    "bggName": "BANG! The Dice Game",
+    "ludoName": "Bang!: The Dice Game",
     "confidence": "ai-suggested"
   },
   {
-    "bggId": "233867",
-    "ludoId": 15555,
-    "bggName": "Welcome To...",
-    "ludoName": "Welcome To: Seu Lar Perfeito",
-    "confidence": "ai-suggested"
-  },
-  {
-    "bggId": "368061",
-    "ludoId": 68483,
-    "bggName": "Zoo Vadis",
-    "ludoName": "Zoo Vadis: Deluxe Edition",
+    "bggId": "137297",
+    "ludoId": 566,
+    "bggName": "Augustus",
+    "ludoName": "Rise of Augustus",
     "confidence": "ai-suggested"
   },
   {
@@ -1178,70 +1129,6 @@
     "ludoId": 681,
     "bggName": "6 nimmt!",
     "ludoName": "Pega em 6!",
-    "confidence": "manual",
-    "reasoning": "Match manual criado pelo usuário"
-  },
-  {
-    "bggId": "2651",
-    "ludoId": 32656,
-    "bggName": "Power Grid",
-    "ludoName": "Power Grid: Versão Energizada",
-    "confidence": "manual",
-    "reasoning": "Match manual criado pelo usuário"
-  },
-  {
-    "bggId": "63268",
-    "ludoId": 26124,
-    "bggName": "Dobble",
-    "ludoName": "Dobble Collector",
-    "confidence": "manual",
-    "reasoning": "Match manual criado pelo usuário"
-  },
-  {
-    "bggId": "231664",
-    "ludoId": 14694,
-    "bggName": "Fast Forward: FEAR",
-    "ludoName": "Fear",
-    "confidence": "manual",
-    "reasoning": "Match manual criado pelo usuário"
-  },
-  {
-    "bggId": "215471",
-    "ludoId": 33271,
-    "bggName": "Photograph",
-    "ludoName": "Fotomania",
-    "confidence": "manual",
-    "reasoning": "Match manual criado pelo usuário"
-  },
-  {
-    "bggId": "227072",
-    "ludoId": 15130,
-    "bggName": "The Chameleon",
-    "ludoName": "Infiltrado",
-    "confidence": "manual",
-    "reasoning": "Match manual criado pelo usuário"
-  },
-  {
-    "bggId": "244521",
-    "ludoId": 18005,
-    "bggName": "The Quacks of Quedlinburg",
-    "ludoName": "The Quacks of Quedlinburg (Quacks)",
-    "confidence": "manual",
-    "reasoning": "Match manual criado pelo usuário"
-  },
-  {
-    "bggId": "38713",
-    "ludoId": 41162,
-    "bggName": "Time's Up! Edición Amarilla",
-    "ludoName": "Time's Up! Party",
-    "confidence": "manual",
-    "reasoning": "Match manual criado pelo usuário"
-  },
-  {
-    "bggId": "233078",
-    "ludoId": 14910,
-    "bggName": "Twilight Imperium: Quarta Edição",
-    "ludoName": "Twilight Imperium (4ª Edição)",
     "confidence": "ai-suggested"
   }
 ]

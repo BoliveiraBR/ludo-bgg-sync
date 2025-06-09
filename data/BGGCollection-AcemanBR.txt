@@ -1165,6 +1165,18 @@
   },
   {
     "num": 98,
+    "id": "374595",
+    "name": "Kelp: Shark vs Octopus",
+    "subtype": "base",
+    "year": "2024",
+    "image": "https://cf.geekdo-images.com/iMtHHxutEtga5DiZDIbgJg__original/img/nzgtIPmNuWX65AHNC0sAbo4V2vU=/0x0/filters:format(jpeg)/pic7493386.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/iMtHHxutEtga5DiZDIbgJg__thumb/img/4QKru9Jmr46bphmA9uzwnOZve44=/fit-in/200x150/filters:strip_icc()/pic7493386.jpg",
+    "numplays": 0,
+    "comment": "",
+    "isExpansion": false
+  },
+  {
+    "num": 99,
     "id": "70323",
     "name": "King of Tokyo",
     "subtype": "base",
@@ -1176,7 +1188,7 @@
     "isExpansion": false
   },
   {
-    "num": 99,
+    "num": 100,
     "id": "165722",
     "name": "KLASK",
     "subtype": "base",
@@ -1188,7 +1200,7 @@
     "isExpansion": false
   },
   {
-    "num": 100,
+    "num": 101,
     "id": "271319",
     "name": "Las Vegas Royale",
     "subtype": "base",
@@ -1200,7 +1212,7 @@
     "isExpansion": false
   },
   {
-    "num": 101,
+    "num": 102,
     "id": "422993",
     "name": "Lemur",
     "subtype": "base",
@@ -1212,7 +1224,7 @@
     "isExpansion": false
   },
   {
-    "num": 102,
+    "num": 103,
     "id": "161533",
     "name": "Lisboa",
     "subtype": "base",
@@ -1224,7 +1236,7 @@
     "isExpansion": false
   },
   {
-    "num": 103,
+    "num": 104,
     "id": "216459",
     "name": "The Lost Expedition",
     "subtype": "base",
@@ -1236,7 +1248,7 @@
     "isExpansion": false
   },
   {
-    "num": 104,
+    "num": 105,
     "id": "277085",
     "name": "Love Letter",
     "subtype": "base",
@@ -1248,7 +1260,7 @@
     "isExpansion": false
   },
   {
-    "num": 105,
+    "num": 106,
     "id": "429367",
     "name": "Lux Nova",
     "subtype": "base",
@@ -1260,7 +1272,7 @@
     "isExpansion": false
   },
   {
-    "num": 106,
+    "num": 107,
     "id": "175239",
     "name": "Machi Koro: Deluxe Edition",
     "subtype": "base",
@@ -1272,7 +1284,7 @@
     "isExpansion": false
   },
   {
-    "num": 107,
+    "num": 108,
     "id": "41239",
     "name": "Mamma Mia! Plus",
     "subtype": "base",
@@ -1284,7 +1296,7 @@
     "isExpansion": false
   },
   {
-    "num": 108,
+    "num": 109,
     "id": "148729",
     "name": "Maquis",
     "subtype": "base",
@@ -1296,7 +1308,7 @@
     "isExpansion": false
   },
   {
-    "num": 109,
+    "num": 110,
     "id": "276025",
     "name": "Maracaibo",
     "subtype": "base",
@@ -1308,7 +1320,7 @@
     "isExpansion": false
   },
   {
-    "num": 110,
+    "num": 111,
     "id": "342810",
     "name": "Marrakesh",
     "subtype": "base",
@@ -1320,7 +1332,7 @@
     "isExpansion": false
   },
   {
-    "num": 111,
+    "num": 112,
     "id": "139030",
     "name": "Mascarade",
     "subtype": "base",
@@ -1332,7 +1344,7 @@
     "isExpansion": false
   },
   {
-    "num": 112,
+    "num": 113,
     "id": "159581",
     "name": "Maskmen",
     "subtype": "base",
@@ -1344,7 +1356,7 @@
     "isExpansion": false
   },
   {
-    "num": 113,
+    "num": 114,
     "id": "166107",
     "name": "Matcha",
     "subtype": "base",
@@ -1356,7 +1368,7 @@
     "isExpansion": false
   },
   {
-    "num": 114,
+    "num": 115,
     "id": "318977",
     "name": "MicroMacro: Crime City",
     "subtype": "base",
@@ -1368,7 +1380,7 @@
     "isExpansion": false
   },
   {
-    "num": 115,
+    "num": 116,
     "id": "244992",
     "name": "The Mind",
     "subtype": "base",
@@ -1380,7 +1392,7 @@
     "isExpansion": false
   },
   {
-    "num": 116,
+    "num": 117,
     "id": "118",
     "name": "Modern Art",
     "subtype": "base",
@@ -1392,7 +1404,7 @@
     "isExpansion": false
   },
   {
-    "num": 117,
+    "num": 118,
     "id": "172386",
     "name": "Mombasa",
     "subtype": "base",
@@ -1404,7 +1416,7 @@
     "isExpansion": false
   },
   {
-    "num": 118,
+    "num": 119,
     "id": "300305",
     "name": "Nanga Parbat",
     "subtype": "base",
@@ -1416,7 +1428,7 @@
     "isExpansion": false
   },
   {
-    "num": 119,
+    "num": 120,
     "id": "409005",
     "name": "Nassau",
     "subtype": "base",
@@ -1428,7 +1440,7 @@
     "isExpansion": false
   },
   {
-    "num": 120,
+    "num": 121,
     "id": "187617",
     "name": "Nemo's War (Second Edition)",
     "subtype": "base",
@@ -1440,7 +1452,7 @@
     "isExpansion": false
   },
   {
-    "num": 121,
+    "num": 122,
     "id": "346645",
     "name": "New York City",
     "subtype": "base",
@@ -1452,7 +1464,7 @@
     "isExpansion": false
   },
   {
-    "num": 122,
+    "num": 123,
     "id": "12942",
     "name": "No Thanks!",
     "subtype": "base",
@@ -1464,7 +1476,7 @@
     "isExpansion": false
   },
   {
-    "num": 123,
+    "num": 124,
     "id": "116858",
     "name": "Noah",
     "subtype": "base",
@@ -1476,7 +1488,7 @@
     "isExpansion": false
   },
   {
-    "num": 124,
+    "num": 125,
     "id": "284435",
     "name": "Nova Luna",
     "subtype": "base",
@@ -1488,7 +1500,7 @@
     "isExpansion": false
   },
   {
-    "num": 125,
+    "num": 126,
     "id": "184267",
     "name": "On Mars",
     "subtype": "base",
@@ -1500,7 +1512,7 @@
     "isExpansion": false
   },
   {
-    "num": 126,
+    "num": 127,
     "id": "156336",
     "name": "Onirim (Second Edition)",
     "subtype": "base",
@@ -1512,7 +1524,7 @@
     "isExpansion": false
   },
   {
-    "num": 127,
+    "num": 128,
     "id": "361214",
     "name": "Order Overload: Cafe",
     "subtype": "base",
@@ -1524,7 +1536,7 @@
     "isExpansion": false
   },
   {
-    "num": 128,
+    "num": 129,
     "id": "218453",
     "name": "Pablo",
     "subtype": "base",
@@ -1536,7 +1548,7 @@
     "isExpansion": false
   },
   {
-    "num": 129,
+    "num": 130,
     "id": "314040",
     "name": "Pandemic Legacy: Season 0",
     "subtype": "base",
@@ -1548,7 +1560,7 @@
     "isExpansion": false
   },
   {
-    "num": 130,
+    "num": 131,
     "id": "161936",
     "name": "Pandemic Legacy: Season 1",
     "subtype": "base",
@@ -1560,7 +1572,7 @@
     "isExpansion": false
   },
   {
-    "num": 131,
+    "num": 132,
     "id": "221107",
     "name": "Pandemic Legacy: Segunda temporada",
     "subtype": "base",
@@ -1572,7 +1584,7 @@
     "isExpansion": false
   },
   {
-    "num": 132,
+    "num": 133,
     "id": "30549",
     "name": "Pandemic: 10th Anniversary Edition",
     "subtype": "base",
@@ -1584,7 +1596,7 @@
     "isExpansion": false
   },
   {
-    "num": 133,
+    "num": 134,
     "id": "141572",
     "name": "Paperback",
     "subtype": "base",
@@ -1596,7 +1608,7 @@
     "isExpansion": false
   },
   {
-    "num": 134,
+    "num": 135,
     "id": "163412",
     "name": "Patchwork",
     "subtype": "base",
@@ -1608,7 +1620,7 @@
     "isExpansion": false
   },
   {
-    "num": 135,
+    "num": 136,
     "id": "256960",
     "name": "Pax Pamir: Second Edition",
     "subtype": "base",
@@ -1620,7 +1632,7 @@
     "isExpansion": false
   },
   {
-    "num": 136,
+    "num": 137,
     "id": "215471",
     "name": "Photograph",
     "subtype": "base",
@@ -1632,7 +1644,7 @@
     "isExpansion": false
   },
   {
-    "num": 137,
+    "num": 138,
     "id": "274960",
     "name": "Point Salad",
     "subtype": "base",
@@ -1644,7 +1656,7 @@
     "isExpansion": false
   },
   {
-    "num": 138,
+    "num": 139,
     "id": "11971",
     "name": "Póquer de bichos",
     "subtype": "base",
@@ -1656,7 +1668,7 @@
     "isExpansion": false
   },
   {
-    "num": 139,
+    "num": 140,
     "id": "2651",
     "name": "Power Grid",
     "subtype": "base",
@@ -1668,7 +1680,7 @@
     "isExpansion": false
   },
   {
-    "num": 140,
+    "num": 141,
     "id": "203780",
     "name": "Power Grid: The Card Game",
     "subtype": "base",
@@ -1680,7 +1692,7 @@
     "isExpansion": false
   },
   {
-    "num": 141,
+    "num": 142,
     "id": "408328",
     "name": "ProcuRatos",
     "subtype": "base",
@@ -1692,7 +1704,7 @@
     "isExpansion": false
   },
   {
-    "num": 142,
+    "num": 143,
     "id": "187988",
     "name": "Pyramid Arcade",
     "subtype": "base",
@@ -1704,7 +1716,7 @@
     "isExpansion": false
   },
   {
-    "num": 143,
+    "num": 144,
     "id": "244521",
     "name": "The Quacks of Quedlinburg",
     "subtype": "base",
@@ -1716,7 +1728,7 @@
     "isExpansion": false
   },
   {
-    "num": 144,
+    "num": 145,
     "id": "392110",
     "name": "O Que O Quê",
     "subtype": "base",
@@ -1728,7 +1740,7 @@
     "isExpansion": false
   },
   {
-    "num": 145,
+    "num": 146,
     "id": "392118",
     "name": "Qui-Quitanda",
     "subtype": "base",
@@ -1740,7 +1752,7 @@
     "isExpansion": false
   },
   {
-    "num": 146,
+    "num": 147,
     "id": "25669",
     "name": "Qwirkle",
     "subtype": "base",
@@ -1752,7 +1764,7 @@
     "isExpansion": false
   },
   {
-    "num": 147,
+    "num": 148,
     "id": "12",
     "name": "Ra",
     "subtype": "base",
@@ -1764,7 +1776,7 @@
     "isExpansion": false
   },
   {
-    "num": 148,
+    "num": 149,
     "id": "28143",
     "name": "Race for the Galaxy",
     "subtype": "base",
@@ -1776,7 +1788,7 @@
     "isExpansion": false
   },
   {
-    "num": 149,
+    "num": 150,
     "id": "227224",
     "name": "The Red Cathedral",
     "subtype": "base",
@@ -1788,7 +1800,7 @@
     "isExpansion": false
   },
   {
-    "num": 150,
+    "num": 151,
     "id": "307002",
     "name": "Regicide",
     "subtype": "base",
@@ -1800,7 +1812,7 @@
     "isExpansion": false
   },
   {
-    "num": 151,
+    "num": 152,
     "id": "310789",
     "name": "Reino das Catapultas",
     "subtype": "base",
@@ -1812,7 +1824,7 @@
     "isExpansion": false
   },
   {
-    "num": 152,
+    "num": 153,
     "id": "41114",
     "name": "The Resistance",
     "subtype": "base",
@@ -1824,7 +1836,7 @@
     "isExpansion": false
   },
   {
-    "num": 153,
+    "num": 154,
     "id": "334931",
     "name": "Robinson Crusoe: Adventures on the Cursed Island – Collector's Edition (Gamefound Edition)",
     "subtype": "base",
@@ -1836,7 +1848,7 @@
     "isExpansion": false
   },
   {
-    "num": 154,
+    "num": 155,
     "id": "194655",
     "name": "Santorini",
     "subtype": "base",
@@ -1848,7 +1860,7 @@
     "isExpansion": false
   },
   {
-    "num": 155,
+    "num": 156,
     "id": "291453",
     "name": "SCOUT",
     "subtype": "base",
@@ -1860,7 +1872,7 @@
     "isExpansion": false
   },
   {
-    "num": 156,
+    "num": 157,
     "id": "367220",
     "name": "Sea Salt & Paper",
     "subtype": "base",
@@ -1872,7 +1884,7 @@
     "isExpansion": false
   },
   {
-    "num": 157,
+    "num": 158,
     "id": "406660",
     "name": "Seaside",
     "subtype": "base",
@@ -1884,7 +1896,7 @@
     "isExpansion": false
   },
   {
-    "num": 158,
+    "num": 159,
     "id": "270673",
     "name": "Silver & Gold",
     "subtype": "base",
@@ -1896,7 +1908,7 @@
     "isExpansion": false
   },
   {
-    "num": 159,
+    "num": 160,
     "id": "262543",
     "name": "Sintonia",
     "subtype": "base",
@@ -1908,7 +1920,7 @@
     "isExpansion": false
   },
   {
-    "num": 160,
+    "num": 161,
     "id": "92415",
     "name": "Skull",
     "subtype": "base",
@@ -1920,7 +1932,7 @@
     "isExpansion": false
   },
   {
-    "num": 161,
+    "num": 162,
     "id": "373106",
     "name": "Sky Team",
     "subtype": "base",
@@ -1932,7 +1944,7 @@
     "isExpansion": false
   },
   {
-    "num": 162,
+    "num": 163,
     "id": "254640",
     "name": "Só uma",
     "subtype": "base",
@@ -1944,7 +1956,7 @@
     "isExpansion": false
   },
   {
-    "num": 163,
+    "num": 164,
     "id": "148228",
     "name": "Splendor",
     "subtype": "base",
@@ -1956,7 +1968,7 @@
     "isExpansion": false
   },
   {
-    "num": 164,
+    "num": 165,
     "id": "364073",
     "name": "Splendor Duel",
     "subtype": "base",
@@ -1968,7 +1980,7 @@
     "isExpansion": false
   },
   {
-    "num": 165,
+    "num": 166,
     "id": "271896",
     "name": "Star Wars: Orla Exterior",
     "subtype": "base",
@@ -1980,7 +1992,7 @@
     "isExpansion": false
   },
   {
-    "num": 166,
+    "num": 167,
     "id": "353470",
     "name": "Star Wars: Palácio do Jabba – Um Jogo Love Letter",
     "subtype": "base",
@@ -1992,7 +2004,7 @@
     "isExpansion": false
   },
   {
-    "num": 167,
+    "num": 168,
     "id": "187645",
     "name": "Star Wars: Rebellion",
     "subtype": "base",
@@ -2004,7 +2016,7 @@
     "isExpansion": false
   },
   {
-    "num": 168,
+    "num": 169,
     "id": "424972",
     "name": "Sushi Go! 10th Anniversary Edition",
     "subtype": "base",
@@ -2016,7 +2028,7 @@
     "isExpansion": false
   },
   {
-    "num": 169,
+    "num": 170,
     "id": "271869",
     "name": "Sushi Roll",
     "subtype": "base",
@@ -2028,7 +2040,7 @@
     "isExpansion": false
   },
   {
-    "num": 170,
+    "num": 171,
     "id": "118048",
     "name": "Targi",
     "subtype": "base",
@@ -2040,7 +2052,7 @@
     "isExpansion": false
   },
   {
-    "num": 171,
+    "num": 172,
     "id": "173761",
     "name": "Telestrations After Dark",
     "subtype": "base",
@@ -2052,7 +2064,7 @@
     "isExpansion": false
   },
   {
-    "num": 172,
+    "num": 173,
     "id": "167791",
     "name": "Terraforming Mars",
     "subtype": "base",
@@ -2064,7 +2076,7 @@
     "isExpansion": false
   },
   {
-    "num": 173,
+    "num": 174,
     "id": "160069",
     "name": "Ticket to Ride: 10th Anniversary",
     "subtype": "base",
@@ -2076,7 +2088,7 @@
     "isExpansion": false
   },
   {
-    "num": 174,
+    "num": 175,
     "id": "329841",
     "name": "Ticket to Ride: Europe – 15 Anos",
     "subtype": "base",
@@ -2088,7 +2100,7 @@
     "isExpansion": false
   },
   {
-    "num": 175,
+    "num": 176,
     "id": "42",
     "name": "Tigris & Euphrates",
     "subtype": "base",
@@ -2100,7 +2112,7 @@
     "isExpansion": false
   },
   {
-    "num": 176,
+    "num": 177,
     "id": "38713",
     "name": "Time's Up! Edición Amarilla",
     "subtype": "base",
@@ -2112,7 +2124,7 @@
     "isExpansion": false
   },
   {
-    "num": 177,
+    "num": 178,
     "id": "155731",
     "name": "Tokaido: Collector's Edition",
     "subtype": "base",
@@ -2124,7 +2136,7 @@
     "isExpansion": false
   },
   {
-    "num": 178,
+    "num": 179,
     "id": "261901",
     "name": "Tokyo Highway",
     "subtype": "base",
@@ -2136,7 +2148,7 @@
     "isExpansion": false
   },
   {
-    "num": 179,
+    "num": 180,
     "id": "102680",
     "name": "Trajan",
     "subtype": "base",
@@ -2148,7 +2160,7 @@
     "isExpansion": false
   },
   {
-    "num": 180,
+    "num": 181,
     "id": "73439",
     "name": "Troyes",
     "subtype": "base",
@@ -2160,7 +2172,7 @@
     "isExpansion": false
   },
   {
-    "num": 181,
+    "num": 182,
     "id": "16747",
     "name": "Tumblin' Dice",
     "subtype": "base",
@@ -2172,7 +2184,7 @@
     "isExpansion": false
   },
   {
-    "num": 182,
+    "num": 183,
     "id": "233078",
     "name": "Twilight Imperium: Quarta Edição",
     "subtype": "base",
@@ -2184,7 +2196,7 @@
     "isExpansion": false
   },
   {
-    "num": 183,
+    "num": 184,
     "id": "361545",
     "name": "Twilight Inscription",
     "subtype": "base",
@@ -2196,7 +2208,7 @@
     "isExpansion": false
   },
   {
-    "num": 184,
+    "num": 185,
     "id": "12333",
     "name": "Twilight Struggle",
     "subtype": "base",
@@ -2208,7 +2220,7 @@
     "isExpansion": false
   },
   {
-    "num": 185,
+    "num": 186,
     "id": "350636",
     "name": "Unlock!: Aventuras Lúdicas",
     "subtype": "base",
@@ -2220,7 +2232,7 @@
     "isExpansion": false
   },
   {
-    "num": 186,
+    "num": 187,
     "id": "368974",
     "name": "Vienna",
     "subtype": "base",
@@ -2232,7 +2244,7 @@
     "isExpansion": false
   },
   {
-    "num": 187,
+    "num": 188,
     "id": "175640",
     "name": "Vinhos: Deluxe Edition",
     "subtype": "base",
@@ -2244,7 +2256,7 @@
     "isExpansion": false
   },
   {
-    "num": 188,
+    "num": 189,
     "id": "183394",
     "name": "Viticulture Essential Edition",
     "subtype": "base",
@@ -2256,7 +2268,7 @@
     "isExpansion": false
   },
   {
-    "num": 189,
+    "num": 190,
     "id": "274364",
     "name": "Watergate",
     "subtype": "base",
@@ -2268,7 +2280,7 @@
     "isExpansion": false
   },
   {
-    "num": 190,
+    "num": 191,
     "id": "12830",
     "name": "Weinhändler",
     "subtype": "base",
@@ -2280,7 +2292,7 @@
     "isExpansion": false
   },
   {
-    "num": 191,
+    "num": 192,
     "id": "233867",
     "name": "Welcome To...",
     "subtype": "base",
@@ -2292,7 +2304,7 @@
     "isExpansion": false
   },
   {
-    "num": 192,
+    "num": 193,
     "id": "198454",
     "name": "When I Dream",
     "subtype": "base",
@@ -2304,7 +2316,7 @@
     "isExpansion": false
   },
   {
-    "num": 193,
+    "num": 194,
     "id": "266192",
     "name": "Wingspan",
     "subtype": "base",
@@ -2316,7 +2328,7 @@
     "isExpansion": false
   },
   {
-    "num": 194,
+    "num": 195,
     "id": "366161",
     "name": "Wingspan Asia",
     "subtype": "base",
@@ -2328,7 +2340,7 @@
     "isExpansion": false
   },
   {
-    "num": 195,
+    "num": 196,
     "id": "318560",
     "name": "Witchstone",
     "subtype": "base",
@@ -2340,7 +2352,7 @@
     "isExpansion": false
   },
   {
-    "num": 196,
+    "num": 197,
     "id": "365258",
     "name": "World Wonders",
     "subtype": "base",
@@ -2352,7 +2364,7 @@
     "isExpansion": false
   },
   {
-    "num": 197,
+    "num": 198,
     "id": "368061",
     "name": "Zoo Vadis",
     "subtype": "base",

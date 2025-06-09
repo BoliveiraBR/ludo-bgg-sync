@@ -1,5 +1,5 @@
 // Declaração de variáveis globais
-let loadBtn, loadingIndicator, bggList, ludoList, saveBtn;
+let loadBtn, loadingIndicator, successMessage, bggList, ludoList, saveBtn;
 let bggTotal, bggBase, bggExp, ludoTotal, ludoBase, ludoExp;
 let maxTotal, maxBase, maxExpansions; // Estatísticas da coleção
 let configModal, configBtn, saveConfigBtn, ludoAuthBtn, bggUserInput, ludoTokenInput, ludoUserDisplay;
@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadBtn = document.getElementById('loadBtn');
     saveBtn = document.getElementById('saveBtn');
     loadingIndicator = document.getElementById('loadingIndicator');
+    successMessage = document.getElementById('successMessage');
     bggList = document.getElementById('bggList');
     ludoList = document.getElementById('ludoList');
 
@@ -115,6 +116,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Event listeners para os quadros de estatísticas
+    document.querySelectorAll('.stat-card[data-stat-filter]').forEach(statCard => {
+        statCard.addEventListener('click', (e) => {
+            // Verificar se há dados carregados
+            if (!currentBGGGames.length && !currentLudoGames.length) {
+                return;
+            }
+            
+            const filter = e.currentTarget.dataset.statFilter;
+            
+            // Aplicar filtro em ambas as coleções
+            applyFilterToBothCollections(filter);
+        });
+    });
+
     // Funções de Pareamento
     async function handleAcceptMatches() {
         try {
@@ -194,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inicializar estado dos filtros na carga da página
     updateFilterLinksState();
 
-    // Carregar coleções automaticamente dos arquivos ao inicializar a página
+    // Carregar coleções automaticamente via API ao inicializar a página
     loadCollections();
 });
 
@@ -224,11 +240,55 @@ function updateFilterLinksState() {
     });
 }
 
+// Função para aplicar filtro em ambas as coleções simultaneamente
+function applyFilterToBothCollections(filter) {
+    // Remover classe active de todos os links de filtro
+    document.querySelectorAll('.filter-link').forEach(link => {
+        link.classList.remove('active');
+    });
+    
+    // Adicionar classe active aos links correspondentes
+    document.querySelectorAll(`.filter-link[data-filter="${filter}"]`).forEach(link => {
+        link.classList.add('active');
+    });
+    
+    // Aplicar filtro na coleção BGG
+    if (currentBGGGames.length > 0) {
+        let bggFiltered;
+        if (filter === 'all') {
+            bggFiltered = currentBGGGames;
+        } else {
+            bggFiltered = currentBGGGames.filter(game => 
+                filter === 'base' ? !game.isExpansion : game.isExpansion
+            );
+        }
+        renderGameList(bggFiltered, bggList);
+    }
+    
+    // Aplicar filtro na coleção Ludopedia
+    if (currentLudoGames.length > 0) {
+        let ludoFiltered;
+        if (filter === 'all') {
+            ludoFiltered = currentLudoGames;
+        } else {
+            ludoFiltered = currentLudoGames.filter(game => 
+                filter === 'base' ? !game.isExpansion : game.isExpansion
+            );
+        }
+        renderGameList(ludoFiltered, ludoList);
+    }
+}
+
 // Funções auxiliares
 function setLoading(loading) {
     isLoading = loading;
     loadBtn.disabled = loading;
     loadingIndicator.style.display = loading ? 'block' : 'none';
+    
+    // Hide success message when loading starts
+    if (loading && successMessage) {
+        successMessage.style.display = 'none';
+    }
 }
 
 function updateStats(collection, type) {
@@ -400,19 +460,18 @@ async function saveCollections() {
     }
 }
 
-// Atualizar loadCollections para habilitar o botão de salvar quando carregar via API
+// Atualizar loadCollections para sempre carregar via API
 async function loadCollections() {
     try {
         setLoading(true);
         saveBtn.disabled = true;
-        const loadType = document.querySelector('input[name="loadType"]:checked').value;
         
         const response = await fetch('/api/collections', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ loadType })
+            body: JSON.stringify({ loadType: 'api' })
         });
 
         if (!response.ok) {
@@ -425,8 +484,8 @@ async function loadCollections() {
         currentBGGGames = data.bggCollection;
         currentLudoGames = data.ludoCollection;
         
-        // Habilitar botão de salvar se carregou via API
-        saveBtn.disabled = !(loadType === 'api' && (currentBGGGames.length || currentLudoGames.length));
+        // Habilitar botão de salvar se há coleções carregadas
+        saveBtn.disabled = !(currentBGGGames.length || currentLudoGames.length);
         
         // Atualizar UI
         updateStats(data.bggCollection, 'bgg');
@@ -449,6 +508,11 @@ async function loadCollections() {
         // Procurar matches após carregar as coleções
         if (currentBGGGames.length > 0 && currentLudoGames.length > 0) {
             findMatches();
+        }
+        
+        // Show success message after successful load
+        if (successMessage) {
+            successMessage.style.display = 'block';
         }
         
     } catch (error) {
