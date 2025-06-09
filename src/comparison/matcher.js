@@ -4,17 +4,15 @@ class CollectionMatcher {
   static compareCollections(bggCollection, ludoCollection) {
     const normalize = name => name.trim().toLowerCase();
 
-    // Usar o campo isExpansion para determinar se é um jogo base
-    const bggBaseNames = bggCollection
-      .filter(item => !item.isExpansion)
+    // Incluir todos os jogos (base e expansões) no pareamento
+    const bggAllNames = bggCollection
       .map(item => ({ original: item.name.trim(), normalized: normalize(item.name) }));
 
-    const ludoBaseNames = ludoCollection
-      .filter(item => !item.isExpansion)
+    const ludoAllNames = ludoCollection
       .map(item => ({ original: item.name.trim(), normalized: normalize(item.name) }));
 
-    const bggSet = new Map(bggBaseNames.map(({ normalized, original }) => [normalized, original]));
-    const ludoSet = new Map(ludoBaseNames.map(({ normalized, original }) => [normalized, original]));
+    const bggSet = new Map(bggAllNames.map(({ normalized, original }) => [normalized, original]));
+    const ludoSet = new Map(ludoAllNames.map(({ normalized, original }) => [normalized, original]));
 
     return {
       matches: [...bggSet.keys()].filter(name => ludoSet.has(name)),

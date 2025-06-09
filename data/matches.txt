@@ -1246,5 +1246,865 @@
     "ludoName": "Time's Up! Party",
     "confidence": "manual",
     "reasoning": "Match manual criado pelo usuário"
+  },
+  {
+    "bggId": "262276",
+    "ludoId": "20193",
+    "bggName": "7 Wonders: Armada – Siracusa",
+    "ludoName": "7 Wonders: Armada – Siracusa"
+  },
+  {
+    "bggId": "110308",
+    "ludoId": "5762",
+    "bggName": "7 Wonders: Catan",
+    "ludoName": "7 Wonders: Catan"
+  },
+  {
+    "bggId": "231168",
+    "ludoId": "15035",
+    "bggName": "7 Wonders: Cities Anniversary Pack",
+    "ludoName": "7 Wonders: Cities Anniversary Pack"
+  },
+  {
+    "bggId": "130236",
+    "ludoId": "5769",
+    "bggName": "7 Wonders: Leaders – Esteban",
+    "ludoName": "7 Wonders: Leaders – Esteban"
+  },
+  {
+    "bggId": "127838",
+    "ludoId": "4671",
+    "bggName": "7 Wonders: Leaders – Louis",
+    "ludoName": "7 Wonders: Leaders – Louis"
+  },
+  {
+    "bggId": "166329",
+    "ludoId": "7902",
+    "bggName": "7 Wonders: Leaders – Nimrod",
+    "ludoName": "7 Wonders: Leaders – Nimrod"
+  },
+  {
+    "bggId": "99315",
+    "ludoId": "5765",
+    "bggName": "7 Wonders: Leaders – Stevie",
+    "ludoName": "7 Wonders: Leaders – Stevie"
+  },
+  {
+    "bggId": "231167",
+    "ludoId": "15034",
+    "bggName": "7 Wonders: Leaders Anniversary Pack",
+    "ludoName": "7 Wonders: Leaders Anniversary Pack"
+  },
+  {
+    "bggId": "92539",
+    "ludoId": "81",
+    "bggName": "7 Wonders: Líderes",
+    "ludoName": "7 Wonders: Líderes"
+  },
+  {
+    "bggId": "133993",
+    "ludoId": "449",
+    "bggName": "7 Wonders: Wonder Pack",
+    "ludoName": "7 Wonders: Wonder Pack"
+  },
+  {
+    "bggId": "150365",
+    "ludoId": "25234",
+    "bggName": "Augustus: Maximus Promo Card",
+    "ludoName": "Augustus: Maximus Promo Card"
+  },
+  {
+    "bggId": "235739",
+    "ludoId": "16204",
+    "bggName": "Azul: Joker Tiles",
+    "ludoName": "Azul: Joker Tiles"
+  },
+  {
+    "bggId": "193614",
+    "ludoId": "10843",
+    "bggName": "BANG! The Dice Game: Old Saloon",
+    "ludoName": "BANG! The Dice Game: Old Saloon"
+  },
+  {
+    "bggId": "295232",
+    "ludoId": "30292",
+    "bggName": "Black Sonata: The Fair Youth",
+    "ludoName": "Black Sonata: The Fair Youth"
+  },
+  {
+    "bggId": "207122",
+    "ludoId": "16797",
+    "bggName": "Captain Sonar: Chicago Map",
+    "ludoName": "Captain Sonar: Chicago Map"
+  },
+  {
+    "bggId": "206873",
+    "ludoId": "16796",
+    "bggName": "Captain Sonar: Foxtrot Map",
+    "ludoName": "Captain Sonar: Foxtrot Map"
+  },
+  {
+    "bggId": "207123",
+    "ludoId": "16798",
+    "bggName": "Captain Sonar: New York Map",
+    "ludoName": "Captain Sonar: New York Map"
+  },
+  {
+    "bggId": "270444",
+    "ludoId": "21030",
+    "bggName": "Captain Sonar: Operation Dragon",
+    "ludoName": "Captain Sonar: Operation Dragon"
+  },
+  {
+    "bggId": "218178",
+    "ludoId": "13130",
+    "bggName": "Captain Sonar: Upgrade One",
+    "ludoName": "Captain Sonar: Upgrade One"
+  },
+  {
+    "bggId": "213294",
+    "ludoId": "12013",
+    "bggName": "Codenames: Authors & Games",
+    "ludoName": "Codenames: Authors & Games"
+  },
+  {
+    "bggId": "205916",
+    "ludoId": "12036",
+    "bggName": "Codenames: Pictures – 5x5 Promo Tiles",
+    "ludoName": "Codenames: Pictures – 5x5 Promo Tiles"
+  },
+  {
+    "bggId": "232917",
+    "ludoId": "16092",
+    "bggName": "Concordia: Aegyptus / Creta",
+    "ludoName": "Concordia: Aegyptus / Creta"
+  },
+  {
+    "bggId": "208364",
+    "ludoId": "11698",
+    "bggName": "Concordia: Gallia / Corsica",
+    "ludoName": "Concordia: Gallia / Corsica"
+  },
+  {
+    "bggId": "181084",
+    "ludoId": "9582",
+    "bggName": "Concordia: Salsa",
+    "ludoName": "Concordia: Salsa"
+  },
+  {
+    "bggId": "325490",
+    "ludoId": "33108",
+    "bggName": "Concordia: Solitaria",
+    "ludoName": "Concordia: Solitaria"
+  },
+  {
+    "bggId": "151332",
+    "ludoId": "15008",
+    "bggName": "CV: Promo Cards",
+    "ludoName": "CV: Promo Cards"
+  },
+  {
+    "bggId": "96778",
+    "ludoId": "244",
+    "bggName": "Cyclades: Hades",
+    "ludoName": "Cyclades: Hades"
+  },
+  {
+    "bggId": "111771",
+    "ludoId": "1360",
+    "bggName": "Cyclades: Hecate",
+    "ludoName": "Cyclades: Hecate"
+  },
+  {
+    "bggId": "108224",
+    "ludoId": "1361",
+    "bggName": "Cyclades: The Manticore",
+    "ludoName": "Cyclades: The Manticore"
+  },
+  {
+    "bggId": "132022",
+    "ludoId": "12172",
+    "bggName": "Dixit: 2012 Asmodee Special Cards",
+    "ludoName": "Dixit: 2012 Asmodee Special Cards"
+  },
+  {
+    "bggId": "256237",
+    "ludoId": "19782",
+    "bggName": "Dixit: Anniversary",
+    "ludoName": "Dixit: Anniversary"
+  },
+  {
+    "bggId": "156189",
+    "ludoId": "6607",
+    "bggName": "Dixit: Daydreams",
+    "ludoName": "Dixit: Daydreams"
+  },
+  {
+    "bggId": "234553",
+    "ludoId": "15155",
+    "bggName": "Dixit: Harmonies",
+    "ludoName": "Dixit: Harmonies"
+  },
+  {
+    "bggId": "174090",
+    "ludoId": "8339",
+    "bggName": "Dixit: Memories",
+    "ludoName": "Dixit: Memories"
+  },
+  {
+    "bggId": "301112",
+    "ludoId": "26283",
+    "bggName": "Dixit: Mirrors",
+    "ludoName": "Dixit: Mirrors"
+  },
+  {
+    "bggId": "145325",
+    "ludoId": "2288",
+    "bggName": "Dixit: Origins",
+    "ludoName": "Dixit: Origins"
+  },
+  {
+    "bggId": "55660",
+    "ludoId": "609",
+    "bggName": "Dixit: Quest",
+    "ludoName": "Dixit: Quest"
+  },
+  {
+    "bggId": "205761",
+    "ludoId": "11889",
+    "bggName": "Dixit: Revelations",
+    "ludoName": "Dixit: Revelations"
+  },
+  {
+    "bggId": "371018",
+    "ludoId": "41143",
+    "bggName": "Dune: War for Arrakis – Smugglers",
+    "ludoName": "Dune: War for Arrakis – Smugglers"
+  },
+  {
+    "bggId": "154842",
+    "ludoId": "2671",
+    "bggName": "Eldritch Horror: Conhecimento Perdido",
+    "ludoName": "Eldritch Horror: Conhecimento Perdido"
+  },
+  {
+    "bggId": "277156",
+    "ludoId": "23039",
+    "bggName": "Escape Plan: Upgrade Pack",
+    "ludoName": "Escape Plan: Upgrade Pack"
+  },
+  {
+    "bggId": "193148",
+    "ludoId": "11343",
+    "bggName": "The Gallerist: KS Stretch Goal Pack #2",
+    "ludoName": "The Gallerist: KS Stretch Goal Pack #2"
+  },
+  {
+    "bggId": "374250",
+    "ludoId": "46473",
+    "bggName": "Hegemony: Lead Your Class to Victory – Crisis & Control",
+    "ludoName": "Hegemony: Lead Your Class to Victory – Crisis & Control"
+  },
+  {
+    "bggId": "147183",
+    "ludoId": "1790",
+    "bggName": "King of Tokyo: Halloween",
+    "ludoName": "King of Tokyo: Halloween"
+  },
+  {
+    "bggId": "127067",
+    "ludoId": "307",
+    "bggName": "King of Tokyo: Power Up!",
+    "ludoName": "King of Tokyo: Power Up!"
+  },
+  {
+    "bggId": "206374",
+    "ludoId": "11780",
+    "bggName": "Lost Cities: Expedition 6 – The Lost Expedition",
+    "ludoName": "Lost Cities: Expedition 6 – The Lost Expedition"
+  },
+  {
+    "bggId": "248181",
+    "ludoId": "18236",
+    "bggName": "The Lost Expedition: The Fountain of Youth & Other Adventures",
+    "ludoName": "The Lost Expedition: The Fountain of Youth & Other Adventures"
+  },
+  {
+    "bggId": "296519",
+    "ludoId": "24091",
+    "bggName": "Maracaibo: La Armada",
+    "ludoName": "Maracaibo: La Armada"
+  },
+  {
+    "bggId": "396446",
+    "ludoId": "56118",
+    "bggName": "Marrakesh: Camels & Nomads",
+    "ludoName": "Marrakesh: Camels & Nomads"
+  },
+  {
+    "bggId": "146565",
+    "ludoId": "2286",
+    "bggName": "Mascarade: The Damned",
+    "ludoName": "Mascarade: The Damned"
+  },
+  {
+    "bggId": "213293",
+    "ludoId": "11858",
+    "bggName": "Mombasa: Cooked Books Mini Expansion",
+    "ludoName": "Mombasa: Cooked Books Mini Expansion"
+  },
+  {
+    "bggId": "266950",
+    "ludoId": "22591",
+    "bggName": "Nemo's War (Second Edition): Bold and Caring Expansion Pack #2",
+    "ludoName": "Nemo's War (Second Edition): Bold and Caring Expansion Pack #2"
+  },
+  {
+    "bggId": "266953",
+    "ludoId": "22602",
+    "bggName": "Nemo's War (Second Edition): Dramatis Personae Expansion Pack #3",
+    "ludoName": "Nemo's War (Second Edition): Dramatis Personae Expansion Pack #3"
+  },
+  {
+    "bggId": "278431",
+    "ludoId": "24747",
+    "bggName": "On Mars: Beacon Promo Card",
+    "ludoName": "On Mars: Beacon Promo Card"
+  },
+  {
+    "bggId": "296981",
+    "ludoId": "24759",
+    "bggName": "On Mars: Upgrade Pack",
+    "ludoName": "On Mars: Upgrade Pack"
+  },
+  {
+    "bggId": "168017",
+    "ludoId": "10702",
+    "bggName": "Onirim (Second Edition): Mirrors Promo Cards",
+    "ludoName": "Onirim (second edition): Mirrors promo cards"
+  },
+  {
+    "bggId": "168018",
+    "ludoId": "10704",
+    "bggName": "Onirim (Second Edition): Sphinx, Diver and Confusion Promo Cards",
+    "ludoName": "Onirim (second edition): Sphinx, Diver and Confusion Promo Cards"
+  },
+  {
+    "bggId": "147580",
+    "ludoId": "2816",
+    "bggName": "Power Grid: Australia & Indian Subcontinent",
+    "ludoName": "Power Grid: Australia & Indian Subcontinent"
+  },
+  {
+    "bggId": "25031",
+    "ludoId": "2808",
+    "bggName": "Power Grid: Benelux/Central Europe",
+    "ludoName": "Power Grid: Benelux/Central Europe"
+  },
+  {
+    "bggId": "88491",
+    "ludoId": "1220",
+    "bggName": "Power Grid: BGG Promo Card Set",
+    "ludoName": "Power Grid: BGG Promo Card Set"
+  },
+  {
+    "bggId": "422757",
+    "ludoId": "68124",
+    "bggName": "Power Grid: Bremen/Manhattan",
+    "ludoName": "Power Grid: Bremen/Manhattan"
+  },
+  {
+    "bggId": "37397",
+    "ludoId": "2810",
+    "bggName": "Power Grid: China/Korea",
+    "ludoName": "Power Grid: China/Korea"
+  },
+  {
+    "bggId": "344428",
+    "ludoId": "79068",
+    "bggName": "Power Grid: Europe/North America",
+    "ludoName": "Power Grid: Europe/North America"
+  },
+  {
+    "bggId": "232004",
+    "ludoId": "14801",
+    "bggName": "Power Grid: Fabled Expansion",
+    "ludoName": "Power Grid: Fabled Expansion"
+  },
+  {
+    "bggId": "38997",
+    "ludoId": "12206",
+    "bggName": "Power Grid: Flux Generator",
+    "ludoName": "Power Grid: Flux Generator"
+  },
+  {
+    "bggId": "19319",
+    "ludoId": "2809",
+    "bggName": "Power Grid: France/Italy",
+    "ludoName": "Power Grid: France/Italy"
+  },
+  {
+    "bggId": "190505",
+    "ludoId": "10099",
+    "bggName": "Power Grid: High-Voltage DC Transmission Passage C",
+    "ludoName": "Power Grid: High-Voltage DC Transmission Passage C"
+  },
+  {
+    "bggId": "285448",
+    "ludoId": "23055",
+    "bggName": "Power Grid: Middle East/South Africa",
+    "ludoName": "Power Grid: Middle East/South Africa"
+  },
+  {
+    "bggId": "131184",
+    "ludoId": "2815",
+    "bggName": "Power Grid: Northern Europe/United Kingdom & Ireland",
+    "ludoName": "Power Grid: Northern Europe/United Kingdom & Ireland"
+  },
+  {
+    "bggId": "131458",
+    "ludoId": "1221",
+    "bggName": "Power Grid: Oracle & Industrial Espionage",
+    "ludoName": "Power Grid: Oracle & Industrial Espionage"
+  },
+  {
+    "bggId": "78727",
+    "ludoId": "2813",
+    "bggName": "Power Grid: Russia & Japan",
+    "ludoName": "Power Grid: Russia & Japan"
+  },
+  {
+    "bggId": "108668",
+    "ludoId": "10123",
+    "bggName": "Power Grid: Supply Contract",
+    "ludoName": "Power Grid: Supply Contract"
+  },
+  {
+    "bggId": "147932",
+    "ludoId": "10649",
+    "bggName": "Power Grid: Taxes",
+    "ludoName": "Power Grid: Taxes"
+  },
+  {
+    "bggId": "344429",
+    "ludoId": "35577",
+    "bggName": "Power Grid: The New Power Plants – Set 2",
+    "ludoName": "Power Grid: The New Power Plants – Set 2"
+  },
+  {
+    "bggId": "108667",
+    "ludoId": "2811",
+    "bggName": "Power Grid: The Robots",
+    "ludoName": "Power Grid: The Robots"
+  },
+  {
+    "bggId": "111144",
+    "ludoId": "12207",
+    "bggName": "Power Grid: Theme Park",
+    "ludoName": "Power Grid: Theme Park"
+  },
+  {
+    "bggId": "55201",
+    "ludoId": "12208",
+    "bggName": "Power Grid: Transformer Station",
+    "ludoName": "Power Grid: Transformer Station"
+  },
+  {
+    "bggId": "84462",
+    "ludoId": "7900",
+    "bggName": "Power Grid: Warehouse",
+    "ludoName": "Power Grid: Warehouse"
+  },
+  {
+    "bggId": "316597",
+    "ludoId": "25378",
+    "bggName": "The Quacks of Quedlinburg: The Alchemists",
+    "ludoName": "The Quacks of Quedlinburg: The Alchemists"
+  },
+  {
+    "bggId": "269259",
+    "ludoId": "22032",
+    "bggName": "The Quacks of Quedlinburg: The Herb Witches",
+    "ludoName": "The Quacks of Quedlinburg: The Herb Witches"
+  },
+  {
+    "bggId": "162889",
+    "ludoId": "5619",
+    "bggName": "The Resistance: Intenção Hostil",
+    "ludoName": "The Resistance: Intenção Hostil"
+  },
+  {
+    "bggId": "162604",
+    "ludoId": "9728",
+    "bggName": "Robinson Crusoe: Adventures on the Cursed Island – Spyglass of Illusory Hope",
+    "ludoName": "Robinson Crusoe: Adventures on the Cursed Island – Spyglass of Illusory Hope"
+  },
+  {
+    "bggId": "216033",
+    "ludoId": "12631",
+    "bggName": "Santorini: Golden Fleece",
+    "ludoName": "Santorini: Golden Fleece"
+  },
+  {
+    "bggId": "396545",
+    "ludoId": "57559",
+    "bggName": "Sea Salt & Paper: Extra Salt",
+    "ludoName": "Sea Salt & Paper: Extra Salt"
+  },
+  {
+    "bggId": "178742",
+    "ludoId": "11262",
+    "bggName": "Splendor: Nobles Promo Tiles",
+    "ludoName": "Splendor: Nobles Promo Tiles"
+  },
+  {
+    "bggId": "202453",
+    "ludoId": "14798",
+    "bggName": "Targi: The Expansion",
+    "ludoName": "Targi: The Expansion"
+  },
+  {
+    "bggId": "231965",
+    "ludoId": "14790",
+    "bggName": "Terraforming Mars: Venus Next",
+    "ludoName": "Terraforming Mars: Venus Next"
+  },
+  {
+    "bggId": "94284",
+    "ludoId": "9252",
+    "bggName": "Troyes: Bonus Cards",
+    "ludoName": "Troyes: Bonus cards"
+  },
+  {
+    "bggId": "276944",
+    "ludoId": "22543",
+    "bggName": "Welcome To...: Solo Mode",
+    "ludoName": "Welcome To...: Solo Mode"
+  },
+  {
+    "bggId": "238474",
+    "ludoId": "23647",
+    "bggName": "When I Dream: Bonus Cards",
+    "ludoName": "When I Dream: Bonus Cards"
+  },
+  {
+    "bggId": "309116",
+    "ludoId": "25127",
+    "bggName": "7 Wonders Duel: Agora",
+    "ludoName": "7 Wonders Duel: Ágora",
+    "confidence": "manual",
+    "reasoning": "Match manual criado pelo usuário"
+  },
+  {
+    "bggId": "300580",
+    "ludoId": "25118",
+    "bggName": "Wingspan: Oceania Expansion",
+    "ludoName": "Wingspan: Oceania",
+    "confidence": "manual",
+    "reasoning": "Match manual criado pelo usuário"
+  },
+  {
+    "bggId": "342031",
+    "ludoId": "32273",
+    "bggName": "Dune: Imperium – Rise of Ix",
+    "ludoName": "Duna: Imperium - Ascensão de Ix",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "408317",
+    "ludoId": "60114",
+    "bggName": "Coup: Promo Burguês e Benfeitor",
+    "ludoName": "Coup - Promo Burguês & Benfeitor",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "370796",
+    "ludoId": "41142",
+    "bggName": "Dune: War for Arrakis –  The Spacing Guild",
+    "ludoName": "Dune: War for Arrakis – The Spacing Guild",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "351611",
+    "ludoId": "46476",
+    "bggName": "Hegemony: Lead Your Class to Victory – Historical Events",
+    "ludoName": "Hegemony: Incidentes Históricos",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "362530",
+    "ludoId": "36687",
+    "bggName": "Cangaço: Compadecida promo card",
+    "ludoName": "Cangaço: Compadecida",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "340367",
+    "ludoId": "31496",
+    "bggName": "Kariba: Charmeleon Promo Card",
+    "ludoName": "Kariba: Camaleão",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "339468",
+    "ludoId": "38188",
+    "bggName": "Catapult Feud: The Royal Feast Expansion",
+    "ludoName": "Reino das Catapultas: O Banquete Real (mini-expansão)",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "330301",
+    "ludoId": "38378",
+    "bggName": "Catapult Feud: Siege! Expansion",
+    "ludoName": "Reino das Catapultas: Siege (Expansão)",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "339469",
+    "ludoId": "38189",
+    "bggName": "Catapult Feud: Dice Ammo Expansion",
+    "ludoName": "Reino das Catapultas: Munição de Dados (mini-expansão)",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "290448",
+    "ludoId": "38849",
+    "bggName": "Wingspan: European Expansion",
+    "ludoName": "Wingspan: Nesting Box",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "165023",
+    "ludoId": "9569",
+    "bggName": "Concordia: Britannia / Germania",
+    "ludoName": "Concordia: Britannia & Germania",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "209574",
+    "ludoId": "12118",
+    "bggName": "Concordia: 8 Forum Cards mini-expansion",
+    "ludoName": "Concordia: 8 Forum Cards",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "127061",
+    "ludoId": "412",
+    "bggName": "Troyes: The Ladies of Troyes",
+    "ludoName": "Troyes: As Damas de Troyes",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "226840",
+    "ludoId": "13793",
+    "bggName": "Star Wars: Rebellion – Rise of the Empire",
+    "ludoName": "Star Wars: Rebellion – A Ascensão do Império",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "315895",
+    "ludoId": "25257",
+    "bggName": "Twilight Imperium: Fourth Edition – Prophecy of Kings",
+    "ludoName": "Twilight Imperium (Quarta Edição): Profecia dos Reis",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "270310",
+    "ludoId": "26290",
+    "bggName": "CO₂: Second Chance – Limited Pack Expansion and Upgrade",
+    "ludoName": "CO₂: Segunda Chance - Expansão e Atualização Limitada do Pacote",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "334293",
+    "ludoId": "9861",
+    "bggName": "Coup: Promo Bufão & Burocrata",
+    "ludoName": "Coup - Promo Bufão & Burocrata",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "202174",
+    "ludoId": "12086",
+    "bggName": "Viticulture: Tuscany Essential Edition",
+    "ludoName": "Viticulture: Tuscany Edição Essencial",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "230226",
+    "ludoId": "17596",
+    "bggName": "The Lost Expedition: The Lost World – Cooperative Promo",
+    "ludoName": "The Lost Expedition: The Lost World Promo Cards",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "229646",
+    "ludoId": "17597",
+    "bggName": "The Lost Expedition: The Cursed Idol – Solo Promo",
+    "ludoName": "The Lost Expedition: The Cursed Idol Promo Cards",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "294345",
+    "ludoId": "24263",
+    "bggName": "Azul: Crystal Mosaic",
+    "ludoName": "Azul: Mosaico de Cristal",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "111661",
+    "ludoId": "80",
+    "bggName": "7 Wonders: Cities",
+    "ludoName": "7 Wonders: Cidades",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "247030",
+    "ludoId": "17401",
+    "bggName": "Terraforming Mars: Prelude",
+    "ludoName": "Terraforming Mars: Prelúdio",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "202976",
+    "ludoId": "11273",
+    "bggName": "7 Wonders Duel: Pantheon",
+    "ludoName": "7 Wonders Duel: Panteão",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "196339",
+    "ludoId": "11760",
+    "bggName": "7 Wonders Duel: Statue of Liberty Promo Card",
+    "ludoName": "7 Wonders Duel: Statue of Liberty",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "29416",
+    "ludoId": "2807",
+    "bggName": "Power Grid: The New Power Plant Cards",
+    "ludoName": "Power Grid: Cartas das Novas Usinas - Conjunto 1 (Versão Energizada)",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "58708",
+    "ludoId": "2812",
+    "bggName": "Power Grid: Brasil/Espanha & Portugal",
+    "ludoName": "Power Grid: Brasil - Espanha & Portugal (Versão Energizada)",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "156119",
+    "ludoId": "5324",
+    "bggName": "7 Wonders: Leaders – Wil Promo Card",
+    "ludoName": "7 Wonders: Leaders – Wil",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "186069",
+    "ludoId": "9698",
+    "bggName": "7 Wonders Duel: Messe Promo Card",
+    "ludoName": "7 Wonders Duel: The Messe Essen Promo Card",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "148931",
+    "ludoId": "3626",
+    "bggName": "Coup: Reformation",
+    "ludoName": "Coup: A Reforma",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "367466",
+    "ludoId": "40510",
+    "bggName": "Dune: Imperium – Immortality",
+    "ludoName": "Duna: Imperium - Imortalidade",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "283717",
+    "ludoId": "22596",
+    "bggName": "BANG! The Dice Game: Undead or Alive",
+    "ludoName": "Bang!: The Dice Game - Undead or Alive",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "119657",
+    "ludoId": "607",
+    "bggName": "Dixit 3: Journey",
+    "ludoName": "Dixit: Journey",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "163107",
+    "ludoId": "6560",
+    "bggName": "Mascarade: Expansion",
+    "ludoName": "Mascarade Expansion",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "144984",
+    "ludoId": "2285",
+    "bggName": "Mascarade: Usurper",
+    "ludoName": "Mascarade: Usurpateur",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "299441",
+    "ludoId": "51421",
+    "bggName": "Robinson Crusoe: Adventures on the Cursed Island – The Book of Adventures",
+    "ludoName": "Robinson Crusoe:  Livro de Aventuras (Gamefound Edition)",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "248929",
+    "ludoId": "18132",
+    "bggName": "Viticulture: Visit from the Rhine Valley",
+    "ludoName": "Viticulture: Visitantes do Vale do Reno",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "193823",
+    "ludoId": "10305",
+    "bggName": "Viticulture: Moor Visitors Expansion",
+    "ludoName": "Viticulture: Visitantes do Charco",
+    "confidence": "manual",
+    "reasoning": "Match manual criado pelo usuário"
+  },
+  {
+    "bggId": "218127",
+    "ludoId": "12415",
+    "bggName": "Terraforming Mars: Hellas & Elysium",
+    "ludoName": "Terraforming Mars: Hellas & Elysium"
+  },
+  {
+    "bggId": "332157",
+    "ludoId": "53150",
+    "bggName": "Twilight Imperium: Fourth Edition – Twilight Codex Volume I: Ordinian",
+    "ludoName": "Twilight Imperium: Fourth Edition – Twilight Codex Volume I: Ordinian"
+  },
+  {
+    "bggId": "336970",
+    "ludoId": "53149",
+    "bggName": "Twilight Imperium: Fourth Edition – Twilight Codex Volume II: Affinity",
+    "ludoName": "Twilight Imperium: Fourth Edition – Twilight Codex Volume II: Affinity"
+  },
+  {
+    "bggId": "362201",
+    "ludoId": "53148",
+    "bggName": "Twilight Imperium: Fourth Edition – Twilight Codex Volume III: Vigil",
+    "ludoName": "Twilight Imperium: Fourth Edition – Twilight Codex Volume III: Vigil"
+  },
+  {
+    "bggId": "406746",
+    "ludoId": "60385",
+    "bggName": "World Wonders: Mundo Wonders Pack",
+    "ludoName": "World Wonders: Mundo Wonders Pack"
+  },
+  {
+    "bggId": "241122",
+    "ludoId": "19557",
+    "bggName": "Nemo's War (Second Edition): Nautilus Upgrades Expansion Pack #1",
+    "ludoName": "Nemo's War (second edition): Nautilus Upgrades Expansion Pack",
+    "confidence": "ai-suggested"
   }
 ]
