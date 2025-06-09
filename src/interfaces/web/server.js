@@ -326,18 +326,25 @@ previousMatches.forEach(match => {
 });
 
 // Remover apenas jogos que formam pares completos
+const bggBeforeFilter = bggCollection.length;
+const ludoBeforeFilter = ludoCollection.length;
+
+// Guardar as coleções originais para verificação cruzada
+const originalBggCollection = [...bggCollection];
+const originalLudoCollection = [...ludoCollection];
+
 bggCollection = bggCollection.filter(bggGame => {
     const matchedLudoId = matchPairs.get(bggGame.id);
-    // Manter o jogo se não tiver match ou se o par dele não existir na coleção atual
+    // Manter o jogo se não tiver match ou se o par dele não existir na coleção ORIGINAL
     if (!matchedLudoId) return true;
-    return !ludoCollection.some(ludoGame => ludoGame.id === matchedLudoId);
+    return !originalLudoCollection.some(ludoGame => ludoGame.id === matchedLudoId);
 });
 
 ludoCollection = ludoCollection.filter(ludoGame => {
     const matchedBggId = matchPairs.get(ludoGame.id);
-    // Manter o jogo se não tiver match ou se o par dele não existir na coleção atual
+    // Manter o jogo se não tiver match ou se o par dele não existir na coleção ORIGINAL
     if (!matchedBggId) return true;
-    return !bggCollection.some(bggGame => bggGame.id === matchedBggId);
+    return !originalBggCollection.some(bggGame => bggGame.id === matchedBggId);
 });
 
     // Usar o matcher para comparar as coleções restantes
@@ -463,17 +470,21 @@ app.post('/api/match-collections-ai', async (req, res) => {
         matchPairs.set(match.ludoId, match.bggId);
     });
 
+    // Guardar as coleções originais para verificação cruzada
+    const originalBggCollection = [...bggCollection];
+    const originalLudoCollection = [...ludoCollection];
+
     // Remover apenas jogos que formam pares completos
     bggCollection = bggCollection.filter(bggGame => {
         const matchedLudoId = matchPairs.get(bggGame.id);
         if (!matchedLudoId) return true;
-        return !ludoCollection.some(ludoGame => ludoGame.id === matchedLudoId);
+        return !originalLudoCollection.some(ludoGame => ludoGame.id === matchedLudoId);
     });
 
     ludoCollection = ludoCollection.filter(ludoGame => {
         const matchedBggId = matchPairs.get(ludoGame.id);
         if (!matchedBggId) return true;
-        return !bggCollection.some(bggGame => bggGame.id === matchedBggId);
+        return !originalBggCollection.some(bggGame => bggGame.id === matchedBggId);
     });
 
     // Usar o matcher para comparar as coleções filtradas
@@ -486,11 +497,6 @@ app.post('/api/match-collections-ai', async (req, res) => {
         message: "Não há jogos não pareados para comparar com AI"
       });
     }
-
-    // Logging dos números
-    console.log('💫 Iniciando comparação com AI:');
-    console.log(`   BGG: ${comparison.onlyInBGG.length} jogos não pareados`);
-    console.log(`   Ludopedia: ${comparison.onlyInLudo.length} jogos não pareados`);
 
     // Buscar matches adicionais usando AI
     let aiMatches;
@@ -506,10 +512,7 @@ app.post('/api/match-collections-ai', async (req, res) => {
         return { id: game.id, name: game.name };
       });
 
-      console.log(`📤 Enviando para AI: ${bggGamesForAI.length} jogos BGG e ${ludoGamesForAI.length} jogos Ludopedia`);
-      
       aiMatches = await chatGptMatcher.findMatches(bggGamesForAI, ludoGamesForAI);
-      console.log(`🤖 AI retornou ${aiMatches ? aiMatches.length : 0} matches com IDs`);
     } catch (aiError) {
       console.error('❌ Erro na análise da AI:', aiError);
       return res.status(500).json({
@@ -521,7 +524,6 @@ app.post('/api/match-collections-ai', async (req, res) => {
     const matches = [];
     for (const aiMatch of aiMatches) {
       if (!aiMatch.bggId || !aiMatch.ludoId || !aiMatch.bggName || !aiMatch.ludoName) {
-        console.warn('⚠️ Match da AI com formato inválido:', aiMatch);
         continue;
       }
       
@@ -535,13 +537,9 @@ app.post('/api/match-collections-ai', async (req, res) => {
           ludopedia: ludoGame,
           confidence: 'ai-suggested'
         });
-      } else {
-        console.warn(`⚠️ Match da AI com IDs não encontrados: BGG ${aiMatch.bggId} | Ludo ${aiMatch.ludoId}`);
       }
     }
     
-    console.log(`✅ Processados ${aiMatches.length} matches da AI, ${matches.length} válidos encontrados`);
-
     res.json({ matches });
   } catch (error) {
     console.error('Error matching collections with AI:', error);
