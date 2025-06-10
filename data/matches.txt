@@ -2106,5 +2106,202 @@
     "bggName": "Nemo's War (Second Edition): Nautilus Upgrades Expansion Pack #1",
     "ludoName": "Nemo's War (second edition): Nautilus Upgrades Expansion Pack",
     "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "422261",
+    "ludoId": "66511",
+    "bggName": "World Wonders: Cristo Promo Card",
+    "ludoName": "World Wonders: Cristo",
+    "confidence": "manual",
+    "reasoning": "Match manual criado pelo usuário"
+  },
+  {
+    "bggId": "348601",
+    "ludoId": "33768",
+    "bggName": "7 Wonders Duel: Agora – Tu Quoque Fili Promo Card",
+    "ludoName": "7 Wonders Duel: Agora – Tu Quoque Fili Promo Card"
+  },
+  {
+    "bggId": "163095",
+    "ludoId": "12064",
+    "bggName": "Noah: The Promo Cards",
+    "ludoName": "Noah: The Promo Cards"
+  },
+  {
+    "bggId": "343598",
+    "ludoId": "33431",
+    "bggName": "Dune: Imperium – Boundless Ambition Promo Card",
+    "ludoName": "Duna: Imperium - Ambição Sem Limites Carta Promo",
+    "confidence": "manual",
+    "reasoning": "Match manual criado pelo usuário"
+  },
+  {
+    "bggId": "326431",
+    "ludoId": "40512",
+    "bggName": "Dune: Imperium – Jessica of Arrakis Promo Card",
+    "ludoName": "Duna: Imperium - Jéssica de Arrakis Carta Promo",
+    "confidence": "manual",
+    "reasoning": "Match manual criado pelo usuário"
+  },
+  {
+    "bggId": "374597",
+    "ludoId": "43088",
+    "bggName": "Dune: Imperium – Piter, Genius Advisor Promo Card",
+    "ludoName": "Duna: Imperium - Piter, Conselheiro Genial Carta Promo",
+    "confidence": "manual",
+    "reasoning": "Match manual criado pelo usuário"
+  },
+  {
+    "bggId": "273473",
+    "ludoId": "21556",
+    "bggName": "Terraforming Mars: Turmoil",
+    "ludoName": "Terraforming Mars: Reviravolta",
+    "confidence": "manual",
+    "reasoning": "Match manual criado pelo usuário"
+  },
+  {
+    "bggId": "126164",
+    "ludoId": "17747",
+    "bggName": "Dixit: \"The Dragon\" Promo Card",
+    "ludoName": "Dixit: \"The Dragon\" Promo Card"
+  },
+  {
+    "bggId": "421183",
+    "ludoId": "66271",
+    "bggName": "Dune: War for Arrakis – Desert War",
+    "ludoName": "Dune: War for Arrakis – Desert War"
+  },
+  {
+    "bggId": "256676",
+    "ludoId": "20284",
+    "bggName": "The Gallerist: Scoring Expansion",
+    "ludoName": "The Gallerist: Scoring Expansion"
+  },
+  {
+    "bggId": "285771",
+    "ludoId": "48068",
+    "bggName": "Nemo's War (Second Edition): Holidays on the High Seas",
+    "ludoName": "Nemo's War (Second Edition): Holidays on the High Seas"
+  },
+  {
+    "bggId": "325375",
+    "ludoId": "27587",
+    "bggName": "Nemo's War (Second Edition): Journey's End Expansion",
+    "ludoName": "Nemo's War (Second Edition): Journey's End Expansion"
+  },
+  {
+    "bggId": "406001",
+    "ludoId": "67607",
+    "bggName": "Terraforming Mars: Amazonis & Vastitas",
+    "ludoName": "Terraforming Mars: Amazonis & Vastitas"
+  },
+  {
+    "bggId": "311247",
+    "ludoId": "24914",
+    "bggName": "Terraforming Mars: Big Box",
+    "ludoName": "Terraforming Mars: Big Box"
+  },
+  {
+    "bggId": "428511",
+    "ludoId": "67606",
+    "bggName": "Terraforming Mars: Utopia & Cimmeria",
+    "ludoName": "Terraforming Mars: Utopia & Cimmeria"
+  },
+  {
+    "bggId": "255681",
+    "ludoId": "18864",
+    "bggName": "Terraforming Mars: Colonies",
+    "ludoName": "Terraforming Mars: Colônias",
+    "confidence": "manual",
+    "reasoning": "Match manual criado pelo usuário"
+  },
+  {
+    "bggId": "230241",
+    "ludoId": "14660",
+    "bggName": "Terraforming Mars: Penguins Promo Card",
+    "ludoName": "Terraforming Mars: Pinguins - Carta Promo",
+    "confidence": "manual",
+    "reasoning": "Match manual criado pelo usuário"
+  },
+  {
+    "bggId": "387809",
+    "ludoId": "52178",
+    "bggName": "Terraforming Mars: Prelude 2",
+    "ludoName": "Terraforming Mars: Prelúdio 2",
+    "confidence": "manual",
+    "reasoning": "Match manual criado pelo usuário"
+  },
+  {
+    "bggId": "406019",
+    "ludoId": "67605",
+    "bggName": "Terraforming Mars: Prelude 2 Kickstarter Promo Pack",
+    "ludoName": "Terraforming Mars: Prelúdio 2 Pack Promo",
+    "confidence": "manual",
+    "reasoning": "Match manual criado pelo usuário"
+  },
+  {
+    "bggId": "230123",
+    "ludoId": "14622",
+    "bggName": "Terraforming Mars: Self-Replicating Robots Promo Card",
+    "ludoName": "Terraforming Mars: Robôs Autorreplicadores - Carta Promo",
+    "confidence": "manual",
+    "reasoning": "Match manual criado pelo usuário"
+  },
+  {
+    "bggId": "226297",
+    "ludoId": "14390",
+    "bggName": "Terraforming Mars: Snow Algae Promo Card",
+    "ludoName": "Terraforming Mars: Alga das Neves - Carta Promo",
+    "confidence": "manual",
+    "reasoning": "Match manual criado pelo usuário"
+  },
+  {
+    "bggId": "202825",
+    "ludoId": "12223",
+    "bggName": "Terraforming Mars: Small Asteroid Promo Card",
+    "ludoName": "Terraforming Mars: Asteroide Pequeno - Carta Promo",
+    "confidence": "manual",
+    "reasoning": "Match manual criado pelo usuário"
+  },
+  {
+    "bggId": "205159",
+    "ludoId": "11272",
+    "bggName": "Isle of Skye: From Chieftain to King – Kennerspiel des Jahres Promo Tile",
+    "ludoName": "Isle of Skye: De Líder a Rei - Promo - Kennerspiel des Jahres",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "283739",
+    "ludoId": "13260",
+    "bggName": "Mombasa: Nomeie Sua Companhia",
+    "ludoName": "Mombasa: Nomeie Sua Companhia"
+  },
+  {
+    "bggId": "186067",
+    "ludoId": "11252",
+    "bggName": "Isle of Skye: From Chieftain to King – Brettspiel Adventskalender 2015 Promo Tiles",
+    "ludoName": "Isle of Skye: De Líder a Rei - Promo - Calendário do Advento",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "312319",
+    "ludoId": "32663",
+    "bggName": "Terraforming Mars: Big Box Promos",
+    "ludoName": "Terraforming Mars: Big Box Promo Pack",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "211945",
+    "ludoId": "18544",
+    "bggName": "Isle of Skye: From Chieftain to King – Adjacency Scrolls",
+    "ludoName": "Isle of Skye: De Líder a Rei - Expansões Promocionais",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "279345",
+    "ludoId": "23794",
+    "bggName": "Terraforming Mars: Turmoil Promos",
+    "ludoName": "Terraforming Mars: Reviravolta - Pacote Promo Kickstarter",
+    "confidence": "ai-suggested"
   }
 ]

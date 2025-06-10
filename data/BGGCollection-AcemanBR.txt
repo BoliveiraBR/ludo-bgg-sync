@@ -3384,6 +3384,23 @@
   },
   {
     "num": 2,
+    "id": "348601",
+    "name": "7 Wonders Duel: Agora – Tu Quoque Fili Promo Card",
+    "subtype": "boardgameexpansion",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/PNRoakcID0FFOL5XHzEUOQ__original/img/y_P0NkXa6bBp4YL9vGp3kx75_bk=/0x0/filters:format(png)/pic6435375.png",
+    "thumbnail": "https://cf.geekdo-images.com/PNRoakcID0FFOL5XHzEUOQ__thumb/img/ghloV6jjOnGpurYFrpYCEuuCaz0=/fit-in/200x150/filters:strip_icc()/pic6435375.png",
+    "numplays": 0,
+    "comment": "",
+    "bggId": "348601",
+    "owned": true,
+    "rating": null,
+    "bggRating": null
+  },
+  {
+    "num": 3,
     "id": "186069",
     "name": "7 Wonders Duel: Messe Promo Card",
     "subtype": "boardgameexpansion",
@@ -3400,7 +3417,7 @@
     "bggRating": null
   },
   {
-    "num": 3,
+    "num": 4,
     "id": "202976",
     "name": "7 Wonders Duel: Pantheon",
     "subtype": "boardgameexpansion",
@@ -3417,7 +3434,7 @@
     "bggRating": null
   },
   {
-    "num": 4,
+    "num": 5,
     "id": "196339",
     "name": "7 Wonders Duel: Statue of Liberty Promo Card",
     "subtype": "boardgameexpansion",
@@ -3434,7 +3451,7 @@
     "bggRating": null
   },
   {
-    "num": 5,
+    "num": 6,
     "id": "262276",
     "name": "7 Wonders: Armada – Siracusa",
     "subtype": "boardgameexpansion",
@@ -3451,7 +3468,7 @@
     "bggRating": null
   },
   {
-    "num": 6,
+    "num": 7,
     "id": "110308",
     "name": "7 Wonders: Catan",
     "subtype": "boardgameexpansion",
@@ -3468,7 +3485,7 @@
     "bggRating": null
   },
   {
-    "num": 7,
+    "num": 8,
     "id": "111661",
     "name": "7 Wonders: Cities",
     "subtype": "boardgameexpansion",
@@ -3485,7 +3502,7 @@
     "bggRating": null
   },
   {
-    "num": 8,
+    "num": 9,
     "id": "231168",
     "name": "7 Wonders: Cities Anniversary Pack",
     "subtype": "boardgameexpansion",
@@ -3502,7 +3519,7 @@
     "bggRating": null
   },
   {
-    "num": 9,
+    "num": 10,
     "id": "130236",
     "name": "7 Wonders: Leaders – Esteban",
     "subtype": "boardgameexpansion",
@@ -3519,7 +3536,7 @@
     "bggRating": null
   },
   {
-    "num": 10,
+    "num": 11,
     "id": "127838",
     "name": "7 Wonders: Leaders – Louis",
     "subtype": "boardgameexpansion",
@@ -3536,7 +3553,7 @@
     "bggRating": null
   },
   {
-    "num": 11,
+    "num": 12,
     "id": "166329",
     "name": "7 Wonders: Leaders – Nimrod",
     "subtype": "boardgameexpansion",
@@ -3553,7 +3570,7 @@
     "bggRating": null
   },
   {
-    "num": 12,
+    "num": 13,
     "id": "99315",
     "name": "7 Wonders: Leaders – Stevie",
     "subtype": "boardgameexpansion",
@@ -3570,7 +3587,7 @@
     "bggRating": null
   },
   {
-    "num": 13,
+    "num": 14,
     "id": "156119",
     "name": "7 Wonders: Leaders – Wil Promo Card",
     "subtype": "boardgameexpansion",
@@ -3587,7 +3604,7 @@
     "bggRating": null
   },
   {
-    "num": 14,
+    "num": 15,
     "id": "231167",
     "name": "7 Wonders: Leaders Anniversary Pack",
     "subtype": "boardgameexpansion",
@@ -3604,7 +3621,7 @@
     "bggRating": null
   },
   {
-    "num": 15,
+    "num": 16,
     "id": "92539",
     "name": "7 Wonders: Líderes",
     "subtype": "boardgameexpansion",
@@ -3621,7 +3638,7 @@
     "bggRating": null
   },
   {
-    "num": 16,
+    "num": 17,
     "id": "133993",
     "name": "7 Wonders: Wonder Pack",
     "subtype": "boardgameexpansion",
@@ -3638,7 +3655,7 @@
     "bggRating": null
   },
   {
-    "num": 17,
+    "num": 18,
     "id": "150365",
     "name": "Augustus: Maximus Promo Card",
     "subtype": "boardgameexpansion",
@@ -3655,7 +3672,7 @@
     "bggRating": null
   },
   {
-    "num": 18,
+    "num": 19,
     "id": "294345",
     "name": "Azul: Crystal Mosaic",
     "subtype": "boardgameexpansion",
@@ -3672,7 +3689,7 @@
     "bggRating": null
   },
   {
-    "num": 19,
+    "num": 20,
     "id": "235739",
     "name": "Azul: Joker Tiles",
     "subtype": "boardgameexpansion",
@@ -3689,7 +3706,7 @@
     "bggRating": null
   },
   {
-    "num": 20,
+    "num": 21,
     "id": "193614",
     "name": "BANG! The Dice Game: Old Saloon",
     "subtype": "boardgameexpansion",
@@ -3706,7 +3723,7 @@
     "bggRating": null
   },
   {
-    "num": 21,
+    "num": 22,
     "id": "283717",
     "name": "BANG! The Dice Game: Undead or Alive",
     "subtype": "boardgameexpansion",
@@ -3723,7 +3740,7 @@
     "bggRating": null
   },
   {
-    "num": 22,
+    "num": 23,
     "id": "295232",
     "name": "Black Sonata: The Fair Youth",
     "subtype": "boardgameexpansion",
@@ -3740,7 +3757,7 @@
     "bggRating": null
   },
   {
-    "num": 23,
+    "num": 24,
     "id": "362530",
     "name": "Cangaço: Compadecida promo card",
     "subtype": "boardgameexpansion",
@@ -3757,7 +3774,7 @@
     "bggRating": null
   },
   {
-    "num": 24,
+    "num": 25,
     "id": "207122",
     "name": "Captain Sonar: Chicago Map",
     "subtype": "boardgameexpansion",
@@ -3774,7 +3791,7 @@
     "bggRating": null
   },
   {
-    "num": 25,
+    "num": 26,
     "id": "206873",
     "name": "Captain Sonar: Foxtrot Map",
     "subtype": "boardgameexpansion",
@@ -3791,7 +3808,7 @@
     "bggRating": null
   },
   {
-    "num": 26,
+    "num": 27,
     "id": "207123",
     "name": "Captain Sonar: New York Map",
     "subtype": "boardgameexpansion",
@@ -3808,7 +3825,7 @@
     "bggRating": null
   },
   {
-    "num": 27,
+    "num": 28,
     "id": "270444",
     "name": "Captain Sonar: Operation Dragon",
     "subtype": "boardgameexpansion",
@@ -3825,7 +3842,7 @@
     "bggRating": null
   },
   {
-    "num": 28,
+    "num": 29,
     "id": "218178",
     "name": "Captain Sonar: Upgrade One",
     "subtype": "boardgameexpansion",
@@ -3842,7 +3859,7 @@
     "bggRating": null
   },
   {
-    "num": 29,
+    "num": 30,
     "id": "339469",
     "name": "Catapult Feud: Dice Ammo Expansion",
     "subtype": "boardgameexpansion",
@@ -3859,7 +3876,7 @@
     "bggRating": null
   },
   {
-    "num": 30,
+    "num": 31,
     "id": "330301",
     "name": "Catapult Feud: Siege! Expansion",
     "subtype": "boardgameexpansion",
@@ -3876,7 +3893,7 @@
     "bggRating": null
   },
   {
-    "num": 31,
+    "num": 32,
     "id": "339468",
     "name": "Catapult Feud: The Royal Feast Expansion",
     "subtype": "boardgameexpansion",
@@ -3893,7 +3910,7 @@
     "bggRating": null
   },
   {
-    "num": 32,
+    "num": 33,
     "id": "270310",
     "name": "CO₂: Second Chance – Limited Pack Expansion and Upgrade",
     "subtype": "boardgameexpansion",
@@ -3910,7 +3927,7 @@
     "bggRating": null
   },
   {
-    "num": 33,
+    "num": 34,
     "id": "127227",
     "name": "CO₂: The Arctic Expansion",
     "subtype": "boardgameexpansion",
@@ -3927,7 +3944,7 @@
     "bggRating": null
   },
   {
-    "num": 34,
+    "num": 35,
     "id": "213294",
     "name": "Codenames: Authors & Games",
     "subtype": "boardgameexpansion",
@@ -3944,7 +3961,7 @@
     "bggRating": null
   },
   {
-    "num": 35,
+    "num": 36,
     "id": "205916",
     "name": "Codenames: Pictures – 5x5 Promo Tiles",
     "subtype": "boardgameexpansion",
@@ -3961,7 +3978,7 @@
     "bggRating": null
   },
   {
-    "num": 36,
+    "num": 37,
     "id": "206078",
     "name": "Codenames: Pictures – Broken Token Promo Card",
     "subtype": "boardgameexpansion",
@@ -3978,7 +3995,7 @@
     "bggRating": null
   },
   {
-    "num": 37,
+    "num": 38,
     "id": "209574",
     "name": "Concordia: 8 Forum Cards mini-expansion",
     "subtype": "boardgameexpansion",
@@ -3995,7 +4012,7 @@
     "bggRating": null
   },
   {
-    "num": 38,
+    "num": 39,
     "id": "232917",
     "name": "Concordia: Aegyptus / Creta",
     "subtype": "boardgameexpansion",
@@ -4012,7 +4029,7 @@
     "bggRating": null
   },
   {
-    "num": 39,
+    "num": 40,
     "id": "165023",
     "name": "Concordia: Britannia / Germania",
     "subtype": "boardgameexpansion",
@@ -4029,7 +4046,7 @@
     "bggRating": null
   },
   {
-    "num": 40,
+    "num": 41,
     "id": "208364",
     "name": "Concordia: Gallia / Corsica",
     "subtype": "boardgameexpansion",
@@ -4046,7 +4063,7 @@
     "bggRating": null
   },
   {
-    "num": 41,
+    "num": 42,
     "id": "181084",
     "name": "Concordia: Salsa",
     "subtype": "boardgameexpansion",
@@ -4063,7 +4080,7 @@
     "bggRating": null
   },
   {
-    "num": 42,
+    "num": 43,
     "id": "325490",
     "name": "Concordia: Solitaria",
     "subtype": "boardgameexpansion",
@@ -4080,7 +4097,7 @@
     "bggRating": null
   },
   {
-    "num": 43,
+    "num": 44,
     "id": "186356",
     "name": "Coup: Inquisition",
     "subtype": "boardgameexpansion",
@@ -4097,7 +4114,7 @@
     "bggRating": null
   },
   {
-    "num": 44,
+    "num": 45,
     "id": "334293",
     "name": "Coup: Promo Bufão & Burocrata",
     "subtype": "boardgameexpansion",
@@ -4114,7 +4131,7 @@
     "bggRating": null
   },
   {
-    "num": 45,
+    "num": 46,
     "id": "408317",
     "name": "Coup: Promo Burguês e Benfeitor",
     "subtype": "boardgameexpansion",
@@ -4131,7 +4148,7 @@
     "bggRating": null
   },
   {
-    "num": 46,
+    "num": 47,
     "id": "148931",
     "name": "Coup: Reformation",
     "subtype": "boardgameexpansion",
@@ -4148,7 +4165,7 @@
     "bggRating": null
   },
   {
-    "num": 47,
+    "num": 48,
     "id": "151332",
     "name": "CV: Promo Cards",
     "subtype": "boardgameexpansion",
@@ -4165,7 +4182,7 @@
     "bggRating": null
   },
   {
-    "num": 48,
+    "num": 49,
     "id": "96778",
     "name": "Cyclades: Hades",
     "subtype": "boardgameexpansion",
@@ -4182,7 +4199,7 @@
     "bggRating": null
   },
   {
-    "num": 49,
+    "num": 50,
     "id": "111771",
     "name": "Cyclades: Hecate",
     "subtype": "boardgameexpansion",
@@ -4199,7 +4216,7 @@
     "bggRating": null
   },
   {
-    "num": 50,
+    "num": 51,
     "id": "108224",
     "name": "Cyclades: The Manticore",
     "subtype": "boardgameexpansion",
@@ -4216,7 +4233,7 @@
     "bggRating": null
   },
   {
-    "num": 51,
+    "num": 52,
     "id": "119657",
     "name": "Dixit 3: Journey",
     "subtype": "boardgameexpansion",
@@ -4233,7 +4250,7 @@
     "bggRating": null
   },
   {
-    "num": 52,
+    "num": 53,
     "id": "126164",
     "name": "Dixit: \"The Dragon\" Promo Card",
     "subtype": "boardgameexpansion",
@@ -4250,7 +4267,7 @@
     "bggRating": null
   },
   {
-    "num": 53,
+    "num": 54,
     "id": "132022",
     "name": "Dixit: 2012 Asmodee Special Cards",
     "subtype": "boardgameexpansion",
@@ -4267,7 +4284,7 @@
     "bggRating": null
   },
   {
-    "num": 54,
+    "num": 55,
     "id": "256237",
     "name": "Dixit: Anniversary",
     "subtype": "boardgameexpansion",
@@ -4284,7 +4301,7 @@
     "bggRating": null
   },
   {
-    "num": 55,
+    "num": 56,
     "id": "156189",
     "name": "Dixit: Daydreams",
     "subtype": "boardgameexpansion",
@@ -4301,7 +4318,7 @@
     "bggRating": null
   },
   {
-    "num": 56,
+    "num": 57,
     "id": "234553",
     "name": "Dixit: Harmonies",
     "subtype": "boardgameexpansion",
@@ -4318,7 +4335,7 @@
     "bggRating": null
   },
   {
-    "num": 57,
+    "num": 58,
     "id": "174090",
     "name": "Dixit: Memories",
     "subtype": "boardgameexpansion",
@@ -4335,7 +4352,7 @@
     "bggRating": null
   },
   {
-    "num": 58,
+    "num": 59,
     "id": "301112",
     "name": "Dixit: Mirrors",
     "subtype": "boardgameexpansion",
@@ -4352,7 +4369,7 @@
     "bggRating": null
   },
   {
-    "num": 59,
+    "num": 60,
     "id": "145325",
     "name": "Dixit: Origins",
     "subtype": "boardgameexpansion",
@@ -4369,7 +4386,7 @@
     "bggRating": null
   },
   {
-    "num": 60,
+    "num": 61,
     "id": "55660",
     "name": "Dixit: Quest",
     "subtype": "boardgameexpansion",
@@ -4386,7 +4403,7 @@
     "bggRating": null
   },
   {
-    "num": 61,
+    "num": 62,
     "id": "205761",
     "name": "Dixit: Revelations",
     "subtype": "boardgameexpansion",
@@ -4403,7 +4420,24 @@
     "bggRating": null
   },
   {
-    "num": 62,
+    "num": 63,
+    "id": "343598",
+    "name": "Dune: Imperium – Boundless Ambition Promo Card",
+    "subtype": "boardgameexpansion",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/OX4YvStCYTqR2i55wQ6yYg__original/img/N8rOfHafUpdaGQb1Hx81PCdlNzM=/0x0/filters:format(png)/pic6308732.png",
+    "thumbnail": "https://cf.geekdo-images.com/OX4YvStCYTqR2i55wQ6yYg__thumb/img/i_AV4bRVacCfTZLIXFTGRWvEVmo=/fit-in/200x150/filters:strip_icc()/pic6308732.png",
+    "numplays": 0,
+    "comment": "",
+    "bggId": "343598",
+    "owned": true,
+    "rating": null,
+    "bggRating": null
+  },
+  {
+    "num": 64,
     "id": "367466",
     "name": "Dune: Imperium – Immortality",
     "subtype": "boardgameexpansion",
@@ -4420,7 +4454,41 @@
     "bggRating": null
   },
   {
-    "num": 63,
+    "num": 65,
+    "id": "326431",
+    "name": "Dune: Imperium – Jessica of Arrakis Promo Card",
+    "subtype": "boardgameexpansion",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/Bv7MNrAR6kW8kpDX0MP84Q__original/img/OlheyVI7VTpcxisFOTLHo4h6FWE=/0x0/filters:format(jpeg)/pic5847836.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/Bv7MNrAR6kW8kpDX0MP84Q__thumb/img/7YNZh9K1qLBA-uEKsIUoSTh3puQ=/fit-in/200x150/filters:strip_icc()/pic5847836.jpg",
+    "numplays": 0,
+    "comment": "",
+    "bggId": "326431",
+    "owned": true,
+    "rating": null,
+    "bggRating": null
+  },
+  {
+    "num": 66,
+    "id": "374597",
+    "name": "Dune: Imperium – Piter, Genius Advisor Promo Card",
+    "subtype": "boardgameexpansion",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/DHUIjC4BGidJDFSpg8xDjw__original/img/gzQXKh4JckDl8kvaNijxG9gQoAs=/0x0/filters:format(png)/pic7172966.png",
+    "thumbnail": "https://cf.geekdo-images.com/DHUIjC4BGidJDFSpg8xDjw__thumb/img/PVXILHR1QHaioSBTbdbZrvfLoYw=/fit-in/200x150/filters:strip_icc()/pic7172966.png",
+    "numplays": 0,
+    "comment": "",
+    "bggId": "374597",
+    "owned": true,
+    "rating": null,
+    "bggRating": null
+  },
+  {
+    "num": 67,
     "id": "342031",
     "name": "Dune: Imperium – Rise of Ix",
     "subtype": "boardgameexpansion",
@@ -4437,7 +4505,7 @@
     "bggRating": null
   },
   {
-    "num": 64,
+    "num": 68,
     "id": "370796",
     "name": "Dune: War for Arrakis –  The Spacing Guild",
     "subtype": "boardgameexpansion",
@@ -4454,7 +4522,24 @@
     "bggRating": null
   },
   {
-    "num": 65,
+    "num": 69,
+    "id": "421183",
+    "name": "Dune: War for Arrakis – Desert War",
+    "subtype": "boardgameexpansion",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "2025",
+    "image": "https://cf.geekdo-images.com/cqO9YO0WVhPT6dRunZS5tA__original/img/eiTnh7qoUdxGRrpt98AGZkJ6WEI=/0x0/filters:format(jpeg)/pic8258909.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/cqO9YO0WVhPT6dRunZS5tA__thumb/img/YGhs478JSjotQL-R29FMuOrgoek=/fit-in/200x150/filters:strip_icc()/pic8258909.jpg",
+    "numplays": 0,
+    "comment": "",
+    "bggId": "421183",
+    "owned": true,
+    "rating": null,
+    "bggRating": null
+  },
+  {
+    "num": 70,
     "id": "371018",
     "name": "Dune: War for Arrakis – Smugglers",
     "subtype": "boardgameexpansion",
@@ -4471,7 +4556,7 @@
     "bggRating": null
   },
   {
-    "num": 66,
+    "num": 71,
     "id": "154842",
     "name": "Eldritch Horror: Conhecimento Perdido",
     "subtype": "boardgameexpansion",
@@ -4488,7 +4573,7 @@
     "bggRating": null
   },
   {
-    "num": 67,
+    "num": 72,
     "id": "277156",
     "name": "Escape Plan: Upgrade Pack",
     "subtype": "boardgameexpansion",
@@ -4505,7 +4590,7 @@
     "bggRating": null
   },
   {
-    "num": 68,
+    "num": 73,
     "id": "193148",
     "name": "The Gallerist: KS Stretch Goal Pack #2",
     "subtype": "boardgameexpansion",
@@ -4522,7 +4607,24 @@
     "bggRating": null
   },
   {
-    "num": 69,
+    "num": 74,
+    "id": "256676",
+    "name": "The Gallerist: Scoring Expansion",
+    "subtype": "boardgameexpansion",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/_tvx1FGPwLhmbazR7d7Mcw__original/img/s92VIk4CmU9Q2H2tvaNw1JGXPRY=/0x0/filters:format(png)/pic4224442.png",
+    "thumbnail": "https://cf.geekdo-images.com/_tvx1FGPwLhmbazR7d7Mcw__thumb/img/2ZmnGBos8VJjz6NZulNfeVDZGUo=/fit-in/200x150/filters:strip_icc()/pic4224442.png",
+    "numplays": 0,
+    "comment": "",
+    "bggId": "256676",
+    "owned": true,
+    "rating": null,
+    "bggRating": null
+  },
+  {
+    "num": 75,
     "id": "374250",
     "name": "Hegemony: Lead Your Class to Victory – Crisis & Control",
     "subtype": "boardgameexpansion",
@@ -4539,7 +4641,7 @@
     "bggRating": null
   },
   {
-    "num": 70,
+    "num": 76,
     "id": "351611",
     "name": "Hegemony: Lead Your Class to Victory – Historical Events",
     "subtype": "boardgameexpansion",
@@ -4556,7 +4658,7 @@
     "bggRating": null
   },
   {
-    "num": 71,
+    "num": 77,
     "id": "211945",
     "name": "Isle of Skye: From Chieftain to King – Adjacency Scrolls",
     "subtype": "boardgameexpansion",
@@ -4573,7 +4675,58 @@
     "bggRating": null
   },
   {
-    "num": 72,
+    "num": 78,
+    "id": "186067",
+    "name": "Isle of Skye: From Chieftain to King – Brettspiel Adventskalender 2015 Promo Tiles",
+    "subtype": "boardgameexpansion",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/HGuF85WOciWzroDVeDB_3w__original/img/m8uRJvsH2vipA0D83rnJA1OB-xg=/0x0/filters:format(jpeg)/pic4911057.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/HGuF85WOciWzroDVeDB_3w__thumb/img/EByqFuLMR5Mr2AQzmyZQJ70W6C0=/fit-in/200x150/filters:strip_icc()/pic4911057.jpg",
+    "numplays": 0,
+    "comment": "",
+    "bggId": "186067",
+    "owned": true,
+    "rating": null,
+    "bggRating": null
+  },
+  {
+    "num": 79,
+    "id": "205159",
+    "name": "Isle of Skye: From Chieftain to King – Kennerspiel des Jahres Promo Tile",
+    "subtype": "boardgameexpansion",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/xrbvibkNS7TUqnj2ZhwCZQ__original/img/9-Y9OrVxXHvDxLJ2rAskD-nkuPE=/0x0/filters:format(jpeg)/pic3133958.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/xrbvibkNS7TUqnj2ZhwCZQ__thumb/img/wd4KdWba_3YH9aZxRWj92BdswRM=/fit-in/200x150/filters:strip_icc()/pic3133958.jpg",
+    "numplays": 0,
+    "comment": "",
+    "bggId": "205159",
+    "owned": true,
+    "rating": null,
+    "bggRating": null
+  },
+  {
+    "num": 80,
+    "id": "291421",
+    "name": "Isle of Skye: Peças Promocionais",
+    "subtype": "boardgameexpansion",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/9K3KV3fk_Zn9m8O25GfJ6w__original/img/h203kxdccyRkiLfSwaIgEvSH2QY=/0x0/filters:format(png)/pic4993656.png",
+    "thumbnail": "https://cf.geekdo-images.com/9K3KV3fk_Zn9m8O25GfJ6w__thumb/img/E1A6ys1cDNVkfwtrZeez8xe1pSY=/fit-in/200x150/filters:strip_icc()/pic4993656.png",
+    "numplays": 0,
+    "comment": "",
+    "bggId": "291421",
+    "owned": true,
+    "rating": null,
+    "bggRating": null
+  },
+  {
+    "num": 81,
     "id": "340367",
     "name": "Kariba: Charmeleon Promo Card",
     "subtype": "boardgameexpansion",
@@ -4590,7 +4743,7 @@
     "bggRating": null
   },
   {
-    "num": 73,
+    "num": 82,
     "id": "147183",
     "name": "King of Tokyo: Halloween",
     "subtype": "boardgameexpansion",
@@ -4607,7 +4760,7 @@
     "bggRating": null
   },
   {
-    "num": 74,
+    "num": 83,
     "id": "127067",
     "name": "King of Tokyo: Power Up!",
     "subtype": "boardgameexpansion",
@@ -4624,7 +4777,7 @@
     "bggRating": null
   },
   {
-    "num": 75,
+    "num": 84,
     "id": "206374",
     "name": "Lost Cities: Expedition 6 – The Lost Expedition",
     "subtype": "boardgameexpansion",
@@ -4641,7 +4794,7 @@
     "bggRating": null
   },
   {
-    "num": 76,
+    "num": 85,
     "id": "229646",
     "name": "The Lost Expedition: The Cursed Idol – Solo Promo",
     "subtype": "boardgameexpansion",
@@ -4658,7 +4811,7 @@
     "bggRating": null
   },
   {
-    "num": 77,
+    "num": 86,
     "id": "248181",
     "name": "The Lost Expedition: The Fountain of Youth & Other Adventures",
     "subtype": "boardgameexpansion",
@@ -4675,7 +4828,7 @@
     "bggRating": null
   },
   {
-    "num": 78,
+    "num": 87,
     "id": "230226",
     "name": "The Lost Expedition: The Lost World – Cooperative Promo",
     "subtype": "boardgameexpansion",
@@ -4692,7 +4845,7 @@
     "bggRating": null
   },
   {
-    "num": 79,
+    "num": 88,
     "id": "296519",
     "name": "Maracaibo: La Armada",
     "subtype": "boardgameexpansion",
@@ -4709,7 +4862,7 @@
     "bggRating": null
   },
   {
-    "num": 80,
+    "num": 89,
     "id": "396446",
     "name": "Marrakesh: Camels & Nomads",
     "subtype": "boardgameexpansion",
@@ -4726,7 +4879,7 @@
     "bggRating": null
   },
   {
-    "num": 81,
+    "num": 90,
     "id": "163107",
     "name": "Mascarade: Expansion",
     "subtype": "boardgameexpansion",
@@ -4743,7 +4896,7 @@
     "bggRating": null
   },
   {
-    "num": 82,
+    "num": 91,
     "id": "146565",
     "name": "Mascarade: The Damned",
     "subtype": "boardgameexpansion",
@@ -4760,7 +4913,7 @@
     "bggRating": null
   },
   {
-    "num": 83,
+    "num": 92,
     "id": "144984",
     "name": "Mascarade: Usurper",
     "subtype": "boardgameexpansion",
@@ -4777,7 +4930,7 @@
     "bggRating": null
   },
   {
-    "num": 84,
+    "num": 93,
     "id": "213293",
     "name": "Mombasa: Cooked Books Mini Expansion",
     "subtype": "boardgameexpansion",
@@ -4794,7 +4947,24 @@
     "bggRating": null
   },
   {
-    "num": 85,
+    "num": 94,
+    "id": "283739",
+    "name": "Mombasa: Nomeie Sua Companhia",
+    "subtype": "boardgameexpansion",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/7b_RAu75HVuuhDQzrCuv0w__original/img/H4omArXJDeoAhOY21bhgNh4lB2Y=/0x0/filters:format(jpeg)/pic5660702.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/7b_RAu75HVuuhDQzrCuv0w__thumb/img/IwKdoe1VUQOV7bx7RdS1uVWdChw=/fit-in/200x150/filters:strip_icc()/pic5660702.jpg",
+    "numplays": 0,
+    "comment": "",
+    "bggId": "283739",
+    "owned": true,
+    "rating": null,
+    "bggRating": null
+  },
+  {
+    "num": 95,
     "id": "336748",
     "name": "Nanga Parbat: Hidden Objectives",
     "subtype": "boardgameexpansion",
@@ -4811,7 +4981,7 @@
     "bggRating": null
   },
   {
-    "num": 86,
+    "num": 96,
     "id": "266950",
     "name": "Nemo's War (Second Edition): Bold and Caring Expansion Pack #2",
     "subtype": "boardgameexpansion",
@@ -4828,7 +4998,7 @@
     "bggRating": null
   },
   {
-    "num": 87,
+    "num": 97,
     "id": "266953",
     "name": "Nemo's War (Second Edition): Dramatis Personae Expansion Pack #3",
     "subtype": "boardgameexpansion",
@@ -4845,7 +5015,7 @@
     "bggRating": null
   },
   {
-    "num": 88,
+    "num": 98,
     "id": "285771",
     "name": "Nemo's War (Second Edition): Holidays on the High Seas",
     "subtype": "boardgameexpansion",
@@ -4862,7 +5032,24 @@
     "bggRating": null
   },
   {
-    "num": 89,
+    "num": 99,
+    "id": "325375",
+    "name": "Nemo's War (Second Edition): Journey's End Expansion",
+    "subtype": "boardgameexpansion",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/Gximup55QjdyAJNnk56GVA__original/img/pIDKWIiO1kd5KDb460x1SUxu7kw=/0x0/filters:format(jpeg)/pic5839104.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/Gximup55QjdyAJNnk56GVA__thumb/img/N0yL7zvG3MK849zK_o7Fp0qxK5U=/fit-in/200x150/filters:strip_icc()/pic5839104.jpg",
+    "numplays": 0,
+    "comment": "",
+    "bggId": "325375",
+    "owned": true,
+    "rating": null,
+    "bggRating": null
+  },
+  {
+    "num": 100,
     "id": "241122",
     "name": "Nemo's War (Second Edition): Nautilus Upgrades Expansion Pack #1",
     "subtype": "boardgameexpansion",
@@ -4879,7 +5066,7 @@
     "bggRating": null
   },
   {
-    "num": 90,
+    "num": 101,
     "id": "163095",
     "name": "Noah: The Promo Cards",
     "subtype": "boardgameexpansion",
@@ -4896,7 +5083,7 @@
     "bggRating": null
   },
   {
-    "num": 91,
+    "num": 102,
     "id": "278431",
     "name": "On Mars: Beacon Promo Card",
     "subtype": "boardgameexpansion",
@@ -4913,7 +5100,7 @@
     "bggRating": null
   },
   {
-    "num": 92,
+    "num": 103,
     "id": "296981",
     "name": "On Mars: Upgrade Pack",
     "subtype": "boardgameexpansion",
@@ -4930,7 +5117,7 @@
     "bggRating": null
   },
   {
-    "num": 93,
+    "num": 104,
     "id": "168017",
     "name": "Onirim (Second Edition): Mirrors Promo Cards",
     "subtype": "boardgameexpansion",
@@ -4947,7 +5134,7 @@
     "bggRating": null
   },
   {
-    "num": 94,
+    "num": 105,
     "id": "168018",
     "name": "Onirim (Second Edition): Sphinx, Diver and Confusion Promo Cards",
     "subtype": "boardgameexpansion",
@@ -4964,24 +5151,7 @@
     "bggRating": null
   },
   {
-    "num": 95,
-    "id": "184025",
-    "name": "Port Royal: Gambler Promo Card",
-    "subtype": "boardgameexpansion",
-    "type": "expansion",
-    "isExpansion": true,
-    "year": "2015",
-    "image": "https://cf.geekdo-images.com/N0xOHCrraXsgD4rp76sXQg__original/img/E1qZqUGESQ44nzg-J7qE2wIFGfY=/0x0/filters:format(jpeg)/pic2923682.jpg",
-    "thumbnail": "https://cf.geekdo-images.com/N0xOHCrraXsgD4rp76sXQg__thumb/img/w5oy6XSz5WKLa0He00Aj8oIo-0c=/fit-in/200x150/filters:strip_icc()/pic2923682.jpg",
-    "numplays": 0,
-    "comment": "Agrega valor e diverte, apesar de não combar bem com outras cartas.",
-    "bggId": "184025",
-    "owned": true,
-    "rating": null,
-    "bggRating": null
-  },
-  {
-    "num": 96,
+    "num": 106,
     "id": "147580",
     "name": "Power Grid: Australia & Indian Subcontinent",
     "subtype": "boardgameexpansion",
@@ -4998,7 +5168,7 @@
     "bggRating": null
   },
   {
-    "num": 97,
+    "num": 107,
     "id": "25031",
     "name": "Power Grid: Benelux/Central Europe",
     "subtype": "boardgameexpansion",
@@ -5015,7 +5185,7 @@
     "bggRating": null
   },
   {
-    "num": 98,
+    "num": 108,
     "id": "88491",
     "name": "Power Grid: BGG Promo Card Set",
     "subtype": "boardgameexpansion",
@@ -5032,7 +5202,7 @@
     "bggRating": null
   },
   {
-    "num": 99,
+    "num": 109,
     "id": "58708",
     "name": "Power Grid: Brasil/Espanha & Portugal",
     "subtype": "boardgameexpansion",
@@ -5049,7 +5219,7 @@
     "bggRating": null
   },
   {
-    "num": 100,
+    "num": 110,
     "id": "422757",
     "name": "Power Grid: Bremen/Manhattan",
     "subtype": "boardgameexpansion",
@@ -5066,7 +5236,7 @@
     "bggRating": null
   },
   {
-    "num": 101,
+    "num": 111,
     "id": "37397",
     "name": "Power Grid: China/Korea",
     "subtype": "boardgameexpansion",
@@ -5083,7 +5253,7 @@
     "bggRating": null
   },
   {
-    "num": 102,
+    "num": 112,
     "id": "344428",
     "name": "Power Grid: Europe/North America",
     "subtype": "boardgameexpansion",
@@ -5100,7 +5270,7 @@
     "bggRating": null
   },
   {
-    "num": 103,
+    "num": 113,
     "id": "232004",
     "name": "Power Grid: Fabled Expansion",
     "subtype": "boardgameexpansion",
@@ -5117,7 +5287,7 @@
     "bggRating": null
   },
   {
-    "num": 104,
+    "num": 114,
     "id": "38997",
     "name": "Power Grid: Flux Generator",
     "subtype": "boardgameexpansion",
@@ -5134,7 +5304,7 @@
     "bggRating": null
   },
   {
-    "num": 105,
+    "num": 115,
     "id": "19319",
     "name": "Power Grid: France/Italy",
     "subtype": "boardgameexpansion",
@@ -5151,7 +5321,7 @@
     "bggRating": null
   },
   {
-    "num": 106,
+    "num": 116,
     "id": "190505",
     "name": "Power Grid: High-Voltage DC Transmission Passage C",
     "subtype": "boardgameexpansion",
@@ -5168,24 +5338,7 @@
     "bggRating": null
   },
   {
-    "num": 107,
-    "id": "399611",
-    "name": "Power Grid: Industrial Espionage",
-    "subtype": "boardgameexpansion",
-    "type": "expansion",
-    "isExpansion": true,
-    "year": "2012",
-    "image": "https://cf.geekdo-images.com/X98Sl8zC3JZ3jfA92J0KQg__original/img/tvZMRmKYclJuCtYdqX77xikYUFM=/0x0/filters:format(jpeg)/pic1780801.jpg",
-    "thumbnail": "https://cf.geekdo-images.com/X98Sl8zC3JZ3jfA92J0KQg__thumb/img/AD3XJgHPR9neQTeDYcjfeW9U8gI=/fit-in/200x150/filters:strip_icc()/pic1780801.jpg",
-    "numplays": 0,
-    "comment": "",
-    "bggId": "399611",
-    "owned": true,
-    "rating": null,
-    "bggRating": null
-  },
-  {
-    "num": 108,
+    "num": 117,
     "id": "285448",
     "name": "Power Grid: Middle East/South Africa",
     "subtype": "boardgameexpansion",
@@ -5202,7 +5355,7 @@
     "bggRating": null
   },
   {
-    "num": 109,
+    "num": 118,
     "id": "131184",
     "name": "Power Grid: Northern Europe/United Kingdom & Ireland",
     "subtype": "boardgameexpansion",
@@ -5219,7 +5372,7 @@
     "bggRating": null
   },
   {
-    "num": 110,
+    "num": 119,
     "id": "131458",
     "name": "Power Grid: Oracle & Industrial Espionage",
     "subtype": "boardgameexpansion",
@@ -5236,7 +5389,7 @@
     "bggRating": null
   },
   {
-    "num": 111,
+    "num": 120,
     "id": "78727",
     "name": "Power Grid: Russia & Japan",
     "subtype": "boardgameexpansion",
@@ -5253,7 +5406,7 @@
     "bggRating": null
   },
   {
-    "num": 112,
+    "num": 121,
     "id": "108668",
     "name": "Power Grid: Supply Contract",
     "subtype": "boardgameexpansion",
@@ -5270,7 +5423,7 @@
     "bggRating": null
   },
   {
-    "num": 113,
+    "num": 122,
     "id": "147932",
     "name": "Power Grid: Taxes",
     "subtype": "boardgameexpansion",
@@ -5287,7 +5440,7 @@
     "bggRating": null
   },
   {
-    "num": 114,
+    "num": 123,
     "id": "29416",
     "name": "Power Grid: The New Power Plant Cards",
     "subtype": "boardgameexpansion",
@@ -5304,7 +5457,7 @@
     "bggRating": null
   },
   {
-    "num": 115,
+    "num": 124,
     "id": "344429",
     "name": "Power Grid: The New Power Plants – Set 2",
     "subtype": "boardgameexpansion",
@@ -5321,7 +5474,7 @@
     "bggRating": null
   },
   {
-    "num": 116,
+    "num": 125,
     "id": "108667",
     "name": "Power Grid: The Robots",
     "subtype": "boardgameexpansion",
@@ -5338,7 +5491,7 @@
     "bggRating": null
   },
   {
-    "num": 117,
+    "num": 126,
     "id": "111144",
     "name": "Power Grid: Theme Park",
     "subtype": "boardgameexpansion",
@@ -5355,7 +5508,7 @@
     "bggRating": null
   },
   {
-    "num": 118,
+    "num": 127,
     "id": "55201",
     "name": "Power Grid: Transformer Station",
     "subtype": "boardgameexpansion",
@@ -5372,7 +5525,7 @@
     "bggRating": null
   },
   {
-    "num": 119,
+    "num": 128,
     "id": "84462",
     "name": "Power Grid: Warehouse",
     "subtype": "boardgameexpansion",
@@ -5389,7 +5542,7 @@
     "bggRating": null
   },
   {
-    "num": 120,
+    "num": 129,
     "id": "316597",
     "name": "The Quacks of Quedlinburg: The Alchemists",
     "subtype": "boardgameexpansion",
@@ -5406,7 +5559,7 @@
     "bggRating": null
   },
   {
-    "num": 121,
+    "num": 130,
     "id": "269259",
     "name": "The Quacks of Quedlinburg: The Herb Witches",
     "subtype": "boardgameexpansion",
@@ -5423,7 +5576,7 @@
     "bggRating": null
   },
   {
-    "num": 122,
+    "num": 131,
     "id": "162889",
     "name": "The Resistance: Intenção Hostil",
     "subtype": "boardgameexpansion",
@@ -5440,7 +5593,7 @@
     "bggRating": null
   },
   {
-    "num": 123,
+    "num": 132,
     "id": "162604",
     "name": "Robinson Crusoe: Adventures on the Cursed Island – Spyglass of Illusory Hope",
     "subtype": "boardgameexpansion",
@@ -5457,7 +5610,7 @@
     "bggRating": null
   },
   {
-    "num": 124,
+    "num": 133,
     "id": "299441",
     "name": "Robinson Crusoe: Adventures on the Cursed Island – The Book of Adventures",
     "subtype": "boardgameexpansion",
@@ -5474,7 +5627,7 @@
     "bggRating": null
   },
   {
-    "num": 125,
+    "num": 134,
     "id": "216033",
     "name": "Santorini: Golden Fleece",
     "subtype": "boardgameexpansion",
@@ -5491,7 +5644,7 @@
     "bggRating": null
   },
   {
-    "num": 126,
+    "num": 135,
     "id": "396545",
     "name": "Sea Salt & Paper: Extra Salt",
     "subtype": "boardgameexpansion",
@@ -5508,7 +5661,7 @@
     "bggRating": null
   },
   {
-    "num": 127,
+    "num": 136,
     "id": "178742",
     "name": "Splendor: Nobles Promo Tiles",
     "subtype": "boardgameexpansion",
@@ -5525,7 +5678,7 @@
     "bggRating": null
   },
   {
-    "num": 128,
+    "num": 137,
     "id": "226840",
     "name": "Star Wars: Rebellion – Rise of the Empire",
     "subtype": "boardgameexpansion",
@@ -5542,7 +5695,7 @@
     "bggRating": null
   },
   {
-    "num": 129,
+    "num": 138,
     "id": "202453",
     "name": "Targi: The Expansion",
     "subtype": "boardgameexpansion",
@@ -5559,7 +5712,75 @@
     "bggRating": null
   },
   {
-    "num": 130,
+    "num": 139,
+    "id": "406001",
+    "name": "Terraforming Mars: Amazonis & Vastitas",
+    "subtype": "boardgameexpansion",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "2024",
+    "image": "https://cf.geekdo-images.com/ncco5BBSeExk55ZS55kmag__original/img/TuV4k8dcVcsn7dqOfdWX85REShQ=/0x0/filters:format(png)/pic8413981.png",
+    "thumbnail": "https://cf.geekdo-images.com/ncco5BBSeExk55ZS55kmag__thumb/img/7Oj6HJkePPxH17bTVQhSTX7wzk0=/fit-in/200x150/filters:strip_icc()/pic8413981.png",
+    "numplays": 0,
+    "comment": "",
+    "bggId": "406001",
+    "owned": true,
+    "rating": null,
+    "bggRating": null
+  },
+  {
+    "num": 140,
+    "id": "311247",
+    "name": "Terraforming Mars: Big Box",
+    "subtype": "boardgameexpansion",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/o70_PGXYqmaieODnS-I9xQ__original/img/aAoVnG2gMw8A3oRrUJt5TU_UjpQ=/0x0/filters:format(jpeg)/pic5470390.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/o70_PGXYqmaieODnS-I9xQ__thumb/img/j6iry7rlSQgG1ccTJ7BGSSSPi4U=/fit-in/200x150/filters:strip_icc()/pic5470390.jpg",
+    "numplays": 0,
+    "comment": "",
+    "bggId": "311247",
+    "owned": true,
+    "rating": null,
+    "bggRating": null
+  },
+  {
+    "num": 141,
+    "id": "312319",
+    "name": "Terraforming Mars: Big Box Promos",
+    "subtype": "boardgameexpansion",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/5tW0F3Y11BH_X6oWhhOlEw__original/img/mcSUUd9u4ezJ3KaBenROaenjVUE=/0x0/filters:format(jpeg)/pic6316454.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/5tW0F3Y11BH_X6oWhhOlEw__thumb/img/TbMCDRXxWN1P4kXyC3A7rHgqbfU=/fit-in/200x150/filters:strip_icc()/pic6316454.jpg",
+    "numplays": 0,
+    "comment": "",
+    "bggId": "312319",
+    "owned": true,
+    "rating": null,
+    "bggRating": null
+  },
+  {
+    "num": 142,
+    "id": "255681",
+    "name": "Terraforming Mars: Colonies",
+    "subtype": "boardgameexpansion",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/OyCyHETRL-RzzYKlF8jshA__original/img/SbCa7xHGKW3v8tYf2CwPYH4t0tQ=/0x0/filters:format(jpeg)/pic4193099.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/OyCyHETRL-RzzYKlF8jshA__thumb/img/WpvEB_JcNNPngED5fDPb3qZOUEA=/fit-in/200x150/filters:strip_icc()/pic4193099.jpg",
+    "numplays": 0,
+    "comment": "",
+    "bggId": "255681",
+    "owned": true,
+    "rating": null,
+    "bggRating": null
+  },
+  {
+    "num": 143,
     "id": "218127",
     "name": "Terraforming Mars: Hellas & Elysium",
     "subtype": "boardgameexpansion",
@@ -5576,7 +5797,24 @@
     "bggRating": null
   },
   {
-    "num": 131,
+    "num": 144,
+    "id": "230241",
+    "name": "Terraforming Mars: Penguins Promo Card",
+    "subtype": "boardgameexpansion",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/54rZSYbCBTvGB3ZM3_gxiA__original/img/fGwYdqoNRiN2rAhvboYT_55F_DY=/0x0/filters:format(png)/pic3899967.png",
+    "thumbnail": "https://cf.geekdo-images.com/54rZSYbCBTvGB3ZM3_gxiA__thumb/img/Bh4gIZthoE-jNm1wPnaOGLR4rPk=/fit-in/200x150/filters:strip_icc()/pic3899967.png",
+    "numplays": 0,
+    "comment": "",
+    "bggId": "230241",
+    "owned": true,
+    "rating": null,
+    "bggRating": null
+  },
+  {
+    "num": 145,
     "id": "247030",
     "name": "Terraforming Mars: Prelude",
     "subtype": "boardgameexpansion",
@@ -5593,7 +5831,92 @@
     "bggRating": null
   },
   {
-    "num": 132,
+    "num": 146,
+    "id": "387809",
+    "name": "Terraforming Mars: Prelude 2",
+    "subtype": "boardgameexpansion",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "2024",
+    "image": "https://cf.geekdo-images.com/wdw44b8TUhIbK_k99sLPbQ__original/img/_XmjG-ReSgT0cv1kDeSAkQg74lc=/0x0/filters:format(jpeg)/pic7719173.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/wdw44b8TUhIbK_k99sLPbQ__thumb/img/DafOn2j3piL6MzwyPnPwmvBEAi8=/fit-in/200x150/filters:strip_icc()/pic7719173.jpg",
+    "numplays": 0,
+    "comment": "",
+    "bggId": "387809",
+    "owned": true,
+    "rating": null,
+    "bggRating": null
+  },
+  {
+    "num": 147,
+    "id": "406019",
+    "name": "Terraforming Mars: Prelude 2 Kickstarter Promo Pack",
+    "subtype": "boardgameexpansion",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "2024",
+    "image": "https://cf.geekdo-images.com/Nv0Q59UXnlLUnJ1_aTRbwA__original/img/kCDM3nhZRxFSkkKkeX_4-q55fcQ=/0x0/filters:format(jpeg)/pic8331006.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/Nv0Q59UXnlLUnJ1_aTRbwA__thumb/img/XDCZ7Az6aixSTlm0TIs8OuqjKQs=/fit-in/200x150/filters:strip_icc()/pic8331006.jpg",
+    "numplays": 0,
+    "comment": "",
+    "bggId": "406019",
+    "owned": true,
+    "rating": null,
+    "bggRating": null
+  },
+  {
+    "num": 148,
+    "id": "230123",
+    "name": "Terraforming Mars: Self-Replicating Robots Promo Card",
+    "subtype": "boardgameexpansion",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/K_IJIx6XZEcjxjW5LDcjcw__original/img/w7mB5wJK_DZ9M3NdgkHfWMuqAmM=/0x0/filters:format(jpeg)/pic3676950.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/K_IJIx6XZEcjxjW5LDcjcw__thumb/img/vvjAnk6uu0dweZUI3WtTih_GN3w=/fit-in/200x150/filters:strip_icc()/pic3676950.jpg",
+    "numplays": 0,
+    "comment": "",
+    "bggId": "230123",
+    "owned": true,
+    "rating": null,
+    "bggRating": null
+  },
+  {
+    "num": 149,
+    "id": "202825",
+    "name": "Terraforming Mars: Small Asteroid Promo Card",
+    "subtype": "boardgameexpansion",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/WSKwjj7GH9BNo2UUaPB3dA__original/img/OaIbdUM-_3eLtXuZbYO6UfVIYjI=/0x0/filters:format(jpeg)/pic3075539.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/WSKwjj7GH9BNo2UUaPB3dA__thumb/img/55qaHmPYVjddjrVl7Xfhja94ydM=/fit-in/200x150/filters:strip_icc()/pic3075539.jpg",
+    "numplays": 0,
+    "comment": "",
+    "bggId": "202825",
+    "owned": true,
+    "rating": null,
+    "bggRating": null
+  },
+  {
+    "num": 150,
+    "id": "226297",
+    "name": "Terraforming Mars: Snow Algae Promo Card",
+    "subtype": "boardgameexpansion",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/lku4eiyn4VuBCHIlHK4hyA__original/img/DdAMEdLV6gaSkddfQlO_0yjUVk0=/0x0/filters:format(png)/pic3615573.png",
+    "thumbnail": "https://cf.geekdo-images.com/lku4eiyn4VuBCHIlHK4hyA__thumb/img/3sgyf5XOnWgWYbj9gXMb_SsUHDM=/fit-in/200x150/filters:strip_icc()/pic3615573.png",
+    "numplays": 0,
+    "comment": "",
+    "bggId": "226297",
+    "owned": true,
+    "rating": null,
+    "bggRating": null
+  },
+  {
+    "num": 151,
     "id": "273473",
     "name": "Terraforming Mars: Turmoil",
     "subtype": "boardgameexpansion",
@@ -5610,7 +5933,41 @@
     "bggRating": null
   },
   {
-    "num": 133,
+    "num": 152,
+    "id": "279345",
+    "name": "Terraforming Mars: Turmoil Promos",
+    "subtype": "boardgameexpansion",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/Rc6mpnxodoB7XJauiWRA-Q__original/img/aWOpyLKuGFdWeBVq1G5FQJu1iNE=/0x0/filters:format(jpeg)/pic5055230.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/Rc6mpnxodoB7XJauiWRA-Q__thumb/img/vHqoLyUWC2lCBrujO8-eMZaIGYY=/fit-in/200x150/filters:strip_icc()/pic5055230.jpg",
+    "numplays": 0,
+    "comment": "",
+    "bggId": "279345",
+    "owned": true,
+    "rating": null,
+    "bggRating": null
+  },
+  {
+    "num": 153,
+    "id": "428511",
+    "name": "Terraforming Mars: Utopia & Cimmeria",
+    "subtype": "boardgameexpansion",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "2024",
+    "image": "https://cf.geekdo-images.com/X-YC018bBn2N934_W9zSBg__original/img/ZGmGvfifyhj04cJHtAhRZDHW82o=/0x0/filters:format(jpeg)/pic8445096.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/X-YC018bBn2N934_W9zSBg__thumb/img/4dXbirAH6GVL02KXlxDCXG0h4Wk=/fit-in/200x150/filters:strip_icc()/pic8445096.jpg",
+    "numplays": 0,
+    "comment": "",
+    "bggId": "428511",
+    "owned": true,
+    "rating": null,
+    "bggRating": null
+  },
+  {
+    "num": 154,
     "id": "231965",
     "name": "Terraforming Mars: Venus Next",
     "subtype": "boardgameexpansion",
@@ -5627,7 +5984,7 @@
     "bggRating": null
   },
   {
-    "num": 134,
+    "num": 155,
     "id": "94284",
     "name": "Troyes: Bonus Cards",
     "subtype": "boardgameexpansion",
@@ -5644,7 +6001,7 @@
     "bggRating": null
   },
   {
-    "num": 135,
+    "num": 156,
     "id": "127061",
     "name": "Troyes: The Ladies of Troyes",
     "subtype": "boardgameexpansion",
@@ -5661,7 +6018,7 @@
     "bggRating": null
   },
   {
-    "num": 136,
+    "num": 157,
     "id": "315895",
     "name": "Twilight Imperium: Fourth Edition – Prophecy of Kings",
     "subtype": "boardgameexpansion",
@@ -5678,7 +6035,7 @@
     "bggRating": null
   },
   {
-    "num": 137,
+    "num": 158,
     "id": "332157",
     "name": "Twilight Imperium: Fourth Edition – Twilight Codex Volume I: Ordinian",
     "subtype": "boardgameexpansion",
@@ -5695,7 +6052,7 @@
     "bggRating": null
   },
   {
-    "num": 138,
+    "num": 159,
     "id": "336970",
     "name": "Twilight Imperium: Fourth Edition – Twilight Codex Volume II: Affinity",
     "subtype": "boardgameexpansion",
@@ -5712,7 +6069,7 @@
     "bggRating": null
   },
   {
-    "num": 139,
+    "num": 160,
     "id": "362201",
     "name": "Twilight Imperium: Fourth Edition – Twilight Codex Volume III: Vigil",
     "subtype": "boardgameexpansion",
@@ -5729,7 +6086,7 @@
     "bggRating": null
   },
   {
-    "num": 140,
+    "num": 161,
     "id": "193823",
     "name": "Viticulture: Moor Visitors Expansion",
     "subtype": "boardgameexpansion",
@@ -5746,7 +6103,7 @@
     "bggRating": null
   },
   {
-    "num": 141,
+    "num": 162,
     "id": "202174",
     "name": "Viticulture: Tuscany Essential Edition",
     "subtype": "boardgameexpansion",
@@ -5763,7 +6120,7 @@
     "bggRating": null
   },
   {
-    "num": 142,
+    "num": 163,
     "id": "248929",
     "name": "Viticulture: Visit from the Rhine Valley",
     "subtype": "boardgameexpansion",
@@ -5780,7 +6137,7 @@
     "bggRating": null
   },
   {
-    "num": 143,
+    "num": 164,
     "id": "276944",
     "name": "Welcome To...: Solo Mode",
     "subtype": "boardgameexpansion",
@@ -5797,7 +6154,7 @@
     "bggRating": null
   },
   {
-    "num": 144,
+    "num": 165,
     "id": "238474",
     "name": "When I Dream: Bonus Cards",
     "subtype": "boardgameexpansion",
@@ -5814,7 +6171,7 @@
     "bggRating": null
   },
   {
-    "num": 145,
+    "num": 166,
     "id": "290448",
     "name": "Wingspan: European Expansion",
     "subtype": "boardgameexpansion",
@@ -5831,7 +6188,7 @@
     "bggRating": null
   },
   {
-    "num": 146,
+    "num": 167,
     "id": "300580",
     "name": "Wingspan: Oceania Expansion",
     "subtype": "boardgameexpansion",
@@ -5848,7 +6205,7 @@
     "bggRating": null
   },
   {
-    "num": 147,
+    "num": 168,
     "id": "422261",
     "name": "World Wonders: Cristo Promo Card",
     "subtype": "boardgameexpansion",
@@ -5865,7 +6222,7 @@
     "bggRating": null
   },
   {
-    "num": 148,
+    "num": 169,
     "id": "406746",
     "name": "World Wonders: Mundo Wonders Pack",
     "subtype": "boardgameexpansion",

@@ -1,0 +1,41 @@
+{
+  "timestamp": "2025-06-09T22:19:39.112Z",
+  "prompt": "Analise estas duas listas de jogos e encontre prováveis matches, \n        considerando variações de nome, traduções e edições diferentes.\n        \n        IMPORTANTE: Compare apenas os NOMES dos jogos, ignorando qualquer ID que possa aparecer.\n        \n        BGG: [\"Kamasutra\",\"CO₂: The Arctic Expansion\",\"Codenames: Pictures – Broken Token Promo Card\",\"Coup: Inquisition\",\"Isle of Skye: From Chieftain to King – Adjacency Scrolls\",\"Isle of Skye: Peças Promocionais\",\"Nanga Parbat: Hidden Objectives\",\"Terraforming Mars: Turmoil Promos\"]\n        \n        Ludopedia: [\"Decrypto: 5th Anniversary Edition\",\"Dobble: À Prova D'Água\",\"Azul Giant\",\"Isle of Skye: De Líder a Rei - Expansões Promocionais\",\"Coup: Promo\",\"Lemur: Duplo Lemur\",\"Glitches: Full Duplex (1)\",\"Glifos: Mais Símbolos: Gato\",\"Glifos: Mais Símbolos: Escaravelho\",\"ProcuRatos: Cartaz Procurado\",\"King of Tokyo/King of New York: Boitatá Promo\",\"Qui-Quitanda: Mais Frutas (1)\",\"Duo Regna: Dragão de 3 Cabeças (1)\",\"O Que O Quê: Mais Desenhos (1)\",\"For Sale - Novas Propriedades: Guarda-Chuva\",\"For Sale - Novas Propriedades: Messe Essen\",\"For Sale - Novas Propriedades: Natal\",\"For Sale - Novas Propriedades: Barril\",\"Terraforming Mars: Colonies - Promo Pack\",\"Terraforming Mars: Reviravolta - Pacote Promo Kickstarter\",\"7 Wonders Duel: Stonehenge\",\"7 Wonders Duel: Sagrada Familia\",\"7 Wonders: CN Tower Palace\",\"7 Wonders: Promo Card Palace\"]\n        \n        Retorne apenas os matches encontrados no formato JSON array de arrays: \n        [[nomeLudopedia, nomeBGG], ...]",
+  "rawResponse": "[\n[\"Isle of Skye: De Líder a Rei - Expansões Promocionais\", \"Isle of Skye: From Chieftain to King – Adjacency Scrolls\"],\n[\"Terraforming Mars: Reviravolta - Pacote Promo Kickstarter\", \"Terraforming Mars: Turmoil Promos\"]\n]",
+  "fullResponse": {
+    "id": "chatcmpl-Bgf843dDgL7RdVfrzVKRCc0PIqlWi",
+    "object": "chat.completion",
+    "created": 1749507576,
+    "model": "gpt-4-0613",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "[\n[\"Isle of Skye: De Líder a Rei - Expansões Promocionais\", \"Isle of Skye: From Chieftain to King – Adjacency Scrolls\"],\n[\"Terraforming Mars: Reviravolta - Pacote Promo Kickstarter\", \"Terraforming Mars: Turmoil Promos\"]\n]",
+          "refusal": null,
+          "annotations": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 461,
+      "completion_tokens": 70,
+      "total_tokens": 531,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      }
+    },
+    "service_tier": "default",
+    "system_fingerprint": null
+  }
+}
