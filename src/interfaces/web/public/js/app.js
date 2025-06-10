@@ -6,6 +6,7 @@ let configModal, configBtn, saveConfigBtn, ludoAuthBtn, bggUserInput, ludoTokenI
 let selectAllMatches, acceptMatchesBtn, matchesList, compareWithAIBtn, aiMatchesList;
 let perfectMatchesCount, onlyBGGCount, onlyLudoCount, previousMatchesCount;
 let manualBggList, manualLudoList, manualBggCount, manualLudoCount, acceptManualMatchBtn;
+let manualBggTotal, manualBggBase, manualBggExp, manualLudoTotal, manualLudoBase, manualLudoExp;
 let isLoading = false;
 let currentBGGGames = [];
 let currentLudoGames = [];
@@ -15,6 +16,8 @@ let selectedMatches = new Set();
 let selectedAIMatches = new Set();
 let selectedManualBggGame = null;
 let selectedManualLudoGame = null;
+let currentManualBggGames = [];
+let currentManualLudoGames = [];
 
 // Inicializar elementos quando o DOM estiver carregado
 document.addEventListener('DOMContentLoaded', () => {
@@ -68,6 +71,14 @@ document.addEventListener('DOMContentLoaded', () => {
     manualLudoCount = document.getElementById('manualLudoCount');
     acceptManualMatchBtn = document.getElementById('acceptManualMatchBtn');
 
+    // Estatísticas dos filtros manuais
+    manualBggTotal = document.getElementById('manualBggTotal');
+    manualBggBase = document.getElementById('manualBggBase');
+    manualBggExp = document.getElementById('manualBggExp');
+    manualLudoTotal = document.getElementById('manualLudoTotal');
+    manualLudoBase = document.getElementById('manualLudoBase');
+    manualLudoExp = document.getElementById('manualLudoExp');
+
     // Configurar event listeners
     configBtn.addEventListener('click', () => {
         loadConfig();
@@ -104,6 +115,37 @@ document.addEventListener('DOMContentLoaded', () => {
             // Apply filter
             const games = collection === 'bgg' ? currentBGGGames : currentLudoGames;
             const container = collection === 'bgg' ? bggList : ludoList;
+            
+            // Handle manual matching filters
+            if (collection === 'manual-bgg') {
+                const games = currentManualBggGames;
+                const container = manualBggList;
+                
+                if (filter === 'all') {
+                    renderManualGameList(games, container, 'bgg');
+                } else {
+                    const filtered = games.filter(game => 
+                        filter === 'base' ? !game.isExpansion : game.isExpansion
+                    );
+                    renderManualGameList(filtered, container, 'bgg');
+                }
+                return;
+            }
+            
+            if (collection === 'manual-ludo') {
+                const games = currentManualLudoGames;
+                const container = manualLudoList;
+                
+                if (filter === 'all') {
+                    renderManualGameList(games, container, 'ludo');
+                } else {
+                    const filtered = games.filter(game => 
+                        filter === 'base' ? !game.isExpansion : game.isExpansion
+                    );
+                    renderManualGameList(filtered, container, 'ludo');
+                }
+                return;
+            }
             
             if (filter === 'all') {
                 renderGameList(games, container);
@@ -929,6 +971,24 @@ function updateAIAcceptButtonState() {
     }
 }
 
+function updateManualStats(bggGames, ludoGames) {
+    // BGG Manual Stats
+    const bggBase = bggGames.filter(game => !game.isExpansion);
+    const bggExp = bggGames.filter(game => game.isExpansion);
+    
+    manualBggTotal.textContent = bggGames.length;
+    manualBggBase.textContent = bggBase.length;
+    manualBggExp.textContent = bggExp.length;
+    
+    // Ludopedia Manual Stats
+    const ludoBase = ludoGames.filter(game => !game.isExpansion);
+    const ludoExpansions = ludoGames.filter(game => game.isExpansion);
+    
+    manualLudoTotal.textContent = ludoGames.length;
+    manualLudoBase.textContent = ludoBase.length;
+    manualLudoExp.textContent = ludoExpansions.length;
+}
+
 // Funções de Manual Matching
 function renderManualLists(onlyBGGGames, onlyLudoGames) {
     // Criar listas combinadas: jogos únicos + jogos de matches pendentes
@@ -951,6 +1011,10 @@ function renderManualLists(onlyBGGGames, onlyLudoGames) {
         });
     }
     
+    // Armazenar as listas completas para uso nos filtros
+    currentManualBggGames = combinedBggGames;
+    currentManualLudoGames = combinedLudoGames;
+    
     // Renderizar lista BGG
     renderManualGameList(combinedBggGames, manualBggList, 'bgg');
     manualBggCount.textContent = combinedBggGames.length;
@@ -958,6 +1022,18 @@ function renderManualLists(onlyBGGGames, onlyLudoGames) {
     // Renderizar lista Ludopedia
     renderManualGameList(combinedLudoGames, manualLudoList, 'ludo');
     manualLudoCount.textContent = combinedLudoGames.length;
+    
+    // Atualizar estatísticas dos filtros
+    updateManualStats(combinedBggGames, combinedLudoGames);
+    
+    // Reset filters to "all" and set active state
+    document.querySelectorAll('.filter-link[data-collection="manual-bgg"], .filter-link[data-collection="manual-ludo"]').forEach(link => {
+        if (link.dataset.filter === 'all') {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
     
     // Reset selections
     selectedManualBggGame = null;
