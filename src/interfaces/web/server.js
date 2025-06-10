@@ -10,7 +10,6 @@ const CollectionLoader = require('../../collection/loader');
 const fs = require('fs').promises;
 
 const app = express();
-const port = process.env.PORT || 3000;
 
 // Aumentar limite do body parser
 app.use(express.json({ limit: '50mb' }));
@@ -20,6 +19,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Rota principal
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Rota de health check
+app.get('/health', (req, res) => {
+  res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
 // API para sincronização
@@ -647,6 +651,7 @@ app.post('/api/save-manual-match', async (req, res) => {
 });
 
 // Iniciar servidor
-app.listen(port, () => {
-  console.log(`🚀 Servidor rodando em http://localhost:${port}`);
+const port = process.env.PORT || 8080;
+app.listen(port, '0.0.0.0', () => {
+  console.log(`🚀 Servidor rodando na porta ${port}`);
 });

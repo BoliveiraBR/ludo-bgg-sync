@@ -4,7 +4,7 @@
   "description": "Script para comparar coleções e partidas entre Ludopedia e BGG.",
   "main": "src/scripts/sync.js",
   "scripts": {
-    "start": "node src/scripts/sync.js",
+    "start": "node src/interfaces/web/simple-test.js",
     "test": "jest",
     "dev": "nodemon src/scripts/sync.js",
     "web": "node src/interfaces/web/server.js",
