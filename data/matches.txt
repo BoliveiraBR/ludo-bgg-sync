@@ -2291,13 +2291,6 @@
     "confidence": "ai-suggested"
   },
   {
-    "bggId": "211945",
-    "ludoId": "18544",
-    "bggName": "Isle of Skye: From Chieftain to King – Adjacency Scrolls",
-    "ludoName": "Isle of Skye: De Líder a Rei - Expansões Promocionais",
-    "confidence": "ai-suggested"
-  },
-  {
     "bggId": "279345",
     "ludoId": "23794",
     "bggName": "Terraforming Mars: Turmoil Promos",
@@ -2315,5 +2308,33 @@
     "ludoId": "40185",
     "bggName": "FUSE Countdown",
     "ludoName": "FUSE Countdown"
+  },
+  {
+    "bggId": "336748",
+    "ludoId": "79752",
+    "bggName": "Nanga Parbat: Hidden Objectives",
+    "ludoName": "Nanga Parbat: Hidden Objectives"
+  },
+  {
+    "bggId": "127227",
+    "ludoId": "79753",
+    "bggName": "CO₂: The Arctic Expansion",
+    "ludoName": "CO2: The Arctic Expansion",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "211945",
+    "ludoId": "11859",
+    "bggName": "Isle of Skye: From Chieftain to King – Adjacency Scrolls",
+    "ludoName": "Isle of Skye: From Chieftain to King - Adjacency Scrolls",
+    "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "291421",
+    "ludoId": "18544",
+    "bggName": "Isle of Skye: Peças Promocionais",
+    "ludoName": "Isle of Skye: De Líder a Rei - Expansões Promocionais",
+    "confidence": "manual",
+    "reasoning": "Match manual criado pelo usuário"
   }
 ]

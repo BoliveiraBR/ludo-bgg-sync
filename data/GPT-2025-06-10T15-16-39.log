@@ -1,0 +1,41 @@
+{
+  "timestamp": "2025-06-10T15:16:39.900Z",
+  "prompt": "Analise estas duas listas de jogos e encontre prováveis matches, \n        considerando variações de nome, traduções e edições diferentes.\n        \n        IMPORTANTE: Compare apenas os NOMES dos jogos, ignorando qualquer ID que possa aparecer.\n        \n        BGG: [\"Kamasutra\",\"Codenames: Pictures – Broken Token Promo Card\",\"Coup: Inquisition\",\"Isle of Skye: From Chieftain to King – Adjacency Scrolls\",\"Isle of Skye: Peças Promocionais\"]\n        \n        Ludopedia: [\"Decrypto: 5th Anniversary Edition\",\"Dobble: À Prova D'Água\",\"Azul Giant\",\"Isle of Skye: From Chieftain to King - Adjacency Scrolls\",\"Isle of Skye: De Líder a Rei - Expansões Promocionais\",\"Coup: Promo\",\"Lemur: Duplo Lemur\",\"Glitches: Full Duplex (1)\",\"Glifos: Mais Símbolos: Gato\",\"Glifos: Mais Símbolos: Escaravelho\",\"ProcuRatos: Cartaz Procurado\",\"King of Tokyo/King of New York: Boitatá Promo\",\"Qui-Quitanda: Mais Frutas (1)\",\"Duo Regna: Dragão de 3 Cabeças (1)\",\"O Que O Quê: Mais Desenhos (1)\",\"For Sale - Novas Propriedades: Guarda-Chuva\",\"For Sale - Novas Propriedades: Messe Essen\",\"For Sale - Novas Propriedades: Natal\",\"For Sale - Novas Propriedades: Barril\",\"Terraforming Mars: Colonies - Promo Pack\",\"7 Wonders Duel: Stonehenge\",\"7 Wonders Duel: Sagrada Familia\",\"7 Wonders: CN Tower Palace\",\"7 Wonders: Promo Card Palace\"]\n        \n        Retorne apenas os matches encontrados no formato JSON array de arrays: \n        [[nomeLudopedia, nomeBGG], ...]",
+  "rawResponse": "[\n[\"Isle of Skye: From Chieftain to King - Adjacency Scrolls\", \"Isle of Skye: From Chieftain to King – Adjacency Scrolls\"]\n]",
+  "fullResponse": {
+    "id": "chatcmpl-Bgv0FOaOu51dV9eKXx2uLwTTHIGAI",
+    "object": "chat.completion",
+    "created": 1749568595,
+    "model": "gpt-4-0613",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "[\n[\"Isle of Skye: From Chieftain to King - Adjacency Scrolls\", \"Isle of Skye: From Chieftain to King – Adjacency Scrolls\"]\n]",
+          "refusal": null,
+          "annotations": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 438,
+      "completion_tokens": 40,
+      "total_tokens": 478,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      }
+    },
+    "service_tier": "default",
+    "system_fingerprint": null
+  }
+}
