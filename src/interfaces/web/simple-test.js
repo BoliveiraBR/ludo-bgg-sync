@@ -10,12 +10,12 @@ app.get('/', (req, res) => {
 app.get('/health', (req, res) => {
   res.json({ 
     status: 'OK', 
-    port: process.env.PORT || 8081,
+    port: process.env.PORT || 8080,
     env: process.env.NODE_ENV || 'development'
   });
 });
 
-const port = process.env.PORT || 8081;
+const port = process.env.PORT || 8080;
 console.log(`🔍 Tentando iniciar na porta: ${port}`);
 
 app.listen(port, '0.0.0.0', () => {
