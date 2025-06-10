@@ -2303,5 +2303,17 @@
     "bggName": "Terraforming Mars: Turmoil Promos",
     "ludoName": "Terraforming Mars: Reviravolta - Pacote Promo Kickstarter",
     "confidence": "ai-suggested"
+  },
+  {
+    "bggId": "358981",
+    "ludoId": "35984",
+    "bggName": "Air, Land, & Sea: Spies, Lies, & Supplies",
+    "ludoName": "Air, Land, & Sea: Spies, Lies, & Supplies"
+  },
+  {
+    "bggId": "369993",
+    "ludoId": "40185",
+    "bggName": "FUSE Countdown",
+    "ludoName": "FUSE Countdown"
   }
 ]

@@ -993,7 +993,9 @@ function renderManualGameList(games, container, type) {
                        name="manual-${type}" value="${index}" id="${radioId}">
                 <label class="form-check-label flex-grow-1" for="${radioId}">
                     ${game.name}
-                    ${game.isExpansion ? '<span class="game-type-badge badge-expansion">Expansão</span>' : ''}
+                    <span class="game-type-badge ${game.isExpansion ? 'badge-expansion' : 'badge-base'}">
+                        ${game.isExpansion ? 'Expansão' : 'Base'}
+                    </span>
                 </label>
             </div>
         `;
