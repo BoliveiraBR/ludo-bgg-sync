@@ -27,6 +27,45 @@ app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
+// Rota para criar database bggludopedia
+app.get('/create-database', async (req, res) => {
+  try {
+    console.log('🏗️ Criando database bggludopedia...');
+    
+    // URL para conectar ao postgres (database padrão)
+    const adminUrl = process.env.DATABASE_URL;
+    
+    const client = new Client({
+      connectionString: adminUrl,
+      ssl: { rejectUnauthorized: false }
+    });
+    
+    await client.connect();
+    console.log('✅ Conectado ao postgres!');
+    
+    // Verificar se já existe
+    const check = await client.query("SELECT 1 FROM pg_database WHERE datname = 'bggludopedia'");
+    
+    if (check.rows.length === 0) {
+      await client.query('CREATE DATABASE bggludopedia');
+      console.log('✅ Database bggludopedia criado!');
+    } else {
+      console.log('ℹ️ Database já existe!');
+    }
+    
+    await client.end();
+    
+    res.json({ 
+      success: true, 
+      message: 'Database bggludopedia criado/verificado com sucesso!' 
+    });
+    
+  } catch (error) {
+    console.error('❌ Erro:', error);
+    res.json({ success: false, error: error.message });
+  }
+});
+
 // Rota para testar setup completo do banco PostgreSQL
 app.get('/test-database-setup', async (req, res) => {
   try {
