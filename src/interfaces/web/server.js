@@ -30,9 +30,8 @@ app.get('/health', (req, res) => {
 // Rota para testar setup completo do banco PostgreSQL
 app.get('/test-database-setup', async (req, res) => {
   try {
-    console.log('🔗 Testando setup completo do banco...');
+    console.log('🔗 Testando conexão direta com banco bggludopedia...');
     
-    // Parse da URL atual
     const databaseUrl = process.env.DATABASE_URL;
     console.log('📋 DATABASE_URL existe:', !!databaseUrl);
     console.log('📋 DATABASE_URL (primeiros 50 chars):', databaseUrl?.substring(0, 50));
@@ -41,65 +40,79 @@ app.get('/test-database-setup', async (req, res) => {
       return res.json({ success: false, error: 'DATABASE_URL não encontrada' });
     }
     
-    // Tentar conectar ao database padrão 'postgres' primeiro
-    const defaultUrl = databaseUrl.replace('/bggludopedia', '/postgres');
-    console.log('🔍 Tentando conectar ao database padrão...');
-    
-    const defaultClient = new Client({
-      connectionString: defaultUrl,
-      ssl: { rejectUnauthorized: false }
-    });
-    
-    await defaultClient.connect();
-    console.log('✅ Conectado ao database padrão!');
-    
-    // Verificar se o database bggludopedia existe
-    const dbCheck = await defaultClient.query(`
-      SELECT 1 FROM pg_database WHERE datname = 'bggludopedia'
-    `);
-    
-    if (dbCheck.rows.length === 0) {
-      console.log('🏗️ Criando database bggludopedia...');
-      await defaultClient.query('CREATE DATABASE bggludopedia');
-      console.log('✅ Database bggludopedia criado!');
-    } else {
-      console.log('✅ Database bggludopedia já existe!');
-    }
-    
-    await defaultClient.end();
-    
-    // Agora conectar ao database específico
-    console.log('🔗 Conectando ao database bggludopedia...');
-    const appClient = new Client({
+    console.log('🔗 Conectando diretamente ao banco bggludopedia...');
+    const client = new Client({
       connectionString: databaseUrl,
-      ssl: { rejectUnauthorized: false }
+      ssl: { rejectUnauthorized: false },
+      connectionTimeoutMillis: 10000, // 10 segundos timeout
     });
     
-    await appClient.connect();
-    console.log('✅ Conectado ao database bggludopedia!');
+    await client.connect();
+    console.log('✅ Conectado ao banco bggludopedia!');
     
-    const result = await appClient.query('SELECT NOW() as current_time, current_database() as db_name');
+    // Teste básico
+    const result = await client.query('SELECT NOW() as current_time, current_database() as db_name, version() as db_version');
+    console.log('📊 Teste básico realizado com sucesso!');
     
-    await appClient.end();
+    // Teste de criação de tabela
+    console.log('🏗️ Testando criação de tabela...');
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS connection_test (
+        id SERIAL PRIMARY KEY,
+        test_time TIMESTAMP DEFAULT NOW(),
+        message TEXT
+      )
+    `);
+    console.log('✅ Tabela connection_test criada/verificada!');
+    
+    // Inserir dados de teste
+    await client.query(`
+      INSERT INTO connection_test (message) 
+      VALUES ('Teste de conexão - ${new Date().toISOString()}')
+    `);
+    console.log('📝 Dados de teste inseridos!');
+    
+    // Consultar dados
+    const testData = await client.query('SELECT * FROM connection_test ORDER BY id DESC LIMIT 1');
+    console.log('📋 Último registro consultado!');
+    
+    await client.end();
+    console.log('🔌 Conexão fechada com sucesso!');
     
     res.json({
       success: true,
-      message: 'Setup do banco realizado com sucesso!',
+      message: 'Conexão com banco estabelecida com sucesso!',
       database: {
         name: result.rows[0].db_name,
-        timestamp: result.rows[0].current_time
+        timestamp: result.rows[0].current_time,
+        version: result.rows[0].db_version.split(' ')[0],
+        lastTest: testData.rows[0]
       }
     });
     
   } catch (error) {
-    console.error('❌ Erro no setup:', error);
+    console.error('❌ Erro na conexão:', error);
+    
+    let errorSuggestion = '';
+    if (error.code === 'ETIMEDOUT') {
+      errorSuggestion = 'Timeout na conexão - verificar security group ou conectividade de rede';
+    } else if (error.code === 'ENOTFOUND') {
+      errorSuggestion = 'Host do banco não encontrado - verificar URL de conexão';
+    } else if (error.code === '28P01') {
+      errorSuggestion = 'Credenciais inválidas - verificar username/password';
+    } else if (error.code === '3D000') {
+      errorSuggestion = 'Database não existe - verificar nome do database na URL';
+    }
+    
     res.json({
       success: false,
       error: {
         name: error.name,
         message: error.message,
-        code: error.code
-      }
+        code: error.code,
+        suggestion: errorSuggestion
+      },
+      timestamp: new Date().toISOString()
     });
   }
 });
