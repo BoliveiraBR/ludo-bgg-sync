@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const axios = require('axios');
+const { Client } = require('pg'); // Adicionar cliente PostgreSQL
 const BGGApi = require('../../api/bggApi');
 const LudopediaApi = require('../../api/ludopediaApi');
 const CollectionMatcher = require('../../comparison/matcher');
@@ -24,6 +25,128 @@ app.get('/', (req, res) => {
 // Rota de health check
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
+// Rota para testar conectividade com banco de dados
+app.get('/test-database', async (req, res) => {
+  console.log('🔗 Iniciando teste de conectividade com PostgreSQL RDS...');
+  
+  // Verificar se DATABASE_URL está disponível
+  if (!process.env.DATABASE_URL) {
+    console.error('❌ DATABASE_URL não encontrada nas variáveis de ambiente');
+    return res.json({
+      success: false,
+      error: 'DATABASE_URL não configurada',
+      timestamp: new Date().toISOString()
+    });
+  }
+
+  console.log('📋 DATABASE_URL encontrada, iniciando conexão...');
+  
+  const client = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false
+    }
+  });
+
+  try {
+    // Conectar ao banco
+    console.log('⏳ Conectando ao banco PostgreSQL...');
+    await client.connect();
+    console.log('✅ Conexão estabelecida com sucesso!');
+
+    // Teste básico - obter informações do banco
+    console.log('🔍 Executando queries de teste...');
+    const result = await client.query('SELECT NOW() as current_time, version() as db_version');
+    
+    // Testar criação de tabela de teste
+    console.log('🏗️ Testando criação de tabela...');
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS connection_test (
+        id SERIAL PRIMARY KEY,
+        test_time TIMESTAMP DEFAULT NOW(),
+        message TEXT,
+        user_agent TEXT
+      )
+    `);
+    console.log('✅ Tabela de teste criada/verificada!');
+
+    // Inserir dados de teste
+    const testMessage = `Teste via endpoint - ${new Date().toISOString()}`;
+    const userAgent = req.get('User-Agent') || 'Unknown';
+    
+    console.log('📝 Inserindo dados de teste...');
+    await client.query(`
+      INSERT INTO connection_test (message, user_agent) 
+      VALUES ($1, $2)
+    `, [testMessage, userAgent]);
+
+    // Consultar últimos registros de teste
+    const testData = await client.query(`
+      SELECT * FROM connection_test 
+      ORDER BY test_time DESC 
+      LIMIT 3
+    `);
+    
+    console.log('📊 Últimos registros de teste:', testData.rows);
+
+    // Verificar quantos registros de teste existem
+    const countResult = await client.query('SELECT COUNT(*) as total FROM connection_test');
+    
+    const response = {
+      success: true,
+      database: {
+        connected: true,
+        timestamp: result.rows[0].current_time,
+        version: result.rows[0].db_version.split(' ')[0],
+        totalTests: parseInt(countResult.rows[0].total),
+        lastTests: testData.rows,
+        connectionString: process.env.DATABASE_URL.replace(/:[^:@]*@/, ':***@') // Ocultar senha
+      },
+      timestamp: new Date().toISOString()
+    };
+
+    console.log('🎉 Teste de conectividade concluído com sucesso!');
+    res.json(response);
+
+  } catch (error) {
+    console.error('❌ Erro durante teste de conectividade:');
+    console.error('  - Tipo:', error.name);
+    console.error('  - Mensagem:', error.message);
+    console.error('  - Código:', error.code);
+    
+    let errorDetails = {
+      name: error.name,
+      message: error.message,
+      code: error.code
+    };
+
+    if (error.code === 'ENOTFOUND') {
+      errorDetails.suggestion = 'Host do banco não encontrado - verificar URL de conexão';
+    } else if (error.code === 'ECONNREFUSED') {
+      errorDetails.suggestion = 'Conexão recusada - verificar security group e firewall';
+    } else if (error.code === '28P01') {
+      errorDetails.suggestion = 'Credenciais inválidas - verificar usuário e senha';
+    } else if (error.code === 'ECONNRESET') {
+      errorDetails.suggestion = 'Conexão resetada - verificar configuração SSL';
+    }
+
+    res.json({
+      success: false,
+      error: errorDetails,
+      timestamp: new Date().toISOString()
+    });
+
+  } finally {
+    // Fechar conexão
+    try {
+      await client.end();
+      console.log('🔌 Conexão com banco fechada.');
+    } catch (closeError) {
+      console.error('⚠️ Erro ao fechar conexão:', closeError.message);
+    }
+  }
 });
 
 // API para sincronização
@@ -647,6 +770,30 @@ app.post('/api/save-manual-match', async (req, res) => {
   } catch (error) {
     console.error('Error saving manual match:', error);
     res.status(500).json({ error: error.message });
+  }
+});
+
+// Rota de teste de conectividade ao banco de dados PostgreSQL
+app.get('/api/test-db', async (req, res) => {
+  const client = new Client({
+    connectionString: process.env.DATABASE_URL,
+  });
+
+  try {
+    await client.connect();
+    const result = await client.query('SELECT NOW()');
+    res.json({
+      success: true,
+      time: result.rows[0].now,
+    });
+  } catch (error) {
+    console.error('Erro ao conectar ao banco de dados:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Erro ao conectar ao banco de dados',
+    });
+  } finally {
+    await client.end();
   }
 });
 
