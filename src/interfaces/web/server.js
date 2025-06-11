@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const axios = require('axios');
-const { Client } = require('pg'); // Adicionar cliente PostgreSQL
+const { Client } = require('pg');
 const BGGApi = require('../../api/bggApi');
 const LudopediaApi = require('../../api/ludopediaApi');
 const CollectionMatcher = require('../../comparison/matcher');
@@ -27,150 +27,80 @@ app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-// Rota para testar conectividade com banco de dados
-app.get('/test-database', async (req, res) => {
-  console.log('🔗 Iniciando teste de conectividade com PostgreSQL RDS...');
-  
-  // Verificar se DATABASE_URL está disponível
-  if (!process.env.DATABASE_URL) {
-    console.error('❌ DATABASE_URL não encontrada nas variáveis de ambiente');
-    return res.json({
-      success: false,
-      error: 'DATABASE_URL não configurada',
-      timestamp: new Date().toISOString()
-    });
-  }
-
-  // Debug detalhado da URL
-  const databaseUrl = process.env.DATABASE_URL;
-  console.log('📋 DATABASE_URL encontrada!');
-  console.log('🔍 URL completa (mascarada):', databaseUrl.replace(/:[^:@]*@/, ':***@'));
-  console.log('🔍 URL length:', databaseUrl.length);
-  console.log('🔍 URL start:', databaseUrl.substring(0, 50));
-  
-  // Parse manual da URL para debug
+// Rota para testar setup completo do banco PostgreSQL
+app.get('/test-database-setup', async (req, res) => {
   try {
-    const url = new URL(databaseUrl);
-    console.log('🔍 Parsed URL:');
-    console.log('  - Protocol:', url.protocol);
-    console.log('  - Host:', url.hostname);
-    console.log('  - Port:', url.port);
-    console.log('  - Database:', url.pathname);
-    console.log('  - Username:', url.username);
-  } catch (parseError) {
-    console.error('❌ Erro ao fazer parse da URL:', parseError.message);
-    return res.json({
-      success: false,
-      error: 'URL de conexão inválida: ' + parseError.message,
-      timestamp: new Date().toISOString()
-    });
-  }
-
-  console.log('📋 Iniciando conexão...');
-  
-  const client = new Client({
-    connectionString: process.env.DATABASE_URL,
-    ssl: {
-      rejectUnauthorized: false
+    console.log('🔗 Testando setup completo do banco...');
+    
+    // Parse da URL atual
+    const databaseUrl = process.env.DATABASE_URL;
+    console.log('📋 DATABASE_URL existe:', !!databaseUrl);
+    console.log('📋 DATABASE_URL (primeiros 50 chars):', databaseUrl?.substring(0, 50));
+    
+    if (!databaseUrl) {
+      return res.json({ success: false, error: 'DATABASE_URL não encontrada' });
     }
-  });
-
-  try {
-    // Conectar ao banco
-    console.log('⏳ Conectando ao banco PostgreSQL...');
-    await client.connect();
-    console.log('✅ Conexão estabelecida com sucesso!');
-
-    // Teste básico - obter informações do banco
-    console.log('🔍 Executando queries de teste...');
-    const result = await client.query('SELECT NOW() as current_time, version() as db_version');
     
-    // Testar criação de tabela de teste
-    console.log('🏗️ Testando criação de tabela...');
-    await client.query(`
-      CREATE TABLE IF NOT EXISTS connection_test (
-        id SERIAL PRIMARY KEY,
-        test_time TIMESTAMP DEFAULT NOW(),
-        message TEXT,
-        user_agent TEXT
-      )
-    `);
-    console.log('✅ Tabela de teste criada/verificada!');
-
-    // Inserir dados de teste
-    const testMessage = `Teste via endpoint - ${new Date().toISOString()}`;
-    const userAgent = req.get('User-Agent') || 'Unknown';
+    // Tentar conectar ao database padrão 'postgres' primeiro
+    const defaultUrl = databaseUrl.replace('/bggludopedia', '/postgres');
+    console.log('🔍 Tentando conectar ao database padrão...');
     
-    console.log('📝 Inserindo dados de teste...');
-    await client.query(`
-      INSERT INTO connection_test (message, user_agent) 
-      VALUES ($1, $2)
-    `, [testMessage, userAgent]);
-
-    // Consultar últimos registros de teste
-    const testData = await client.query(`
-      SELECT * FROM connection_test 
-      ORDER BY test_time DESC 
-      LIMIT 3
+    const defaultClient = new Client({
+      connectionString: defaultUrl,
+      ssl: { rejectUnauthorized: false }
+    });
+    
+    await defaultClient.connect();
+    console.log('✅ Conectado ao database padrão!');
+    
+    // Verificar se o database bggludopedia existe
+    const dbCheck = await defaultClient.query(`
+      SELECT 1 FROM pg_database WHERE datname = 'bggludopedia'
     `);
     
-    console.log('📊 Últimos registros de teste:', testData.rows);
-
-    // Verificar quantos registros de teste existem
-    const countResult = await client.query('SELECT COUNT(*) as total FROM connection_test');
+    if (dbCheck.rows.length === 0) {
+      console.log('🏗️ Criando database bggludopedia...');
+      await defaultClient.query('CREATE DATABASE bggludopedia');
+      console.log('✅ Database bggludopedia criado!');
+    } else {
+      console.log('✅ Database bggludopedia já existe!');
+    }
     
-    const response = {
+    await defaultClient.end();
+    
+    // Agora conectar ao database específico
+    console.log('🔗 Conectando ao database bggludopedia...');
+    const appClient = new Client({
+      connectionString: databaseUrl,
+      ssl: { rejectUnauthorized: false }
+    });
+    
+    await appClient.connect();
+    console.log('✅ Conectado ao database bggludopedia!');
+    
+    const result = await appClient.query('SELECT NOW() as current_time, current_database() as db_name');
+    
+    await appClient.end();
+    
+    res.json({
       success: true,
+      message: 'Setup do banco realizado com sucesso!',
       database: {
-        connected: true,
-        timestamp: result.rows[0].current_time,
-        version: result.rows[0].db_version.split(' ')[0],
-        totalTests: parseInt(countResult.rows[0].total),
-        lastTests: testData.rows,
-        connectionString: process.env.DATABASE_URL.replace(/:[^:@]*@/, ':***@') // Ocultar senha
-      },
-      timestamp: new Date().toISOString()
-    };
-
-    console.log('🎉 Teste de conectividade concluído com sucesso!');
-    res.json(response);
-
-  } catch (error) {
-    console.error('❌ Erro durante teste de conectividade:');
-    console.error('  - Tipo:', error.name);
-    console.error('  - Mensagem:', error.message);
-    console.error('  - Código:', error.code);
+        name: result.rows[0].db_name,
+        timestamp: result.rows[0].current_time
+      }
+    });
     
-    let errorDetails = {
-      name: error.name,
-      message: error.message,
-      code: error.code
-    };
-
-    if (error.code === 'ENOTFOUND') {
-      errorDetails.suggestion = 'Host do banco não encontrado - verificar URL de conexão';
-    } else if (error.code === 'ECONNREFUSED') {
-      errorDetails.suggestion = 'Conexão recusada - verificar security group e firewall';
-    } else if (error.code === '28P01') {
-      errorDetails.suggestion = 'Credenciais inválidas - verificar usuário e senha';
-    } else if (error.code === 'ECONNRESET') {
-      errorDetails.suggestion = 'Conexão resetada - verificar configuração SSL';
-    }
-
+  } catch (error) {
+    console.error('❌ Erro no setup:', error);
     res.json({
       success: false,
-      error: errorDetails,
-      timestamp: new Date().toISOString()
+      error: {
+        name: error.name,
+        message: error.message,
+        code: error.code
+      }
     });
-
-  } finally {
-    // Fechar conexão
-    try {
-      await client.end();
-      console.log('🔌 Conexão com banco fechada.');
-    } catch (closeError) {
-      console.error('⚠️ Erro ao fechar conexão:', closeError.message);
-    }
   }
 });
 
@@ -795,30 +725,6 @@ app.post('/api/save-manual-match', async (req, res) => {
   } catch (error) {
     console.error('Error saving manual match:', error);
     res.status(500).json({ error: error.message });
-  }
-});
-
-// Rota de teste de conectividade ao banco de dados PostgreSQL
-app.get('/api/test-db', async (req, res) => {
-  const client = new Client({
-    connectionString: process.env.DATABASE_URL,
-  });
-
-  try {
-    await client.connect();
-    const result = await client.query('SELECT NOW()');
-    res.json({
-      success: true,
-      time: result.rows[0].now,
-    });
-  } catch (error) {
-    console.error('Erro ao conectar ao banco de dados:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Erro ao conectar ao banco de dados',
-    });
-  } finally {
-    await client.end();
   }
 });
 
