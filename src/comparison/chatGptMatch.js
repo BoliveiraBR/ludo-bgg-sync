@@ -148,7 +148,7 @@ class ChatGPTMatcher {
         model: "gpt-3.5-turbo", // Era "gpt-4"
         messages: [{ role: "user", content: prompt }],
         temperature: 0.2, // Baixa temperatura para respostas mais consistentes
-        max_tokens: 500 // Limitar tokens para evitar respostas muito longas
+        max_tokens: 2000 // Limitar tokens para evitar respostas muito longas
       });
 
       const content = response.choices[0]?.message?.content;
