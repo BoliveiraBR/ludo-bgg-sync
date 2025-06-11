@@ -41,7 +41,32 @@ app.get('/test-database', async (req, res) => {
     });
   }
 
-  console.log('📋 DATABASE_URL encontrada, iniciando conexão...');
+  // Debug detalhado da URL
+  const databaseUrl = process.env.DATABASE_URL;
+  console.log('📋 DATABASE_URL encontrada!');
+  console.log('🔍 URL completa (mascarada):', databaseUrl.replace(/:[^:@]*@/, ':***@'));
+  console.log('🔍 URL length:', databaseUrl.length);
+  console.log('🔍 URL start:', databaseUrl.substring(0, 50));
+  
+  // Parse manual da URL para debug
+  try {
+    const url = new URL(databaseUrl);
+    console.log('🔍 Parsed URL:');
+    console.log('  - Protocol:', url.protocol);
+    console.log('  - Host:', url.hostname);
+    console.log('  - Port:', url.port);
+    console.log('  - Database:', url.pathname);
+    console.log('  - Username:', url.username);
+  } catch (parseError) {
+    console.error('❌ Erro ao fazer parse da URL:', parseError.message);
+    return res.json({
+      success: false,
+      error: 'URL de conexão inválida: ' + parseError.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+
+  console.log('📋 Iniciando conexão...');
   
   const client = new Client({
     connectionString: process.env.DATABASE_URL,
