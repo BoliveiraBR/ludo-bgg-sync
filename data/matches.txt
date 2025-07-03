@@ -2336,5 +2336,11 @@
     "ludoName": "Isle of Skye: De Líder a Rei - Expansões Promocionais",
     "confidence": "manual",
     "reasoning": "Match manual criado pelo usuário"
+  },
+  {
+    "bggId": "28086",
+    "ludoId": "3123",
+    "bggName": "Age of War",
+    "ludoName": "Age of War"
   }
 ]

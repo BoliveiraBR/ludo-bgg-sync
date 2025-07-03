@@ -1,6 +1,182 @@
 ﻿[
   {
     "num": 1,
+    "id": "61747",
+    "name": "Take 5: 30th Anniversary Edition",
+    "type": "base",
+    "isExpansion": false,
+    "year": "N/A",
+    "rating": null,
+    "favorite": false,
+    "comment": "",
+    "cost": null,
+    "link": "https://ludopedia.com.br/jogo/take-5-30th-anniversary-edition",
+    "ludopediaId": "61747",
+    "thumbnail": "",
+    "image": ""
+  },
+  {
+    "num": 2,
+    "id": "68137",
+    "name": "Piña Coladice",
+    "type": "base",
+    "isExpansion": false,
+    "year": "N/A",
+    "rating": null,
+    "favorite": false,
+    "comment": "",
+    "cost": null,
+    "link": "https://ludopedia.com.br/jogo/pina-coladice",
+    "ludopediaId": "68137",
+    "thumbnail": "",
+    "image": ""
+  },
+  {
+    "num": 3,
+    "id": "537",
+    "name": "Tichu",
+    "type": "base",
+    "isExpansion": false,
+    "year": "N/A",
+    "rating": null,
+    "favorite": false,
+    "comment": "",
+    "cost": null,
+    "link": "https://ludopedia.com.br/jogo/tichu",
+    "ludopediaId": "537",
+    "thumbnail": "",
+    "image": ""
+  },
+  {
+    "num": 4,
+    "id": "61487",
+    "name": "FateFlip: Arrastado pelo mar",
+    "type": "base",
+    "isExpansion": false,
+    "year": "N/A",
+    "rating": null,
+    "favorite": false,
+    "comment": "",
+    "cost": null,
+    "link": "https://ludopedia.com.br/jogo/fateflip-washed-ashore",
+    "ludopediaId": "61487",
+    "thumbnail": "",
+    "image": ""
+  },
+  {
+    "num": 5,
+    "id": "11301",
+    "name": "Fuji Flush",
+    "type": "base",
+    "isExpansion": false,
+    "year": "N/A",
+    "rating": null,
+    "favorite": false,
+    "comment": "",
+    "cost": null,
+    "link": "https://ludopedia.com.br/jogo/fuji-flush",
+    "ludopediaId": "11301",
+    "thumbnail": "",
+    "image": ""
+  },
+  {
+    "num": 6,
+    "id": "52320",
+    "name": "Seas of Strife",
+    "type": "base",
+    "isExpansion": false,
+    "year": "N/A",
+    "rating": null,
+    "favorite": false,
+    "comment": "",
+    "cost": null,
+    "link": "https://ludopedia.com.br/jogo/seas-of-strife",
+    "ludopediaId": "52320",
+    "thumbnail": "",
+    "image": ""
+  },
+  {
+    "num": 7,
+    "id": "64928",
+    "name": "Fishing",
+    "type": "base",
+    "isExpansion": false,
+    "year": "N/A",
+    "rating": null,
+    "favorite": false,
+    "comment": "",
+    "cost": null,
+    "link": "https://ludopedia.com.br/jogo/fishing",
+    "ludopediaId": "64928",
+    "thumbnail": "",
+    "image": ""
+  },
+  {
+    "num": 8,
+    "id": "26506",
+    "name": "Jekyll vs Hyde",
+    "type": "base",
+    "isExpansion": false,
+    "year": "N/A",
+    "rating": null,
+    "favorite": false,
+    "comment": "",
+    "cost": null,
+    "link": "https://ludopedia.com.br/jogo/jekyll-vs-hyde",
+    "ludopediaId": "26506",
+    "thumbnail": "",
+    "image": ""
+  },
+  {
+    "num": 9,
+    "id": "26002",
+    "name": "The King is Dead: Second Edition",
+    "type": "base",
+    "isExpansion": false,
+    "year": "N/A",
+    "rating": null,
+    "favorite": false,
+    "comment": "",
+    "cost": null,
+    "link": "https://ludopedia.com.br/jogo/the-king-is-dead-second-edition",
+    "ludopediaId": "26002",
+    "thumbnail": "",
+    "image": ""
+  },
+  {
+    "num": 10,
+    "id": "40880",
+    "name": "Tsuro: Luxury Limited Edition",
+    "type": "base",
+    "isExpansion": false,
+    "year": "N/A",
+    "rating": null,
+    "favorite": false,
+    "comment": "",
+    "cost": null,
+    "link": "https://ludopedia.com.br/jogo/tsuro-luxury-limited-edition",
+    "ludopediaId": "40880",
+    "thumbnail": "",
+    "image": ""
+  },
+  {
+    "num": 11,
+    "id": "70371",
+    "name": "Tokyo Highway: Rainbow City",
+    "type": "base",
+    "isExpansion": false,
+    "year": "N/A",
+    "rating": null,
+    "favorite": false,
+    "comment": "",
+    "cost": null,
+    "link": "https://ludopedia.com.br/jogo/tokyo-highway-rainbow-city",
+    "ludopediaId": "70371",
+    "thumbnail": "",
+    "image": ""
+  },
+  {
+    "num": 12,
     "id": "40185",
     "name": "FUSE Countdown",
     "type": "base",
@@ -16,7 +192,7 @@
     "image": ""
   },
   {
-    "num": 2,
+    "num": 13,
     "id": "35984",
     "name": "Air, Land, & Sea: Spies, Lies, & Supplies",
     "type": "base",
@@ -32,7 +208,7 @@
     "image": ""
   },
   {
-    "num": 3,
+    "num": 14,
     "id": "54051",
     "name": "Kelp: Tubarão vs Polvo",
     "type": "base",
@@ -48,7 +224,7 @@
     "image": ""
   },
   {
-    "num": 4,
+    "num": 15,
     "id": "3123",
     "name": "Age of War",
     "type": "base",
@@ -64,7 +240,7 @@
     "image": ""
   },
   {
-    "num": 5,
+    "num": 16,
     "id": "79658",
     "name": "Blend Off!",
     "type": "base",
@@ -80,7 +256,7 @@
     "image": ""
   },
   {
-    "num": 6,
+    "num": 17,
     "id": "62686",
     "name": "Seaside",
     "type": "base",
@@ -96,7 +272,7 @@
     "image": ""
   },
   {
-    "num": 7,
+    "num": 18,
     "id": "33271",
     "name": "Fotomania",
     "type": "base",
@@ -112,7 +288,7 @@
     "image": ""
   },
   {
-    "num": 8,
+    "num": 19,
     "id": "61579",
     "name": "Nassau",
     "type": "base",
@@ -128,7 +304,7 @@
     "image": ""
   },
   {
-    "num": 9,
+    "num": 20,
     "id": "61580",
     "name": "Kathmandu",
     "type": "base",
@@ -144,7 +320,7 @@
     "image": ""
   },
   {
-    "num": 10,
+    "num": 21,
     "id": "10999",
     "name": "Power Grid: The Card Game",
     "type": "base",
@@ -160,7 +336,7 @@
     "image": ""
   },
   {
-    "num": 11,
+    "num": 22,
     "id": "14694",
     "name": "Fear",
     "type": "base",
@@ -176,7 +352,7 @@
     "image": ""
   },
   {
-    "num": 12,
+    "num": 23,
     "id": "41162",
     "name": "Time's Up! Party",
     "type": "base",
@@ -192,7 +368,7 @@
     "image": ""
   },
   {
-    "num": 13,
+    "num": 24,
     "id": "77063",
     "name": "Finspan",
     "type": "base",
@@ -208,7 +384,7 @@
     "image": ""
   },
   {
-    "num": 14,
+    "num": 25,
     "id": "68483",
     "name": "Zoo Vadis: Deluxe Edition",
     "type": "base",
@@ -224,7 +400,7 @@
     "image": ""
   },
   {
-    "num": 15,
+    "num": 26,
     "id": "65939",
     "name": "Córdoba",
     "type": "base",
@@ -240,7 +416,7 @@
     "image": ""
   },
   {
-    "num": 16,
+    "num": 27,
     "id": "65940",
     "name": "Lux Nova",
     "type": "base",
@@ -256,7 +432,7 @@
     "image": ""
   },
   {
-    "num": 17,
+    "num": 28,
     "id": "67951",
     "name": "Sushi Go! 10th Anniversary Edition",
     "type": "base",
@@ -272,7 +448,7 @@
     "image": ""
   },
   {
-    "num": 18,
+    "num": 29,
     "id": "37059",
     "name": "Order Overload: Cafe",
     "type": "base",
@@ -288,7 +464,7 @@
     "image": ""
   },
   {
-    "num": 19,
+    "num": 30,
     "id": "30881",
     "name": "Robinson Crusoe: Edição de Colecionador",
     "type": "base",
@@ -304,7 +480,7 @@
     "image": ""
   },
   {
-    "num": 20,
+    "num": 31,
     "id": "51377",
     "name": "Sky Team",
     "type": "base",
@@ -320,7 +496,7 @@
     "image": ""
   },
   {
-    "num": 21,
+    "num": 32,
     "id": "37857",
     "name": "Dune: Guerra por Arrakis",
     "type": "base",
@@ -336,7 +512,7 @@
     "image": ""
   },
   {
-    "num": 22,
+    "num": 33,
     "id": "57868",
     "name": "Cascadito",
     "type": "base",
@@ -352,7 +528,7 @@
     "image": ""
   },
   {
-    "num": 23,
+    "num": 34,
     "id": "57863",
     "name": "Cascadero",
     "type": "base",
@@ -368,7 +544,7 @@
     "image": ""
   },
   {
-    "num": 24,
+    "num": 35,
     "id": "32709",
     "name": "Regicide",
     "type": "base",
@@ -384,7 +560,7 @@
     "image": ""
   },
   {
-    "num": 25,
+    "num": 36,
     "id": "65730",
     "name": "Lemur",
     "type": "base",
@@ -400,7 +576,7 @@
     "image": ""
   },
   {
-    "num": 26,
+    "num": 37,
     "id": "60977",
     "name": "Glitches",
     "type": "base",
@@ -416,7 +592,7 @@
     "image": ""
   },
   {
-    "num": 27,
+    "num": 38,
     "id": "60250",
     "name": "Glifos",
     "type": "base",
@@ -432,7 +608,7 @@
     "image": ""
   },
   {
-    "num": 28,
+    "num": 39,
     "id": "60249",
     "name": "ProcuRatos",
     "type": "base",
@@ -448,7 +624,7 @@
     "image": ""
   },
   {
-    "num": 29,
+    "num": 40,
     "id": "33406",
     "name": "GROVE: A 9 card solitaire game",
     "type": "base",
@@ -464,7 +640,7 @@
     "image": ""
   },
   {
-    "num": 30,
+    "num": 41,
     "id": "37047",
     "name": "Heat: Pedal to the Metal",
     "type": "base",
@@ -480,7 +656,7 @@
     "image": ""
   },
   {
-    "num": 31,
+    "num": 42,
     "id": "33246",
     "name": "High Score (I)",
     "type": "base",
@@ -496,7 +672,7 @@
     "image": ""
   },
   {
-    "num": 32,
+    "num": 43,
     "id": "15130",
     "name": "Infiltrado",
     "type": "base",
@@ -512,7 +688,7 @@
     "image": ""
   },
   {
-    "num": 33,
+    "num": 44,
     "id": "38286",
     "name": "Sea Salt & Paper",
     "type": "base",
@@ -528,7 +704,7 @@
     "image": ""
   },
   {
-    "num": 34,
+    "num": 45,
     "id": "12103",
     "name": "Maskmen",
     "type": "base",
@@ -544,7 +720,7 @@
     "image": ""
   },
   {
-    "num": 35,
+    "num": 46,
     "id": "41163",
     "name": "Vienna (I)",
     "type": "base",
@@ -560,7 +736,7 @@
     "image": ""
   },
   {
-    "num": 36,
+    "num": 47,
     "id": "39596",
     "name": "Cuzco (I)",
     "type": "base",
@@ -576,7 +752,7 @@
     "image": ""
   },
   {
-    "num": 37,
+    "num": 48,
     "id": "33119",
     "name": "Hegemony: Conduza Sua Classe À Vitória - Edição Ampliada",
     "type": "base",
@@ -592,7 +768,7 @@
     "image": ""
   },
   {
-    "num": 38,
+    "num": 49,
     "id": "26214",
     "name": "MicroMacro: A Cidade do Crime",
     "type": "base",
@@ -608,7 +784,7 @@
     "image": ""
   },
   {
-    "num": 39,
+    "num": 50,
     "id": "32873",
     "name": "La Granja: Deluxe Master Set",
     "type": "base",
@@ -624,7 +800,7 @@
     "image": ""
   },
   {
-    "num": 40,
+    "num": 51,
     "id": "21932",
     "name": "Las Vegas Royale",
     "type": "base",
@@ -640,7 +816,7 @@
     "image": ""
   },
   {
-    "num": 41,
+    "num": 52,
     "id": "908",
     "name": "Arte Moderna",
     "type": "base",
@@ -656,7 +832,7 @@
     "image": ""
   },
   {
-    "num": 42,
+    "num": 53,
     "id": "40535",
     "name": "Beer & Bread",
     "type": "base",
@@ -672,7 +848,7 @@
     "image": ""
   },
   {
-    "num": 43,
+    "num": 54,
     "id": "55669",
     "name": "Decrypto: 5th Anniversary Edition",
     "type": "base",
@@ -688,7 +864,7 @@
     "image": ""
   },
   {
-    "num": 44,
+    "num": 55,
     "id": "32897",
     "name": "Scout",
     "type": "base",
@@ -704,7 +880,7 @@
     "image": ""
   },
   {
-    "num": 45,
+    "num": 56,
     "id": "53939",
     "name": "RA: Pharaoh Edition",
     "type": "base",
@@ -720,7 +896,7 @@
     "image": ""
   },
   {
-    "num": 46,
+    "num": 57,
     "id": "36265",
     "name": "The Castles of Burgundy: Special Edition",
     "type": "base",
@@ -736,7 +912,7 @@
     "image": ""
   },
   {
-    "num": 47,
+    "num": 58,
     "id": "36707",
     "name": "World Wonders",
     "type": "base",
@@ -752,7 +928,7 @@
     "image": ""
   },
   {
-    "num": 48,
+    "num": 59,
     "id": "32973",
     "name": "Marrakesh",
     "type": "base",
@@ -768,7 +944,7 @@
     "image": ""
   },
   {
-    "num": 49,
+    "num": 60,
     "id": "32974",
     "name": "New York City",
     "type": "base",
@@ -784,7 +960,7 @@
     "image": ""
   },
   {
-    "num": 50,
+    "num": 61,
     "id": "25174",
     "name": "Amsterdam",
     "type": "base",
@@ -800,7 +976,7 @@
     "image": ""
   },
   {
-    "num": 51,
+    "num": 62,
     "id": "25173",
     "name": "Hamburg",
     "type": "base",
@@ -816,7 +992,7 @@
     "image": ""
   },
   {
-    "num": 52,
+    "num": 63,
     "id": "35779",
     "name": "Before the Guests Arrive",
     "type": "base",
@@ -832,7 +1008,7 @@
     "image": ""
   },
   {
-    "num": 53,
+    "num": 64,
     "id": "3261",
     "name": "Bananagrams",
     "type": "base",
@@ -848,7 +1024,7 @@
     "image": ""
   },
   {
-    "num": 54,
+    "num": 65,
     "id": "41198",
     "name": "Unlock!: Aventuras Lúdicas",
     "type": "base",
@@ -864,7 +1040,7 @@
     "image": ""
   },
   {
-    "num": 55,
+    "num": 66,
     "id": "34042",
     "name": "EXIT: O Jogo - Senhor dos Anéis: Sombras sobre a Terra Média",
     "type": "base",
@@ -880,7 +1056,7 @@
     "image": ""
   },
   {
-    "num": 56,
+    "num": 67,
     "id": "31327",
     "name": "EXIT: O Jogo - O Portal entre os Mundos",
     "type": "base",
@@ -896,7 +1072,7 @@
     "image": ""
   },
   {
-    "num": 57,
+    "num": 68,
     "id": "22471",
     "name": "O Dilema do Rei",
     "type": "base",
@@ -912,7 +1088,7 @@
     "image": ""
   },
   {
-    "num": 58,
+    "num": 69,
     "id": "30939",
     "name": "Witchstone",
     "type": "base",
@@ -928,7 +1104,7 @@
     "image": ""
   },
   {
-    "num": 59,
+    "num": 70,
     "id": "53865",
     "name": "Qui-Quitanda",
     "type": "base",
@@ -944,7 +1120,7 @@
     "image": ""
   },
   {
-    "num": 60,
+    "num": 71,
     "id": "53864",
     "name": "Duo Regna",
     "type": "base",
@@ -960,7 +1136,7 @@
     "image": ""
   },
   {
-    "num": 61,
+    "num": 72,
     "id": "53863",
     "name": "O Que O Quê",
     "type": "base",
@@ -976,7 +1152,7 @@
     "image": ""
   },
   {
-    "num": 62,
+    "num": 73,
     "id": "10546",
     "name": "Pandemic Iberia",
     "type": "base",
@@ -992,7 +1168,7 @@
     "image": ""
   },
   {
-    "num": 63,
+    "num": 74,
     "id": "35767",
     "name": "Twilight Inscription",
     "type": "base",
@@ -1008,7 +1184,7 @@
     "image": ""
   },
   {
-    "num": 64,
+    "num": 75,
     "id": "37434",
     "name": "Wingspan: Ásia",
     "type": "base",
@@ -1024,7 +1200,7 @@
     "image": ""
   },
   {
-    "num": 65,
+    "num": 76,
     "id": "39037",
     "name": "Splendor Duel",
     "type": "base",
@@ -1040,7 +1216,7 @@
     "image": ""
   },
   {
-    "num": 66,
+    "num": 77,
     "id": "32915",
     "name": "Get on Board: New York & London",
     "type": "base",
@@ -1056,7 +1232,7 @@
     "image": ""
   },
   {
-    "num": 67,
+    "num": 78,
     "id": "6438",
     "name": "Hive Pocket",
     "type": "base",
@@ -1072,7 +1248,7 @@
     "image": ""
   },
   {
-    "num": 68,
+    "num": 79,
     "id": "16257",
     "name": "Deckscape Ameaça em Londres",
     "type": "base",
@@ -1088,7 +1264,7 @@
     "image": ""
   },
   {
-    "num": 69,
+    "num": 80,
     "id": "26473",
     "name": "Canvas",
     "type": "base",
@@ -1104,7 +1280,7 @@
     "image": ""
   },
   {
-    "num": 70,
+    "num": 81,
     "id": "32656",
     "name": "Power Grid: Versão Energizada",
     "type": "base",
@@ -1120,7 +1296,7 @@
     "image": ""
   },
   {
-    "num": 71,
+    "num": 82,
     "id": "32446",
     "name": "Reino das Catapultas",
     "type": "base",
@@ -1136,7 +1312,7 @@
     "image": ""
   },
   {
-    "num": 72,
+    "num": 83,
     "id": "8617",
     "name": "Telestrations: Na Madruga",
     "type": "base",
@@ -1152,7 +1328,7 @@
     "image": ""
   },
   {
-    "num": 73,
+    "num": 84,
     "id": "15775",
     "name": "Escape Plan",
     "type": "base",
@@ -1168,7 +1344,7 @@
     "image": ""
   },
   {
-    "num": 74,
+    "num": 85,
     "id": "23031",
     "name": "Nova Luna",
     "type": "base",
@@ -1184,7 +1360,7 @@
     "image": ""
   },
   {
-    "num": 75,
+    "num": 86,
     "id": "774",
     "name": "For Sale",
     "type": "base",
@@ -1200,7 +1376,7 @@
     "image": ""
   },
   {
-    "num": 76,
+    "num": 87,
     "id": "21612",
     "name": "Destemidos: Normandia",
     "type": "base",
@@ -1216,7 +1392,7 @@
     "image": ""
   },
   {
-    "num": 77,
+    "num": 88,
     "id": "34608",
     "name": "Star Wars: Palácio do Jabba - Um Jogo Love Letter",
     "type": "base",
@@ -1232,7 +1408,7 @@
     "image": ""
   },
   {
-    "num": 78,
+    "num": 89,
     "id": "22984",
     "name": "Silver & Gold",
     "type": "base",
@@ -1248,7 +1424,7 @@
     "image": ""
   },
   {
-    "num": 79,
+    "num": 90,
     "id": "31802",
     "name": "EXIT: O Jogo - Roubo no Mississippi",
     "type": "base",
@@ -1264,7 +1440,7 @@
     "image": ""
   },
   {
-    "num": 80,
+    "num": 91,
     "id": "26241",
     "name": "EXIT: O Jogo - A Floresta Encantada",
     "type": "base",
@@ -1280,7 +1456,7 @@
     "image": ""
   },
   {
-    "num": 81,
+    "num": 92,
     "id": "26240",
     "name": "EXIT: O Jogo - O Cemitério do Cavaleiro",
     "type": "base",
@@ -1296,7 +1472,7 @@
     "image": ""
   },
   {
-    "num": 82,
+    "num": 93,
     "id": "25841",
     "name": "EXIT: O Jogo - A Montanha Russa Assombrada",
     "type": "base",
@@ -1312,7 +1488,7 @@
     "image": ""
   },
   {
-    "num": 83,
+    "num": 94,
     "id": "14677",
     "name": "EXIT: O Jogo - A Casa dos Enigmas",
     "type": "base",
@@ -1328,7 +1504,7 @@
     "image": ""
   },
   {
-    "num": 84,
+    "num": 95,
     "id": "22209",
     "name": "Exit: As Catacumbas do Terror",
     "type": "base",
@@ -1344,7 +1520,7 @@
     "image": ""
   },
   {
-    "num": 85,
+    "num": 96,
     "id": "14394",
     "name": "EXIT: O Jogo - O Castelo Proibido",
     "type": "base",
@@ -1360,7 +1536,7 @@
     "image": ""
   },
   {
-    "num": 86,
+    "num": 97,
     "id": "13981",
     "name": "Cangaço",
     "type": "base",
@@ -1376,7 +1552,7 @@
     "image": ""
   },
   {
-    "num": 87,
+    "num": 98,
     "id": "24478",
     "name": "Air, Land, & Sea",
     "type": "base",
@@ -1392,7 +1568,7 @@
     "image": ""
   },
   {
-    "num": 88,
+    "num": 99,
     "id": "30558",
     "name": "Caper: Europe",
     "type": "base",
@@ -1408,7 +1584,7 @@
     "image": ""
   },
   {
-    "num": 89,
+    "num": 100,
     "id": "21992",
     "name": "Watergate",
     "type": "base",
@@ -1424,7 +1600,7 @@
     "image": ""
   },
   {
-    "num": 90,
+    "num": 101,
     "id": "22533",
     "name": "Love Letter (2ª Edição)",
     "type": "base",
@@ -1440,7 +1616,7 @@
     "image": ""
   },
   {
-    "num": 91,
+    "num": 102,
     "id": "21122",
     "name": "Pax Pamir: Segunda Edição",
     "type": "base",
@@ -1456,7 +1632,7 @@
     "image": ""
   },
   {
-    "num": 92,
+    "num": 103,
     "id": "9008",
     "name": "KLASK",
     "type": "base",
@@ -1472,7 +1648,7 @@
     "image": ""
   },
   {
-    "num": 93,
+    "num": 104,
     "id": "17289",
     "name": "The Game: Face to Face",
     "type": "base",
@@ -1488,7 +1664,7 @@
     "image": ""
   },
   {
-    "num": 94,
+    "num": 105,
     "id": "29022",
     "name": "Ticket to Ride: Europa - 15 Anos",
     "type": "base",
@@ -1504,7 +1680,7 @@
     "image": ""
   },
   {
-    "num": 95,
+    "num": 106,
     "id": "4826",
     "name": "Mamma Mia! Plus",
     "type": "base",
@@ -1520,7 +1696,7 @@
     "image": ""
   },
   {
-    "num": 96,
+    "num": 107,
     "id": "30645",
     "name": "Biblios: Quill and Parchment",
     "type": "base",
@@ -1536,7 +1712,7 @@
     "image": ""
   },
   {
-    "num": 97,
+    "num": 108,
     "id": "24561",
     "name": "Nanga Parbat",
     "type": "base",
@@ -1552,7 +1728,7 @@
     "image": ""
   },
   {
-    "num": 98,
+    "num": 109,
     "id": "988",
     "name": "Tumblin-Dice",
     "type": "base",
@@ -1568,7 +1744,7 @@
     "image": ""
   },
   {
-    "num": 99,
+    "num": 110,
     "id": "25941",
     "name": "Duna: Imperium",
     "type": "base",
@@ -1584,7 +1760,7 @@
     "image": ""
   },
   {
-    "num": 100,
+    "num": 111,
     "id": "9637",
     "name": "Skull",
     "type": "base",
@@ -1600,7 +1776,7 @@
     "image": ""
   },
   {
-    "num": 101,
+    "num": 112,
     "id": "25605",
     "name": "The Red Cathedral",
     "type": "base",
@@ -1616,7 +1792,7 @@
     "image": ""
   },
   {
-    "num": 102,
+    "num": 113,
     "id": "22066",
     "name": "Pablo (2ª Edição)",
     "type": "base",
@@ -1632,7 +1808,7 @@
     "image": ""
   },
   {
-    "num": 103,
+    "num": 114,
     "id": "11478",
     "name": "Lisboa",
     "type": "base",
@@ -1648,7 +1824,7 @@
     "image": ""
   },
   {
-    "num": 104,
+    "num": 115,
     "id": "5873",
     "name": "Paperback",
     "type": "base",
@@ -1664,7 +1840,7 @@
     "image": ""
   },
   {
-    "num": 105,
+    "num": 116,
     "id": "26124",
     "name": "Dobble Collector",
     "type": "base",
@@ -1680,7 +1856,7 @@
     "image": ""
   },
   {
-    "num": 106,
+    "num": 117,
     "id": "21701",
     "name": "Sintonia",
     "type": "base",
@@ -1696,7 +1872,7 @@
     "image": ""
   },
   {
-    "num": 107,
+    "num": 118,
     "id": "18504",
     "name": "Black Sonata",
     "type": "base",
@@ -1712,7 +1888,7 @@
     "image": ""
   },
   {
-    "num": 108,
+    "num": 119,
     "id": "10621",
     "name": "Maquis",
     "type": "base",
@@ -1728,7 +1904,7 @@
     "image": ""
   },
   {
-    "num": 109,
+    "num": 120,
     "id": "9382",
     "name": "Nemo's War (Second Edition)",
     "type": "base",
@@ -1744,7 +1920,7 @@
     "image": ""
   },
   {
-    "num": 110,
+    "num": 121,
     "id": "22193",
     "name": "Dobble: À Prova D'Água",
     "type": "base",
@@ -1760,7 +1936,7 @@
     "image": ""
   },
   {
-    "num": 111,
+    "num": 122,
     "id": "25200",
     "name": "Pandemic Legacy: Season 0",
     "type": "base",
@@ -1776,9 +1952,9 @@
     "image": ""
   },
   {
-    "num": 112,
+    "num": 123,
     "id": "18005",
-    "name": "The Quacks of Quedlinburg (Quacks)",
+    "name": "The Quacks of Quedlinburg",
     "type": "base",
     "isExpansion": false,
     "year": "N/A",
@@ -1786,20 +1962,20 @@
     "favorite": false,
     "comment": "",
     "cost": null,
-    "link": "https://ludopedia.com.br/jogo/the-quacks-of-quedlinburg-quacks",
+    "link": "https://ludopedia.com.br/jogo/the-quacks-of-quedlinburg",
     "ludopediaId": "18005",
     "thumbnail": "",
     "image": ""
   },
   {
-    "num": 113,
+    "num": 124,
     "id": "9330",
     "name": "Star Wars: Rebellion",
     "type": "base",
     "isExpansion": false,
     "year": "N/A",
     "rating": 9,
-    "favorite": false,
+    "favorite": true,
     "comment": "Mistura narrativa Star Wars com algumas mecânicas parecidas com um Twilight Imperium. Longo, mas vale cada minuto de partida.",
     "cost": null,
     "link": "https://ludopedia.com.br/jogo/star-wars-rebellion",
@@ -1808,7 +1984,7 @@
     "image": ""
   },
   {
-    "num": 114,
+    "num": 125,
     "id": "22349",
     "name": "Salada de Pontos",
     "type": "base",
@@ -1824,7 +2000,7 @@
     "image": ""
   },
   {
-    "num": 115,
+    "num": 126,
     "id": "18931",
     "name": "On Mars",
     "type": "base",
@@ -1840,7 +2016,7 @@
     "image": ""
   },
   {
-    "num": 116,
+    "num": 127,
     "id": "21221",
     "name": "Star Wars: Orla Exterior",
     "type": "base",
@@ -1856,7 +2032,7 @@
     "image": ""
   },
   {
-    "num": 117,
+    "num": 128,
     "id": "21822",
     "name": "Maracaibo",
     "type": "base",
@@ -1872,7 +2048,7 @@
     "image": ""
   },
   {
-    "num": 118,
+    "num": 129,
     "id": "8644",
     "name": "Machi Koro: Deluxe Edition",
     "type": "base",
@@ -1888,7 +2064,7 @@
     "image": ""
   },
   {
-    "num": 119,
+    "num": 130,
     "id": "9836",
     "name": "Archaeology: The New Expedition",
     "type": "base",
@@ -1904,7 +2080,7 @@
     "image": ""
   },
   {
-    "num": 120,
+    "num": 131,
     "id": "18839",
     "name": "Kariba",
     "type": "base",
@@ -1920,7 +2096,7 @@
     "image": ""
   },
   {
-    "num": 121,
+    "num": 132,
     "id": "18216",
     "name": "Hanabi Deluxe",
     "type": "base",
@@ -1936,7 +2112,7 @@
     "image": ""
   },
   {
-    "num": 122,
+    "num": 133,
     "id": "14305",
     "name": "Pandemic Legacy: 2ª Temporada",
     "type": "base",
@@ -1952,7 +2128,7 @@
     "image": ""
   },
   {
-    "num": 123,
+    "num": 134,
     "id": "20049",
     "name": "Tokyo Highway (four-player edition)",
     "type": "base",
@@ -1968,7 +2144,7 @@
     "image": ""
   },
   {
-    "num": 124,
+    "num": 135,
     "id": "13677",
     "name": "Código Secreto: Dueto",
     "type": "base",
@@ -1984,7 +2160,7 @@
     "image": ""
   },
   {
-    "num": 125,
+    "num": 136,
     "id": "2060",
     "name": "Bang!: The Dice Game",
     "type": "base",
@@ -2000,7 +2176,7 @@
     "image": ""
   },
   {
-    "num": 126,
+    "num": 137,
     "id": "14393",
     "name": "EXIT: O Jogo - A Estação Polar",
     "type": "base",
@@ -2016,7 +2192,7 @@
     "image": ""
   },
   {
-    "num": 127,
+    "num": 138,
     "id": "13894",
     "name": "The Lost Expedition",
     "type": "base",
@@ -2032,7 +2208,7 @@
     "image": ""
   },
   {
-    "num": 128,
+    "num": 139,
     "id": "1387",
     "name": "Póquer de Bichos",
     "type": "base",
@@ -2048,7 +2224,7 @@
     "image": ""
   },
   {
-    "num": 129,
+    "num": 140,
     "id": "18755",
     "name": "Azul Giant",
     "type": "base",
@@ -2064,7 +2240,7 @@
     "image": ""
   },
   {
-    "num": 130,
+    "num": 141,
     "id": "566",
     "name": "Rise of Augustus",
     "type": "base",
@@ -2080,7 +2256,7 @@
     "image": ""
   },
   {
-    "num": 131,
+    "num": 142,
     "id": "21216",
     "name": "Sushi Roll",
     "type": "base",
@@ -2096,7 +2272,7 @@
     "image": ""
   },
   {
-    "num": 132,
+    "num": 143,
     "id": "7832",
     "name": "Deep Sea Adventure",
     "type": "base",
@@ -2112,7 +2288,7 @@
     "image": ""
   },
   {
-    "num": 133,
+    "num": 144,
     "id": "7847",
     "name": "A Fake Artist Goes to New York",
     "type": "base",
@@ -2128,7 +2304,7 @@
     "image": ""
   },
   {
-    "num": 134,
+    "num": 145,
     "id": "24735",
     "name": "In Front of the Elevators",
     "type": "base",
@@ -2144,7 +2320,7 @@
     "image": ""
   },
   {
-    "num": 135,
+    "num": 146,
     "id": "1813",
     "name": "No Thanks!",
     "type": "base",
@@ -2160,7 +2336,7 @@
     "image": ""
   },
   {
-    "num": 136,
+    "num": 147,
     "id": "15237",
     "name": "The Castles of Burgundy: The Dice Game",
     "type": "base",
@@ -2176,7 +2352,7 @@
     "image": ""
   },
   {
-    "num": 137,
+    "num": 148,
     "id": "20418",
     "name": "Wingspan",
     "type": "base",
@@ -2192,7 +2368,7 @@
     "image": ""
   },
   {
-    "num": 138,
+    "num": 149,
     "id": "15555",
     "name": "Welcome To: Seu Lar Perfeito",
     "type": "base",
@@ -2208,7 +2384,7 @@
     "image": ""
   },
   {
-    "num": 139,
+    "num": 150,
     "id": "20517",
     "name": "Pandemic 10th Anniversary",
     "type": "base",
@@ -2224,7 +2400,7 @@
     "image": ""
   },
   {
-    "num": 140,
+    "num": 151,
     "id": "14553",
     "name": "Decrypto",
     "type": "base",
@@ -2240,7 +2416,7 @@
     "image": ""
   },
   {
-    "num": 141,
+    "num": 152,
     "id": "14362",
     "name": "When I Dream",
     "type": "base",
@@ -2256,7 +2432,7 @@
     "image": ""
   },
   {
-    "num": 142,
+    "num": 153,
     "id": "17305",
     "name": "The Mind",
     "type": "base",
@@ -2272,7 +2448,7 @@
     "image": ""
   },
   {
-    "num": 143,
+    "num": 154,
     "id": "20106",
     "name": "Só Uma",
     "type": "base",
@@ -2288,7 +2464,7 @@
     "image": ""
   },
   {
-    "num": 144,
+    "num": 155,
     "id": "403",
     "name": "Targi",
     "type": "base",
@@ -2304,7 +2480,7 @@
     "image": ""
   },
   {
-    "num": 145,
+    "num": 156,
     "id": "12390",
     "name": "CO2: Segunda Chance",
     "type": "base",
@@ -2320,7 +2496,7 @@
     "image": ""
   },
   {
-    "num": 146,
+    "num": 157,
     "id": "14910",
     "name": "Twilight Imperium (4ª Edição)",
     "type": "base",
@@ -2336,7 +2512,7 @@
     "image": ""
   },
   {
-    "num": 147,
+    "num": 158,
     "id": "8019",
     "name": "Arboretum",
     "type": "base",
@@ -2352,7 +2528,7 @@
     "image": ""
   },
   {
-    "num": 148,
+    "num": 159,
     "id": "17646",
     "name": "The Grizzled: Armistício",
     "type": "base",
@@ -2368,7 +2544,7 @@
     "image": ""
   },
   {
-    "num": 149,
+    "num": 160,
     "id": "4447",
     "name": "High Society",
     "type": "base",
@@ -2384,7 +2560,7 @@
     "image": ""
   },
   {
-    "num": 150,
+    "num": 161,
     "id": "7710",
     "name": "The Game",
     "type": "base",
@@ -2400,7 +2576,7 @@
     "image": ""
   },
   {
-    "num": 151,
+    "num": 162,
     "id": "695",
     "name": "Qwirkle",
     "type": "base",
@@ -2416,7 +2592,7 @@
     "image": ""
   },
   {
-    "num": 152,
+    "num": 163,
     "id": "14981",
     "name": "Azul",
     "type": "base",
@@ -2432,7 +2608,7 @@
     "image": ""
   },
   {
-    "num": 153,
+    "num": 164,
     "id": "7434",
     "name": "Matcha",
     "type": "base",
@@ -2448,7 +2624,7 @@
     "image": ""
   },
   {
-    "num": 154,
+    "num": 165,
     "id": "11188",
     "name": "HMS Dolores",
     "type": "base",
@@ -2464,7 +2640,7 @@
     "image": ""
   },
   {
-    "num": 155,
+    "num": 166,
     "id": "16",
     "name": "Battle Line",
     "type": "base",
@@ -2480,7 +2656,7 @@
     "image": ""
   },
   {
-    "num": 156,
+    "num": 167,
     "id": "508",
     "name": "Tigris & Euphrates",
     "type": "base",
@@ -2496,7 +2672,7 @@
     "image": ""
   },
   {
-    "num": 157,
+    "num": 168,
     "id": "2194",
     "name": "Concordia",
     "type": "base",
@@ -2512,7 +2688,7 @@
     "image": ""
   },
   {
-    "num": 158,
+    "num": 169,
     "id": "14488",
     "name": "In the Year of the Dragon: 10th Anniversary",
     "type": "base",
@@ -2528,7 +2704,7 @@
     "image": ""
   },
   {
-    "num": 159,
+    "num": 170,
     "id": "8858",
     "name": "Terraforming Mars",
     "type": "base",
@@ -2544,7 +2720,7 @@
     "image": ""
   },
   {
-    "num": 160,
+    "num": 171,
     "id": "1826",
     "name": "CV",
     "type": "base",
@@ -2560,7 +2736,7 @@
     "image": ""
   },
   {
-    "num": 161,
+    "num": 172,
     "id": "619",
     "name": "Coloretto",
     "type": "base",
@@ -2576,7 +2752,7 @@
     "image": ""
   },
   {
-    "num": 162,
+    "num": 173,
     "id": "8424",
     "name": "Mombasa",
     "type": "base",
@@ -2592,7 +2768,7 @@
     "image": ""
   },
   {
-    "num": 163,
+    "num": 174,
     "id": "10306",
     "name": "Santorini",
     "type": "base",
@@ -2608,7 +2784,7 @@
     "image": ""
   },
   {
-    "num": 164,
+    "num": 175,
     "id": "134",
     "name": "Trajan",
     "type": "base",
@@ -2624,7 +2800,7 @@
     "image": ""
   },
   {
-    "num": 165,
+    "num": 176,
     "id": "411",
     "name": "Troyes",
     "type": "base",
@@ -2640,7 +2816,7 @@
     "image": ""
   },
   {
-    "num": 166,
+    "num": 177,
     "id": "1558",
     "name": "Mascarade",
     "type": "base",
@@ -2656,7 +2832,7 @@
     "image": ""
   },
   {
-    "num": 167,
+    "num": 178,
     "id": "9407",
     "name": "Pyramid Arcade",
     "type": "base",
@@ -2672,7 +2848,7 @@
     "image": ""
   },
   {
-    "num": 168,
+    "num": 179,
     "id": "5598",
     "name": "Die Weinhändler",
     "type": "base",
@@ -2688,7 +2864,7 @@
     "image": ""
   },
   {
-    "num": 169,
+    "num": 180,
     "id": "755",
     "name": "Xadrez",
     "type": "base",
@@ -2704,7 +2880,7 @@
     "image": ""
   },
   {
-    "num": 170,
+    "num": 181,
     "id": "7731",
     "name": "Isle of Skye: De Líder a Rei",
     "type": "base",
@@ -2720,7 +2896,7 @@
     "image": ""
   },
   {
-    "num": 171,
+    "num": 182,
     "id": "595",
     "name": "Bohnanza: Por um Punhado de Feijões!",
     "type": "base",
@@ -2736,7 +2912,7 @@
     "image": ""
   },
   {
-    "num": 172,
+    "num": 183,
     "id": "10509",
     "name": "Onirim: Second Edition",
     "type": "base",
@@ -2752,7 +2928,7 @@
     "image": ""
   },
   {
-    "num": 173,
+    "num": 184,
     "id": "9368",
     "name": "Vinhos Deluxe Edition",
     "type": "base",
@@ -2768,7 +2944,7 @@
     "image": ""
   },
   {
-    "num": 174,
+    "num": 185,
     "id": "3501",
     "name": "Tokaido - Collector's Edition",
     "type": "base",
@@ -2784,7 +2960,7 @@
     "image": ""
   },
   {
-    "num": 175,
+    "num": 186,
     "id": "10816",
     "name": "Código Secreto: Imagens",
     "type": "base",
@@ -2800,7 +2976,7 @@
     "image": ""
   },
   {
-    "num": 176,
+    "num": 187,
     "id": "10990",
     "name": "Capitão Sonar",
     "type": "base",
@@ -2816,7 +2992,7 @@
     "image": ""
   },
   {
-    "num": 177,
+    "num": 188,
     "id": "6876",
     "name": "Patchwork",
     "type": "base",
@@ -2832,7 +3008,7 @@
     "image": ""
   },
   {
-    "num": 178,
+    "num": 189,
     "id": "7714",
     "name": "The Gallerist",
     "type": "base",
@@ -2848,7 +3024,7 @@
     "image": ""
   },
   {
-    "num": 179,
+    "num": 190,
     "id": "8147",
     "name": "Código Secreto",
     "type": "base",
@@ -2864,7 +3040,7 @@
     "image": ""
   },
   {
-    "num": 180,
+    "num": 191,
     "id": "503",
     "name": "Twilight Struggle",
     "type": "base",
@@ -2880,7 +3056,7 @@
     "image": ""
   },
   {
-    "num": 181,
+    "num": 192,
     "id": "1261",
     "name": "Jaipur",
     "type": "base",
@@ -2896,7 +3072,7 @@
     "image": ""
   },
   {
-    "num": 182,
+    "num": 193,
     "id": "460",
     "name": "Coup",
     "type": "base",
@@ -2912,7 +3088,7 @@
     "image": ""
   },
   {
-    "num": 183,
+    "num": 194,
     "id": "544",
     "name": "Sexta-Feira",
     "type": "base",
@@ -2928,7 +3104,7 @@
     "image": ""
   },
   {
-    "num": 184,
+    "num": 195,
     "id": "681",
     "name": "Pega em 6!",
     "type": "base",
@@ -2944,7 +3120,7 @@
     "image": ""
   },
   {
-    "num": 185,
+    "num": 196,
     "id": "13",
     "name": "Agricola",
     "type": "base",
@@ -2960,7 +3136,7 @@
     "image": ""
   },
   {
-    "num": 186,
+    "num": 197,
     "id": "9711",
     "name": "Viticulture - Edição Essencial",
     "type": "base",
@@ -2976,14 +3152,14 @@
     "image": ""
   },
   {
-    "num": 187,
+    "num": 198,
     "id": "47",
     "name": "Race for the Galaxy",
     "type": "base",
     "isExpansion": false,
     "year": "N/A",
     "rating": 8,
-    "favorite": true,
+    "favorite": false,
     "comment": "Curva de aprendizado complicada e iconografia marromenos. Mas um jogão.",
     "cost": null,
     "link": "https://ludopedia.com.br/jogo/race-for-the-galaxy",
@@ -2992,7 +3168,7 @@
     "image": ""
   },
   {
-    "num": 188,
+    "num": 199,
     "id": "7231",
     "name": "Pandemic Legacy: 1ª Temporada",
     "type": "base",
@@ -3008,7 +3184,7 @@
     "image": ""
   },
   {
-    "num": 189,
+    "num": 200,
     "id": "8285",
     "name": "7 Wonders Duel",
     "type": "base",
@@ -3024,7 +3200,7 @@
     "image": ""
   },
   {
-    "num": 190,
+    "num": 201,
     "id": "773",
     "name": "Exploradores",
     "type": "base",
@@ -3040,7 +3216,7 @@
     "image": ""
   },
   {
-    "num": 191,
+    "num": 202,
     "id": "3607",
     "name": "Splendor",
     "type": "base",
@@ -3056,7 +3232,7 @@
     "image": ""
   },
   {
-    "num": 192,
+    "num": 203,
     "id": "570",
     "name": "Hanabi",
     "type": "base",
@@ -3072,7 +3248,7 @@
     "image": ""
   },
   {
-    "num": 193,
+    "num": 204,
     "id": "306",
     "name": "King of Tokyo",
     "type": "base",
@@ -3088,7 +3264,7 @@
     "image": ""
   },
   {
-    "num": 194,
+    "num": 205,
     "id": "4176",
     "name": "Ticket to Ride: 10th Anniversary",
     "type": "base",
@@ -3104,7 +3280,7 @@
     "image": ""
   },
   {
-    "num": 195,
+    "num": 206,
     "id": "780",
     "name": "The Resistance",
     "type": "base",
@@ -3120,7 +3296,7 @@
     "image": ""
   },
   {
-    "num": 196,
+    "num": 207,
     "id": "343",
     "name": "Noah",
     "type": "base",
@@ -3136,7 +3312,7 @@
     "image": ""
   },
   {
-    "num": 197,
+    "num": 208,
     "id": "2036",
     "name": "Eldritch Horror",
     "type": "base",
@@ -3152,7 +3328,7 @@
     "image": ""
   },
   {
-    "num": 198,
+    "num": 209,
     "id": "612",
     "name": "Dixit: Odyssey",
     "type": "base",
@@ -3168,7 +3344,7 @@
     "image": ""
   },
   {
-    "num": 199,
+    "num": 210,
     "id": "606",
     "name": "Dixit",
     "type": "base",
@@ -3184,7 +3360,7 @@
     "image": ""
   },
   {
-    "num": 200,
+    "num": 211,
     "id": "22",
     "name": "Cyclades",
     "type": "base",
@@ -3200,7 +3376,7 @@
     "image": ""
   },
   {
-    "num": 201,
+    "num": 212,
     "id": "1851",
     "name": "Biblios",
     "type": "base",
@@ -3216,7 +3392,7 @@
     "image": ""
   },
   {
-    "num": 202,
+    "num": 213,
     "id": "8",
     "name": "7 Wonders",
     "type": "base",
@@ -3233,6 +3409,102 @@
   },
   {
     "num": 1,
+    "id": "53818",
+    "name": "Codenames: Pictures – Broken Token Promo Card",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "N/A",
+    "rating": null,
+    "favorite": false,
+    "comment": "",
+    "cost": null,
+    "link": "https://ludopedia.com.br/jogo/codenames-pictures-broken-token-promo-card",
+    "ludopediaId": "53818",
+    "thumbnail": "",
+    "image": ""
+  },
+  {
+    "num": 2,
+    "id": "77093",
+    "name": "Terraforming Mars: Extensão da Big Box + Amazonis Planitia 3D Tiles",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "N/A",
+    "rating": null,
+    "favorite": false,
+    "comment": "",
+    "cost": null,
+    "link": "https://ludopedia.com.br/jogo/terraforming-mars-big-box-extension",
+    "ludopediaId": "77093",
+    "thumbnail": "",
+    "image": ""
+  },
+  {
+    "num": 3,
+    "id": "53899",
+    "name": "Qui-Quitanda: Mais Frutas (2)",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "N/A",
+    "rating": null,
+    "favorite": false,
+    "comment": "",
+    "cost": null,
+    "link": "https://ludopedia.com.br/jogo/qui-quitanda-mais-frutas-2",
+    "ludopediaId": "53899",
+    "thumbnail": "",
+    "image": ""
+  },
+  {
+    "num": 4,
+    "id": "32790",
+    "name": "Código Secreto: Expansão promocional Brasil",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "N/A",
+    "rating": null,
+    "favorite": false,
+    "comment": "",
+    "cost": null,
+    "link": "https://ludopedia.com.br/jogo/codigo-secreto-expansao-promocional-brasil",
+    "ludopediaId": "32790",
+    "thumbnail": "",
+    "image": ""
+  },
+  {
+    "num": 5,
+    "id": "71068",
+    "name": "Lux Nova: Mestre dos Vitrais (Verde)",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "N/A",
+    "rating": null,
+    "favorite": false,
+    "comment": "",
+    "cost": null,
+    "link": "https://ludopedia.com.br/jogo/lux-nova-mestre-dos-vitrais-verde",
+    "ludopediaId": "71068",
+    "thumbnail": "",
+    "image": ""
+  },
+  {
+    "num": 6,
+    "id": "67876",
+    "name": "Córdoba: Marco 7",
+    "type": "expansion",
+    "isExpansion": true,
+    "year": "N/A",
+    "rating": null,
+    "favorite": false,
+    "comment": "",
+    "cost": null,
+    "link": "https://ludopedia.com.br/jogo/cordoba-marco-7",
+    "ludopediaId": "67876",
+    "thumbnail": "",
+    "image": ""
+  },
+  {
+    "num": 7,
     "id": "11859",
     "name": "Isle of Skye: From Chieftain to King - Adjacency Scrolls",
     "type": "expansion",
@@ -3248,7 +3520,7 @@
     "image": ""
   },
   {
-    "num": 2,
+    "num": 8,
     "id": "79753",
     "name": "CO2: The Arctic Expansion",
     "type": "expansion",
@@ -3264,7 +3536,7 @@
     "image": ""
   },
   {
-    "num": 3,
+    "num": 9,
     "id": "79752",
     "name": "Nanga Parbat: Hidden Objectives",
     "type": "expansion",
@@ -3280,7 +3552,7 @@
     "image": ""
   },
   {
-    "num": 4,
+    "num": 10,
     "id": "18544",
     "name": "Isle of Skye: De Líder a Rei - Expansões Promocionais",
     "type": "expansion",
@@ -3296,7 +3568,7 @@
     "image": ""
   },
   {
-    "num": 5,
+    "num": 11,
     "id": "67606",
     "name": "Terraforming Mars: Utopia & Cimmeria",
     "type": "expansion",
@@ -3312,7 +3584,7 @@
     "image": ""
   },
   {
-    "num": 6,
+    "num": 12,
     "id": "67605",
     "name": "Terraforming Mars: Prelúdio 2 Pack Promo",
     "type": "expansion",
@@ -3328,7 +3600,7 @@
     "image": ""
   },
   {
-    "num": 7,
+    "num": 13,
     "id": "52178",
     "name": "Terraforming Mars: Prelúdio 2",
     "type": "expansion",
@@ -3344,7 +3616,7 @@
     "image": ""
   },
   {
-    "num": 8,
+    "num": 14,
     "id": "67607",
     "name": "Terraforming Mars: Amazonis & Vastitas",
     "type": "expansion",
@@ -3360,7 +3632,7 @@
     "image": ""
   },
   {
-    "num": 9,
+    "num": 15,
     "id": "27587",
     "name": "Nemo's War (Second Edition): Journey's End Expansion",
     "type": "expansion",
@@ -3376,7 +3648,7 @@
     "image": ""
   },
   {
-    "num": 10,
+    "num": 16,
     "id": "48068",
     "name": "Nemo's War (Second Edition): Holidays on the High Seas",
     "type": "expansion",
@@ -3392,7 +3664,7 @@
     "image": ""
   },
   {
-    "num": 11,
+    "num": 17,
     "id": "20284",
     "name": "The Gallerist: Scoring Expansion",
     "type": "expansion",
@@ -3408,7 +3680,7 @@
     "image": ""
   },
   {
-    "num": 12,
+    "num": 18,
     "id": "66271",
     "name": "Dune: War for Arrakis – Desert War",
     "type": "expansion",
@@ -3424,7 +3696,7 @@
     "image": ""
   },
   {
-    "num": 13,
+    "num": 19,
     "id": "17747",
     "name": "Dixit: \"The Dragon\" Promo Card",
     "type": "expansion",
@@ -3440,7 +3712,7 @@
     "image": ""
   },
   {
-    "num": 14,
+    "num": 20,
     "id": "12064",
     "name": "Noah: The Promo Cards",
     "type": "expansion",
@@ -3456,7 +3728,7 @@
     "image": ""
   },
   {
-    "num": 15,
+    "num": 21,
     "id": "43088",
     "name": "Duna: Imperium - Piter, Conselheiro Genial Carta Promo",
     "type": "expansion",
@@ -3472,7 +3744,7 @@
     "image": ""
   },
   {
-    "num": 16,
+    "num": 22,
     "id": "66511",
     "name": "World Wonders: Cristo",
     "type": "expansion",
@@ -3488,7 +3760,7 @@
     "image": ""
   },
   {
-    "num": 17,
+    "num": 23,
     "id": "60385",
     "name": "World Wonders: Mundo Wonders Pack",
     "type": "expansion",
@@ -3504,7 +3776,7 @@
     "image": ""
   },
   {
-    "num": 18,
+    "num": 24,
     "id": "7900",
     "name": "Power Grid: Warehouse",
     "type": "expansion",
@@ -3520,7 +3792,7 @@
     "image": ""
   },
   {
-    "num": 19,
+    "num": 25,
     "id": "12208",
     "name": "Power Grid: Transformer Station",
     "type": "expansion",
@@ -3536,7 +3808,7 @@
     "image": ""
   },
   {
-    "num": 20,
+    "num": 26,
     "id": "12207",
     "name": "Power Grid: Theme Park",
     "type": "expansion",
@@ -3552,7 +3824,7 @@
     "image": ""
   },
   {
-    "num": 21,
+    "num": 27,
     "id": "12206",
     "name": "Power Grid: Flux Generator",
     "type": "expansion",
@@ -3568,7 +3840,7 @@
     "image": ""
   },
   {
-    "num": 22,
+    "num": 28,
     "id": "40510",
     "name": "Duna: Imperium - Imortalidade",
     "type": "expansion",
@@ -3584,7 +3856,7 @@
     "image": ""
   },
   {
-    "num": 23,
+    "num": 29,
     "id": "79068",
     "name": "Power Grid: Europe/North America",
     "type": "expansion",
@@ -3600,7 +3872,7 @@
     "image": ""
   },
   {
-    "num": 24,
+    "num": 30,
     "id": "23055",
     "name": "Power Grid: Middle East/South Africa",
     "type": "expansion",
@@ -3616,7 +3888,7 @@
     "image": ""
   },
   {
-    "num": 25,
+    "num": 31,
     "id": "68124",
     "name": "Power Grid: Bremen/Manhattan",
     "type": "expansion",
@@ -3632,7 +3904,7 @@
     "image": ""
   },
   {
-    "num": 26,
+    "num": 32,
     "id": "2816",
     "name": "Power Grid: Australia & Indian Subcontinent",
     "type": "expansion",
@@ -3648,7 +3920,7 @@
     "image": ""
   },
   {
-    "num": 27,
+    "num": 33,
     "id": "51421",
     "name": "Robinson Crusoe:  Livro de Aventuras (Gamefound Edition)",
     "type": "expansion",
@@ -3664,7 +3936,7 @@
     "image": ""
   },
   {
-    "num": 28,
+    "num": 34,
     "id": "33768",
     "name": "7 Wonders Duel: Agora – Tu Quoque Fili Promo Card",
     "type": "expansion",
@@ -3680,7 +3952,7 @@
     "image": ""
   },
   {
-    "num": 29,
+    "num": 35,
     "id": "10681",
     "name": "Coup: Promo",
     "type": "expansion",
@@ -3696,7 +3968,7 @@
     "image": ""
   },
   {
-    "num": 30,
+    "num": 36,
     "id": "60114",
     "name": "Coup - Promo Burguês & Benfeitor",
     "type": "expansion",
@@ -3712,7 +3984,7 @@
     "image": ""
   },
   {
-    "num": 31,
+    "num": 37,
     "id": "56118",
     "name": "Marrakesh: Camels & Nomads",
     "type": "expansion",
@@ -3728,7 +4000,7 @@
     "image": ""
   },
   {
-    "num": 32,
+    "num": 38,
     "id": "41143",
     "name": "Dune: War for Arrakis – Smugglers",
     "type": "expansion",
@@ -3744,7 +4016,7 @@
     "image": ""
   },
   {
-    "num": 33,
+    "num": 39,
     "id": "41142",
     "name": "Dune: War for Arrakis – The Spacing Guild",
     "type": "expansion",
@@ -3760,7 +4032,7 @@
     "image": ""
   },
   {
-    "num": 34,
+    "num": 40,
     "id": "66597",
     "name": "Lemur: Duplo Lemur",
     "type": "expansion",
@@ -3776,7 +4048,7 @@
     "image": ""
   },
   {
-    "num": 35,
+    "num": 41,
     "id": "62825",
     "name": "Glitches: Full Duplex (1)",
     "type": "expansion",
@@ -3792,7 +4064,7 @@
     "image": ""
   },
   {
-    "num": 36,
+    "num": 42,
     "id": "61791",
     "name": "Glifos: Mais Símbolos: Gato",
     "type": "expansion",
@@ -3808,7 +4080,7 @@
     "image": ""
   },
   {
-    "num": 37,
+    "num": 43,
     "id": "61790",
     "name": "Glifos: Mais Símbolos: Escaravelho",
     "type": "expansion",
@@ -3824,7 +4096,7 @@
     "image": ""
   },
   {
-    "num": 38,
+    "num": 44,
     "id": "61050",
     "name": "ProcuRatos: Cartaz Procurado",
     "type": "expansion",
@@ -3840,7 +4112,7 @@
     "image": ""
   },
   {
-    "num": 39,
+    "num": 45,
     "id": "57559",
     "name": "Sea Salt & Paper: Extra Salt",
     "type": "expansion",
@@ -3856,7 +4128,7 @@
     "image": ""
   },
   {
-    "num": 40,
+    "num": 46,
     "id": "25378",
     "name": "The Quacks of Quedlinburg: The Alchemists",
     "type": "expansion",
@@ -3872,7 +4144,7 @@
     "image": ""
   },
   {
-    "num": 41,
+    "num": 47,
     "id": "53148",
     "name": "Twilight Imperium: Fourth Edition – Twilight Codex Volume III: Vigil",
     "type": "expansion",
@@ -3888,7 +4160,7 @@
     "image": ""
   },
   {
-    "num": 42,
+    "num": 48,
     "id": "53149",
     "name": "Twilight Imperium: Fourth Edition – Twilight Codex Volume II: Affinity",
     "type": "expansion",
@@ -3904,7 +4176,7 @@
     "image": ""
   },
   {
-    "num": 43,
+    "num": 49,
     "id": "53150",
     "name": "Twilight Imperium: Fourth Edition – Twilight Codex Volume I: Ordinian",
     "type": "expansion",
@@ -3920,7 +4192,7 @@
     "image": ""
   },
   {
-    "num": 44,
+    "num": 50,
     "id": "46473",
     "name": "Hegemony: Lead Your Class to Victory – Crisis & Control",
     "type": "expansion",
@@ -3936,7 +4208,7 @@
     "image": ""
   },
   {
-    "num": 45,
+    "num": 51,
     "id": "46476",
     "name": "Hegemony: Incidentes Históricos",
     "type": "expansion",
@@ -3952,7 +4224,7 @@
     "image": ""
   },
   {
-    "num": 46,
+    "num": 52,
     "id": "33431",
     "name": "Duna: Imperium - Ambição Sem Limites Carta Promo",
     "type": "expansion",
@@ -3968,7 +4240,7 @@
     "image": ""
   },
   {
-    "num": 47,
+    "num": 53,
     "id": "36687",
     "name": "Cangaço: Compadecida",
     "type": "expansion",
@@ -3984,7 +4256,7 @@
     "image": ""
   },
   {
-    "num": 48,
+    "num": 54,
     "id": "49717",
     "name": "King of Tokyo/King of New York: Boitatá Promo",
     "type": "expansion",
@@ -4000,7 +4272,7 @@
     "image": ""
   },
   {
-    "num": 49,
+    "num": 55,
     "id": "53898",
     "name": "Qui-Quitanda: Mais Frutas (1)",
     "type": "expansion",
@@ -4016,7 +4288,7 @@
     "image": ""
   },
   {
-    "num": 50,
+    "num": 56,
     "id": "53897",
     "name": "Duo Regna: Dragão de 3 Cabeças (1)",
     "type": "expansion",
@@ -4032,7 +4304,7 @@
     "image": ""
   },
   {
-    "num": 51,
+    "num": 57,
     "id": "53896",
     "name": "O Que O Quê: Mais Desenhos (1)",
     "type": "expansion",
@@ -4048,7 +4320,7 @@
     "image": ""
   },
   {
-    "num": 52,
+    "num": 58,
     "id": "34129",
     "name": "For Sale - Novas Propriedades: Guarda-Chuva",
     "type": "expansion",
@@ -4064,7 +4336,7 @@
     "image": ""
   },
   {
-    "num": 53,
+    "num": 59,
     "id": "34133",
     "name": "For Sale - Novas Propriedades: Messe Essen",
     "type": "expansion",
@@ -4080,7 +4352,7 @@
     "image": ""
   },
   {
-    "num": 54,
+    "num": 60,
     "id": "34131",
     "name": "For Sale - Novas Propriedades: Natal",
     "type": "expansion",
@@ -4096,7 +4368,7 @@
     "image": ""
   },
   {
-    "num": 55,
+    "num": 61,
     "id": "34130",
     "name": "For Sale - Novas Propriedades: Barril",
     "type": "expansion",
@@ -4112,7 +4384,7 @@
     "image": ""
   },
   {
-    "num": 56,
+    "num": 62,
     "id": "32273",
     "name": "Duna: Imperium - Ascensão de Ix",
     "type": "expansion",
@@ -4128,7 +4400,7 @@
     "image": ""
   },
   {
-    "num": 57,
+    "num": 63,
     "id": "31496",
     "name": "Kariba: Camaleão",
     "type": "expansion",
@@ -4144,7 +4416,7 @@
     "image": ""
   },
   {
-    "num": 58,
+    "num": 64,
     "id": "38188",
     "name": "Reino das Catapultas: O Banquete Real (mini-expansão)",
     "type": "expansion",
@@ -4160,7 +4432,7 @@
     "image": ""
   },
   {
-    "num": 59,
+    "num": 65,
     "id": "38378",
     "name": "Reino das Catapultas: Siege (Expansão)",
     "type": "expansion",
@@ -4176,7 +4448,7 @@
     "image": ""
   },
   {
-    "num": 60,
+    "num": 66,
     "id": "38189",
     "name": "Reino das Catapultas: Munição de Dados (mini-expansão)",
     "type": "expansion",
@@ -4192,7 +4464,7 @@
     "image": ""
   },
   {
-    "num": 61,
+    "num": 67,
     "id": "38849",
     "name": "Wingspan: Nesting Box",
     "type": "expansion",
@@ -4208,7 +4480,7 @@
     "image": ""
   },
   {
-    "num": 62,
+    "num": 68,
     "id": "33108",
     "name": "Concordia: Solitaria",
     "type": "expansion",
@@ -4224,7 +4496,7 @@
     "image": ""
   },
   {
-    "num": 63,
+    "num": 69,
     "id": "9582",
     "name": "Concordia: Salsa",
     "type": "expansion",
@@ -4240,7 +4512,7 @@
     "image": ""
   },
   {
-    "num": 64,
+    "num": 70,
     "id": "11698",
     "name": "Concordia: Gallia / Corsica",
     "type": "expansion",
@@ -4256,7 +4528,7 @@
     "image": ""
   },
   {
-    "num": 65,
+    "num": 71,
     "id": "9569",
     "name": "Concordia: Britannia & Germania",
     "type": "expansion",
@@ -4272,7 +4544,7 @@
     "image": ""
   },
   {
-    "num": 66,
+    "num": 72,
     "id": "16092",
     "name": "Concordia: Aegyptus / Creta",
     "type": "expansion",
@@ -4288,7 +4560,7 @@
     "image": ""
   },
   {
-    "num": 67,
+    "num": 73,
     "id": "40512",
     "name": "Duna: Imperium - Jéssica de Arrakis Carta Promo",
     "type": "expansion",
@@ -4304,7 +4576,7 @@
     "image": ""
   },
   {
-    "num": 68,
+    "num": 74,
     "id": "2811",
     "name": "Power Grid: The Robots",
     "type": "expansion",
@@ -4320,7 +4592,7 @@
     "image": ""
   },
   {
-    "num": 69,
+    "num": 75,
     "id": "35577",
     "name": "Power Grid: The New Power Plants – Set 2",
     "type": "expansion",
@@ -4336,7 +4608,7 @@
     "image": ""
   },
   {
-    "num": 70,
+    "num": 76,
     "id": "12118",
     "name": "Concordia: 8 Forum Cards",
     "type": "expansion",
@@ -4352,7 +4624,7 @@
     "image": ""
   },
   {
-    "num": 71,
+    "num": 77,
     "id": "2809",
     "name": "Power Grid: France/Italy",
     "type": "expansion",
@@ -4368,7 +4640,7 @@
     "image": ""
   },
   {
-    "num": 72,
+    "num": 78,
     "id": "2810",
     "name": "Power Grid: China/Korea",
     "type": "expansion",
@@ -4384,7 +4656,7 @@
     "image": ""
   },
   {
-    "num": 73,
+    "num": 79,
     "id": "23039",
     "name": "Escape Plan: Upgrade Pack",
     "type": "expansion",
@@ -4400,7 +4672,7 @@
     "image": ""
   },
   {
-    "num": 74,
+    "num": 80,
     "id": "412",
     "name": "Troyes: As Damas de Troyes",
     "type": "expansion",
@@ -4416,7 +4688,7 @@
     "image": ""
   },
   {
-    "num": 75,
+    "num": 81,
     "id": "22032",
     "name": "The Quacks of Quedlinburg: The Herb Witches",
     "type": "expansion",
@@ -4432,7 +4704,7 @@
     "image": ""
   },
   {
-    "num": 76,
+    "num": 82,
     "id": "25118",
     "name": "Wingspan: Oceania",
     "type": "expansion",
@@ -4448,7 +4720,7 @@
     "image": ""
   },
   {
-    "num": 77,
+    "num": 83,
     "id": "32663",
     "name": "Terraforming Mars: Big Box Promo Pack",
     "type": "expansion",
@@ -4464,7 +4736,7 @@
     "image": ""
   },
   {
-    "num": 78,
+    "num": 84,
     "id": "24914",
     "name": "Terraforming Mars: Big Box",
     "type": "expansion",
@@ -4480,7 +4752,7 @@
     "image": ""
   },
   {
-    "num": 79,
+    "num": 85,
     "id": "22596",
     "name": "Bang!: The Dice Game - Undead or Alive",
     "type": "expansion",
@@ -4496,7 +4768,7 @@
     "image": ""
   },
   {
-    "num": 80,
+    "num": 86,
     "id": "10843",
     "name": "BANG! The Dice Game: Old Saloon",
     "type": "expansion",
@@ -4512,7 +4784,7 @@
     "image": ""
   },
   {
-    "num": 81,
+    "num": 87,
     "id": "18132",
     "name": "Viticulture: Visitantes do Vale do Reno",
     "type": "expansion",
@@ -4528,7 +4800,7 @@
     "image": ""
   },
   {
-    "num": 82,
+    "num": 88,
     "id": "10305",
     "name": "Viticulture: Visitantes do Charco",
     "type": "expansion",
@@ -4544,7 +4816,7 @@
     "image": ""
   },
   {
-    "num": 83,
+    "num": 89,
     "id": "14798",
     "name": "Targi: The Expansion",
     "type": "expansion",
@@ -4560,7 +4832,7 @@
     "image": ""
   },
   {
-    "num": 84,
+    "num": 90,
     "id": "22543",
     "name": "Welcome To...: Solo Mode",
     "type": "expansion",
@@ -4576,14 +4848,14 @@
     "image": ""
   },
   {
-    "num": 85,
+    "num": 91,
     "id": "13793",
     "name": "Star Wars: Rebellion – A Ascensão do Império",
     "type": "expansion",
     "isExpansion": true,
     "year": "N/A",
     "rating": null,
-    "favorite": false,
+    "favorite": true,
     "comment": "",
     "cost": null,
     "link": "https://ludopedia.com.br/jogo/star-wars-rebellion-rise-of-the-empire",
@@ -4592,7 +4864,7 @@
     "image": ""
   },
   {
-    "num": 86,
+    "num": 92,
     "id": "30292",
     "name": "Black Sonata: The Fair Youth",
     "type": "expansion",
@@ -4608,7 +4880,7 @@
     "image": ""
   },
   {
-    "num": 87,
+    "num": 93,
     "id": "26283",
     "name": "Dixit: Mirrors",
     "type": "expansion",
@@ -4624,7 +4896,7 @@
     "image": ""
   },
   {
-    "num": 88,
+    "num": 94,
     "id": "25127",
     "name": "7 Wonders Duel: Ágora",
     "type": "expansion",
@@ -4640,7 +4912,7 @@
     "image": ""
   },
   {
-    "num": 89,
+    "num": 95,
     "id": "22591",
     "name": "Nemo's War (Second Edition): Bold and Caring Expansion Pack #2",
     "type": "expansion",
@@ -4656,7 +4928,7 @@
     "image": ""
   },
   {
-    "num": 90,
+    "num": 96,
     "id": "22602",
     "name": "Nemo's War (Second Edition): Dramatis Personae Expansion Pack #3",
     "type": "expansion",
@@ -4672,7 +4944,7 @@
     "image": ""
   },
   {
-    "num": 91,
+    "num": 97,
     "id": "19557",
     "name": "Nemo's War (second edition): Nautilus Upgrades Expansion Pack",
     "type": "expansion",
@@ -4688,7 +4960,7 @@
     "image": ""
   },
   {
-    "num": 92,
+    "num": 98,
     "id": "25257",
     "name": "Twilight Imperium (Quarta Edição): Profecia dos Reis",
     "type": "expansion",
@@ -4704,7 +4976,7 @@
     "image": ""
   },
   {
-    "num": 93,
+    "num": 99,
     "id": "12223",
     "name": "Terraforming Mars: Asteroide Pequeno - Carta Promo",
     "type": "expansion",
@@ -4720,7 +4992,7 @@
     "image": ""
   },
   {
-    "num": 94,
+    "num": 100,
     "id": "14622",
     "name": "Terraforming Mars: Robôs Autorreplicadores - Carta Promo",
     "type": "expansion",
@@ -4736,7 +5008,7 @@
     "image": ""
   },
   {
-    "num": 95,
+    "num": 101,
     "id": "14390",
     "name": "Terraforming Mars: Alga das Neves - Carta Promo",
     "type": "expansion",
@@ -4752,7 +5024,7 @@
     "image": ""
   },
   {
-    "num": 96,
+    "num": 102,
     "id": "20218",
     "name": "Terraforming Mars: Colonies - Promo Pack",
     "type": "expansion",
@@ -4768,7 +5040,7 @@
     "image": ""
   },
   {
-    "num": 97,
+    "num": 103,
     "id": "23794",
     "name": "Terraforming Mars: Reviravolta - Pacote Promo Kickstarter",
     "type": "expansion",
@@ -4784,7 +5056,7 @@
     "image": ""
   },
   {
-    "num": 98,
+    "num": 104,
     "id": "24759",
     "name": "On Mars: Upgrade Pack",
     "type": "expansion",
@@ -4800,7 +5072,7 @@
     "image": ""
   },
   {
-    "num": 99,
+    "num": 105,
     "id": "24747",
     "name": "On Mars: Beacon Promo Card",
     "type": "expansion",
@@ -4816,7 +5088,7 @@
     "image": ""
   },
   {
-    "num": 100,
+    "num": 106,
     "id": "26290",
     "name": "CO₂: Segunda Chance - Expansão e Atualização Limitada do Pacote",
     "type": "expansion",
@@ -4832,7 +5104,7 @@
     "image": ""
   },
   {
-    "num": 101,
+    "num": 107,
     "id": "21030",
     "name": "Captain Sonar: Operation Dragon",
     "type": "expansion",
@@ -4848,9 +5120,9 @@
     "image": ""
   },
   {
-    "num": 102,
+    "num": 108,
     "id": "9861",
-    "name": "Coup - Promo Bufão & Burocrata",
+    "name": "Coup - Expansão Bufão & Burocrata",
     "type": "expansion",
     "isExpansion": true,
     "year": "N/A",
@@ -4864,7 +5136,7 @@
     "image": ""
   },
   {
-    "num": 103,
+    "num": 109,
     "id": "12086",
     "name": "Viticulture: Tuscany Edição Essencial",
     "type": "expansion",
@@ -4880,7 +5152,7 @@
     "image": ""
   },
   {
-    "num": 104,
+    "num": 110,
     "id": "24091",
     "name": "Maracaibo: La Armada",
     "type": "expansion",
@@ -4896,7 +5168,7 @@
     "image": ""
   },
   {
-    "num": 105,
+    "num": 111,
     "id": "21556",
     "name": "Terraforming Mars: Reviravolta",
     "type": "expansion",
@@ -4912,7 +5184,7 @@
     "image": ""
   },
   {
-    "num": 106,
+    "num": 112,
     "id": "14801",
     "name": "Power Grid: Fabled Expansion",
     "type": "expansion",
@@ -4928,7 +5200,7 @@
     "image": ""
   },
   {
-    "num": 107,
+    "num": 113,
     "id": "14660",
     "name": "Terraforming Mars: Pinguins - Carta Promo",
     "type": "expansion",
@@ -4944,7 +5216,7 @@
     "image": ""
   },
   {
-    "num": 108,
+    "num": 114,
     "id": "25234",
     "name": "Augustus: Maximus Promo Card",
     "type": "expansion",
@@ -4960,7 +5232,7 @@
     "image": ""
   },
   {
-    "num": 109,
+    "num": 115,
     "id": "14438",
     "name": "7 Wonders Duel: Stonehenge",
     "type": "expansion",
@@ -4976,7 +5248,7 @@
     "image": ""
   },
   {
-    "num": 110,
+    "num": 116,
     "id": "19457",
     "name": "7 Wonders Duel: Sagrada Familia",
     "type": "expansion",
@@ -4992,7 +5264,7 @@
     "image": ""
   },
   {
-    "num": 111,
+    "num": 117,
     "id": "20193",
     "name": "7 Wonders: Armada – Siracusa",
     "type": "expansion",
@@ -5008,7 +5280,7 @@
     "image": ""
   },
   {
-    "num": 112,
+    "num": 118,
     "id": "22138",
     "name": "7 Wonders: CN Tower Palace",
     "type": "expansion",
@@ -5024,7 +5296,7 @@
     "image": ""
   },
   {
-    "num": 113,
+    "num": 119,
     "id": "15034",
     "name": "7 Wonders: Leaders Anniversary Pack",
     "type": "expansion",
@@ -5040,7 +5312,7 @@
     "image": ""
   },
   {
-    "num": 114,
+    "num": 120,
     "id": "15035",
     "name": "7 Wonders: Cities Anniversary Pack",
     "type": "expansion",
@@ -5056,7 +5328,7 @@
     "image": ""
   },
   {
-    "num": 115,
+    "num": 121,
     "id": "15008",
     "name": "CV: Promo Cards",
     "type": "expansion",
@@ -5072,7 +5344,7 @@
     "image": ""
   },
   {
-    "num": 116,
+    "num": 122,
     "id": "17596",
     "name": "The Lost Expedition: The Lost World Promo Cards",
     "type": "expansion",
@@ -5088,7 +5360,7 @@
     "image": ""
   },
   {
-    "num": 117,
+    "num": 123,
     "id": "17597",
     "name": "The Lost Expedition: The Cursed Idol Promo Cards",
     "type": "expansion",
@@ -5104,7 +5376,7 @@
     "image": ""
   },
   {
-    "num": 118,
+    "num": 124,
     "id": "18236",
     "name": "The Lost Expedition: The Fountain of Youth & Other Adventures",
     "type": "expansion",
@@ -5120,7 +5392,7 @@
     "image": ""
   },
   {
-    "num": 119,
+    "num": 125,
     "id": "24263",
     "name": "Azul: Mosaico de Cristal",
     "type": "expansion",
@@ -5136,7 +5408,7 @@
     "image": ""
   },
   {
-    "num": 120,
+    "num": 126,
     "id": "12415",
     "name": "Terraforming Mars: Hellas & Elysium",
     "type": "expansion",
@@ -5152,7 +5424,7 @@
     "image": ""
   },
   {
-    "num": 121,
+    "num": 127,
     "id": "15155",
     "name": "Dixit: Harmonies",
     "type": "expansion",
@@ -5168,7 +5440,7 @@
     "image": ""
   },
   {
-    "num": 122,
+    "num": 128,
     "id": "23647",
     "name": "When I Dream: Bonus Cards",
     "type": "expansion",
@@ -5184,7 +5456,7 @@
     "image": ""
   },
   {
-    "num": 123,
+    "num": 129,
     "id": "19782",
     "name": "Dixit: Anniversary",
     "type": "expansion",
@@ -5200,7 +5472,7 @@
     "image": ""
   },
   {
-    "num": 124,
+    "num": 130,
     "id": "16204",
     "name": "Azul: Joker Tiles",
     "type": "expansion",
@@ -5216,7 +5488,7 @@
     "image": ""
   },
   {
-    "num": 125,
+    "num": 131,
     "id": "18864",
     "name": "Terraforming Mars: Colônias",
     "type": "expansion",
@@ -5232,7 +5504,7 @@
     "image": ""
   },
   {
-    "num": 126,
+    "num": 132,
     "id": "80",
     "name": "7 Wonders: Cidades",
     "type": "expansion",
@@ -5248,7 +5520,7 @@
     "image": ""
   },
   {
-    "num": 127,
+    "num": 133,
     "id": "17401",
     "name": "Terraforming Mars: Prelúdio",
     "type": "expansion",
@@ -5264,7 +5536,7 @@
     "image": ""
   },
   {
-    "num": 128,
+    "num": 134,
     "id": "14790",
     "name": "Terraforming Mars: Venus Next",
     "type": "expansion",
@@ -5280,7 +5552,7 @@
     "image": ""
   },
   {
-    "num": 129,
+    "num": 135,
     "id": "16798",
     "name": "Captain Sonar: New York Map",
     "type": "expansion",
@@ -5296,7 +5568,7 @@
     "image": ""
   },
   {
-    "num": 130,
+    "num": 136,
     "id": "16796",
     "name": "Captain Sonar: Foxtrot Map",
     "type": "expansion",
@@ -5312,7 +5584,7 @@
     "image": ""
   },
   {
-    "num": 131,
+    "num": 137,
     "id": "16797",
     "name": "Captain Sonar: Chicago Map",
     "type": "expansion",
@@ -5328,7 +5600,7 @@
     "image": ""
   },
   {
-    "num": 132,
+    "num": 138,
     "id": "13130",
     "name": "Captain Sonar: Upgrade One",
     "type": "expansion",
@@ -5344,7 +5616,7 @@
     "image": ""
   },
   {
-    "num": 133,
+    "num": 139,
     "id": "11262",
     "name": "Splendor: Nobles Promo Tiles",
     "type": "expansion",
@@ -5360,7 +5632,7 @@
     "image": ""
   },
   {
-    "num": 134,
+    "num": 140,
     "id": "2813",
     "name": "Power Grid: Russia & Japan",
     "type": "expansion",
@@ -5376,7 +5648,7 @@
     "image": ""
   },
   {
-    "num": 135,
+    "num": 141,
     "id": "2815",
     "name": "Power Grid: Northern Europe/United Kingdom & Ireland",
     "type": "expansion",
@@ -5392,7 +5664,7 @@
     "image": ""
   },
   {
-    "num": 136,
+    "num": 142,
     "id": "2808",
     "name": "Power Grid: Benelux/Central Europe",
     "type": "expansion",
@@ -5408,7 +5680,7 @@
     "image": ""
   },
   {
-    "num": 137,
+    "num": 143,
     "id": "1361",
     "name": "Cyclades: The Manticore",
     "type": "expansion",
@@ -5424,7 +5696,7 @@
     "image": ""
   },
   {
-    "num": 138,
+    "num": 144,
     "id": "1360",
     "name": "Cyclades: Hecate",
     "type": "expansion",
@@ -5440,7 +5712,7 @@
     "image": ""
   },
   {
-    "num": 139,
+    "num": 145,
     "id": "14320",
     "name": "7 Wonders: Promo Card Palace",
     "type": "expansion",
@@ -5456,7 +5728,7 @@
     "image": ""
   },
   {
-    "num": 140,
+    "num": 146,
     "id": "11889",
     "name": "Dixit: Revelations",
     "type": "expansion",
@@ -5472,7 +5744,7 @@
     "image": ""
   },
   {
-    "num": 141,
+    "num": 147,
     "id": "11858",
     "name": "Mombasa: Cooked Books Mini Expansion",
     "type": "expansion",
@@ -5488,7 +5760,7 @@
     "image": ""
   },
   {
-    "num": 142,
+    "num": 148,
     "id": "13260",
     "name": "Mombasa: Nomeie Sua Companhia",
     "type": "expansion",
@@ -5504,7 +5776,7 @@
     "image": ""
   },
   {
-    "num": 143,
+    "num": 149,
     "id": "11780",
     "name": "Lost Cities: Expedition 6 – The Lost Expedition",
     "type": "expansion",
@@ -5520,7 +5792,7 @@
     "image": ""
   },
   {
-    "num": 144,
+    "num": 150,
     "id": "12631",
     "name": "Santorini: Golden Fleece",
     "type": "expansion",
@@ -5536,7 +5808,7 @@
     "image": ""
   },
   {
-    "num": 145,
+    "num": 151,
     "id": "9252",
     "name": "Troyes: Bonus cards",
     "type": "expansion",
@@ -5552,7 +5824,7 @@
     "image": ""
   },
   {
-    "num": 146,
+    "num": 152,
     "id": "10704",
     "name": "Onirim (second edition): Sphinx, Diver and Confusion Promo Cards",
     "type": "expansion",
@@ -5568,7 +5840,7 @@
     "image": ""
   },
   {
-    "num": 147,
+    "num": 153,
     "id": "10702",
     "name": "Onirim (second edition): Mirrors promo cards",
     "type": "expansion",
@@ -5584,7 +5856,7 @@
     "image": ""
   },
   {
-    "num": 148,
+    "num": 154,
     "id": "10099",
     "name": "Power Grid: High-Voltage DC Transmission Passage C",
     "type": "expansion",
@@ -5600,7 +5872,7 @@
     "image": ""
   },
   {
-    "num": 149,
+    "num": 155,
     "id": "2285",
     "name": "Mascarade: Usurpateur",
     "type": "expansion",
@@ -5616,7 +5888,7 @@
     "image": ""
   },
   {
-    "num": 150,
+    "num": 156,
     "id": "2286",
     "name": "Mascarade: The Damned",
     "type": "expansion",
@@ -5632,7 +5904,7 @@
     "image": ""
   },
   {
-    "num": 151,
+    "num": 157,
     "id": "6560",
     "name": "Mascarade Expansion",
     "type": "expansion",
@@ -5648,7 +5920,7 @@
     "image": ""
   },
   {
-    "num": 152,
+    "num": 158,
     "id": "11272",
     "name": "Isle of Skye: De Líder a Rei - Promo - Kennerspiel des Jahres",
     "type": "expansion",
@@ -5664,7 +5936,7 @@
     "image": ""
   },
   {
-    "num": 153,
+    "num": 159,
     "id": "11252",
     "name": "Isle of Skye: De Líder a Rei - Promo - Calendário do Advento",
     "type": "expansion",
@@ -5680,7 +5952,7 @@
     "image": ""
   },
   {
-    "num": 154,
+    "num": 160,
     "id": "12013",
     "name": "Codenames: Authors & Games",
     "type": "expansion",
@@ -5696,7 +5968,7 @@
     "image": ""
   },
   {
-    "num": 155,
+    "num": 161,
     "id": "12172",
     "name": "Dixit: 2012 Asmodee Special Cards",
     "type": "expansion",
@@ -5712,7 +5984,7 @@
     "image": ""
   },
   {
-    "num": 156,
+    "num": 162,
     "id": "10649",
     "name": "Power Grid: Taxes",
     "type": "expansion",
@@ -5728,7 +6000,7 @@
     "image": ""
   },
   {
-    "num": 157,
+    "num": 163,
     "id": "10123",
     "name": "Power Grid: Supply Contract",
     "type": "expansion",
@@ -5744,7 +6016,7 @@
     "image": ""
   },
   {
-    "num": 158,
+    "num": 164,
     "id": "1221",
     "name": "Power Grid: Oracle & Industrial Espionage",
     "type": "expansion",
@@ -5760,7 +6032,7 @@
     "image": ""
   },
   {
-    "num": 159,
+    "num": 165,
     "id": "1220",
     "name": "Power Grid: BGG Promo Card Set",
     "type": "expansion",
@@ -5776,7 +6048,7 @@
     "image": ""
   },
   {
-    "num": 160,
+    "num": 166,
     "id": "6607",
     "name": "Dixit: Daydreams",
     "type": "expansion",
@@ -5792,7 +6064,7 @@
     "image": ""
   },
   {
-    "num": 161,
+    "num": 167,
     "id": "8339",
     "name": "Dixit: Memories",
     "type": "expansion",
@@ -5808,7 +6080,7 @@
     "image": ""
   },
   {
-    "num": 162,
+    "num": 168,
     "id": "607",
     "name": "Dixit: Journey",
     "type": "expansion",
@@ -5824,7 +6096,7 @@
     "image": ""
   },
   {
-    "num": 163,
+    "num": 169,
     "id": "12036",
     "name": "Codenames: Pictures – 5x5 Promo Tiles",
     "type": "expansion",
@@ -5840,7 +6112,7 @@
     "image": ""
   },
   {
-    "num": 164,
+    "num": 170,
     "id": "11273",
     "name": "7 Wonders Duel: Panteão",
     "type": "expansion",
@@ -5856,7 +6128,7 @@
     "image": ""
   },
   {
-    "num": 165,
+    "num": 171,
     "id": "11760",
     "name": "7 Wonders Duel: Statue of Liberty",
     "type": "expansion",
@@ -5872,7 +6144,7 @@
     "image": ""
   },
   {
-    "num": 166,
+    "num": 172,
     "id": "11343",
     "name": "The Gallerist: KS Stretch Goal Pack #2",
     "type": "expansion",
@@ -5888,7 +6160,7 @@
     "image": ""
   },
   {
-    "num": 167,
+    "num": 173,
     "id": "9728",
     "name": "Robinson Crusoe: Adventures on the Cursed Island – Spyglass of Illusory Hope",
     "type": "expansion",
@@ -5904,7 +6176,7 @@
     "image": ""
   },
   {
-    "num": 168,
+    "num": 174,
     "id": "2807",
     "name": "Power Grid: Cartas das Novas Usinas - Conjunto 1 (Versão Energizada)",
     "type": "expansion",
@@ -5920,7 +6192,7 @@
     "image": ""
   },
   {
-    "num": 169,
+    "num": 175,
     "id": "2812",
     "name": "Power Grid: Brasil - Espanha & Portugal (Versão Energizada)",
     "type": "expansion",
@@ -5936,7 +6208,7 @@
     "image": ""
   },
   {
-    "num": 170,
+    "num": 176,
     "id": "81",
     "name": "7 Wonders: Líderes",
     "type": "expansion",
@@ -5952,7 +6224,7 @@
     "image": ""
   },
   {
-    "num": 171,
+    "num": 177,
     "id": "5324",
     "name": "7 Wonders: Leaders – Wil",
     "type": "expansion",
@@ -5968,7 +6240,7 @@
     "image": ""
   },
   {
-    "num": 172,
+    "num": 178,
     "id": "5765",
     "name": "7 Wonders: Leaders – Stevie",
     "type": "expansion",
@@ -5984,7 +6256,7 @@
     "image": ""
   },
   {
-    "num": 173,
+    "num": 179,
     "id": "5769",
     "name": "7 Wonders: Leaders – Esteban",
     "type": "expansion",
@@ -6000,7 +6272,7 @@
     "image": ""
   },
   {
-    "num": 174,
+    "num": 180,
     "id": "7902",
     "name": "7 Wonders: Leaders – Nimrod",
     "type": "expansion",
@@ -6016,7 +6288,7 @@
     "image": ""
   },
   {
-    "num": 175,
+    "num": 181,
     "id": "4671",
     "name": "7 Wonders: Leaders – Louis",
     "type": "expansion",
@@ -6032,7 +6304,7 @@
     "image": ""
   },
   {
-    "num": 176,
+    "num": 182,
     "id": "449",
     "name": "7 Wonders: Wonder Pack",
     "type": "expansion",
@@ -6048,7 +6320,7 @@
     "image": ""
   },
   {
-    "num": 177,
+    "num": 183,
     "id": "5762",
     "name": "7 Wonders: Catan",
     "type": "expansion",
@@ -6064,7 +6336,7 @@
     "image": ""
   },
   {
-    "num": 178,
+    "num": 184,
     "id": "9698",
     "name": "7 Wonders Duel: The Messe Essen Promo Card",
     "type": "expansion",
@@ -6080,7 +6352,7 @@
     "image": ""
   },
   {
-    "num": 179,
+    "num": 185,
     "id": "3626",
     "name": "Coup: A Reforma",
     "type": "expansion",
@@ -6096,7 +6368,7 @@
     "image": ""
   },
   {
-    "num": 180,
+    "num": 186,
     "id": "5619",
     "name": "The Resistance: Intenção Hostil",
     "type": "expansion",
@@ -6112,14 +6384,14 @@
     "image": ""
   },
   {
-    "num": 181,
+    "num": 187,
     "id": "307",
     "name": "King of Tokyo: Power Up!",
     "type": "expansion",
     "isExpansion": true,
     "year": "N/A",
     "rating": 8,
-    "favorite": true,
+    "favorite": false,
     "comment": "A ideia de que os monstros do KoT original não têm personalidade ou características especiais parece absurda depois de jogar com esta expansão.",
     "cost": null,
     "link": "https://ludopedia.com.br/jogo/king-of-tokyo-power-up",
@@ -6128,7 +6400,7 @@
     "image": ""
   },
   {
-    "num": 182,
+    "num": 188,
     "id": "1790",
     "name": "King of Tokyo: Halloween",
     "type": "expansion",
@@ -6144,7 +6416,7 @@
     "image": ""
   },
   {
-    "num": 183,
+    "num": 189,
     "id": "2671",
     "name": "Eldritch Horror: Conhecimento Perdido",
     "type": "expansion",
@@ -6160,7 +6432,7 @@
     "image": ""
   },
   {
-    "num": 184,
+    "num": 190,
     "id": "2288",
     "name": "Dixit: Origins",
     "type": "expansion",
@@ -6176,7 +6448,7 @@
     "image": ""
   },
   {
-    "num": 185,
+    "num": 191,
     "id": "609",
     "name": "Dixit: Quest",
     "type": "expansion",
@@ -6192,7 +6464,7 @@
     "image": ""
   },
   {
-    "num": 186,
+    "num": 192,
     "id": "244",
     "name": "Cyclades: Hades",
     "type": "expansion",

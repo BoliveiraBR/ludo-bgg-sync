@@ -15,7 +15,19 @@ const app = express();
 // Aumentar limite do body parser
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+// Servir arquivos estáticos com headers específicos
+app.use(express.static(path.join(__dirname, 'public'), {
+  setHeaders: (res, path, stat) => {
+    if (path.endsWith('.png')) {
+      res.set('Content-Type', 'image/png');
+      res.set('Cache-Control', 'public, max-age=31536000');
+    }
+    if (path.endsWith('favicon.png')) {
+      res.set('Content-Type', 'image/png');
+      res.set('Cache-Control', 'public, max-age=31536000');
+    }
+  }
+}));
 
 // Rota principal
 app.get('/', (req, res) => {
