@@ -502,19 +502,14 @@ async function saveCollections() {
     }
 }
 
-// Atualizar loadCollections para carregar do arquivo por padrão
+// Carregar coleções automaticamente do banco de dados
 async function loadCollections() {
     try {
         setLoading(true);
         saveBtn.disabled = true;
         
-        const response = await fetch('/api/collections', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ loadType: 'file' })
-        });
+        // Carregar do banco usando GET (sem body)
+        const response = await fetch('/api/collections');
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -522,16 +517,21 @@ async function loadCollections() {
 
         const data = await response.json();
         
+        // Mostrar mensagem se houver
+        if (data.message) {
+            console.log('ℹ️', data.message);
+        }
+        
         // Store the collections
-        currentBGGGames = data.bggCollection;
-        currentLudoGames = data.ludoCollection;
+        currentBGGGames = data.bggCollection || [];
+        currentLudoGames = data.ludoCollection || [];
         
         // Habilitar botão de salvar se há coleções carregadas
         saveBtn.disabled = !(currentBGGGames.length || currentLudoGames.length);
         
         // Atualizar UI
-        updateStats(data.bggCollection, 'bgg');
-        updateStats(data.ludoCollection, 'ludo');
+        updateStats(currentBGGGames, 'bgg');
+        updateStats(currentLudoGames, 'ludo');
         
         // Atualizar estado dos links de filtro
         updateFilterLinksState();
@@ -544,22 +544,26 @@ async function loadCollections() {
             link.classList.remove('active');
         });
         
-        renderGameList(data.bggCollection, bggList);
-        renderGameList(data.ludoCollection, ludoList);
+        renderGameList(currentBGGGames, bggList);
+        renderGameList(currentLudoGames, ludoList);
 
         // Procurar matches após carregar as coleções
         if (currentBGGGames.length > 0 && currentLudoGames.length > 0) {
             findMatches();
         }
         
-        // Show success message after successful load
-        if (successMessage) {
+        // Show success message after successful load apenas se carregou dados
+        if (successMessage && (currentBGGGames.length > 0 || currentLudoGames.length > 0)) {
             successMessage.style.display = 'block';
         }
         
+        // Log sobre a fonte dos dados
+        console.log(`📊 Coleções carregadas (${data.source}): BGG=${currentBGGGames.length}, Ludopedia=${currentLudoGames.length}`);
+        
     } catch (error) {
-        console.error('Error:', error);
-        alert('Erro ao carregar coleções: ' + error.message);
+        console.error('❌ Error:', error);
+        // Não mostrar alert para erros automáticos, apenas log
+        console.warn('⚠️ Erro ao carregar coleções automaticamente:', error.message);
         saveBtn.disabled = true;
     } finally {
         setLoading(false);

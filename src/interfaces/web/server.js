@@ -7,7 +7,6 @@ const BGGApi = require('../../api/bggApi');
 const LudopediaApi = require('../../api/ludopediaApi');
 const CollectionMatcher = require('../../comparison/matcher');
 const ChatGPTMatcher = require('../../comparison/chatGptMatch');
-const CollectionLoader = require('../../collection/loader');
 const DatabaseManager = require('../../database/dbManager');
 const fs = require('fs').promises;
 
@@ -261,22 +260,108 @@ app.post('/api/sync', async (req, res) => {
   }
 });
 
-// Rota para carregar coleções (API ou arquivo)
+// Rota para carregar coleções automaticamente do banco (sem parâmetros)
+app.get('/api/collections', async (req, res) => {
+  try {
+    // Carregar credenciais do arquivo
+    const credentialsPath = path.join(__dirname, '../../../data/credentials.txt');
+    let credentials;
+    
+    try {
+      credentials = JSON.parse(await fs.readFile(credentialsPath, 'utf8'));
+    } catch (credError) {
+      return res.json({
+        bggCollection: [],
+        ludoCollection: [],
+        source: 'none',
+        message: 'Nenhuma configuração encontrada. Configure suas credenciais primeiro.'
+      });
+    }
+
+    if (!credentials.BGG_USER) {
+      return res.json({
+        bggCollection: [],
+        ludoCollection: [],
+        source: 'none',
+        message: 'Usuário BGG não configurado. Configure suas credenciais primeiro.'
+      });
+    }
+
+    // Carregar do banco de dados
+    console.log('💾 Carregando coleções do banco de dados automaticamente...');
+    const dbManager = new DatabaseManager();
+    let bggCollection = [];
+    let ludoCollection = [];
+
+    try {
+      [bggCollection, ludoCollection] = await Promise.all([
+        dbManager.getBGGCollection(credentials.BGG_USER),
+        dbManager.getLudopediaCollection(credentials.LUDO_USER || credentials.BGG_USER)
+      ]);
+      
+      console.log(`📊 Carregado do banco: BGG=${bggCollection.length}, Ludopedia=${ludoCollection.length}`);
+    } catch (dbError) {
+      console.warn('⚠️ Erro ao carregar do banco:', dbError.message);
+      return res.json({
+        bggCollection: [],
+        ludoCollection: [],
+        source: 'none',
+        message: 'Erro ao conectar com o banco de dados. Use "Carregar Coleções via API" para popular o banco.'
+      });
+    }
+    
+    // Garante que os campos de tipo estejam consistentes
+    bggCollection = bggCollection.map(game => ({
+      ...game,
+      isExpansion: game.type === 'expansion' || game.subtype === 'expansion' || game.isExpansion === true
+    }));
+    
+    ludoCollection = ludoCollection.map(game => ({
+      ...game,
+      isExpansion: game.type === 'expansion' || game.isExpansion === true
+    }));
+
+    res.json({
+      bggCollection,
+      ludoCollection,
+      source: 'database',
+      message: bggCollection.length === 0 && ludoCollection.length === 0 
+        ? 'Banco de dados vazio. Use "Carregar Coleções via API" para popular o banco.'
+        : null
+    });
+
+  } catch (error) {
+    console.error('❌ Error loading collections automatically:', error);
+    res.status(500).json({ 
+      error: error.message,
+      bggCollection: [],
+      ludoCollection: [],
+      source: 'error'
+    });
+  }
+});
+
+// Rota para carregar coleções (API ou banco de dados)
 app.post('/api/collections', async (req, res) => {
   try {
     const { loadType } = req.body;
     let bggCollection, ludoCollection;
 
-    if (loadType === 'api') {
-      // Carregar credenciais do arquivo
-      const credentialsPath = path.join(__dirname, '../../../data/credentials.txt');
-      const credentials = JSON.parse(await fs.readFile(credentialsPath, 'utf8'));
+    // Carregar credenciais do arquivo
+    const credentialsPath = path.join(__dirname, '../../../data/credentials.txt');
+    const credentials = JSON.parse(await fs.readFile(credentialsPath, 'utf8'));
 
-      if (!credentials.BGG_USER || !credentials.LUDO_ACCESS_TOKEN) {
-        throw new Error('Credenciais não configuradas. Clique no ícone de configurações para configurar.');
+    if (!credentials.BGG_USER) {
+      throw new Error('Usuário BGG não configurado. Clique no ícone de configurações para configurar.');
+    }
+
+    if (loadType === 'api') {
+      if (!credentials.LUDO_ACCESS_TOKEN) {
+        throw new Error('Token Ludopedia não configurado. Clique no ícone de configurações para configurar.');
       }
 
       // Carregar via API
+      console.log('📡 Carregando coleções via API...');
       const bggApi = new BGGApi(credentials.BGG_USER);
       const ludoApi = new LudopediaApi(credentials.LUDO_ACCESS_TOKEN);
 
@@ -284,42 +369,64 @@ app.post('/api/collections', async (req, res) => {
         bggApi.fetchCollection(),
         ludoApi.fetchCollection()
       ]);
+      
+      console.log(`📊 Carregado via API: BGG=${bggCollection.length}, Ludopedia=${ludoCollection.length}`);
     } else {
-      // Carregar credenciais do arquivo
-      const credentialsPath = path.join(__dirname, '../../../data/credentials.txt');
-      const credentials = JSON.parse(await fs.readFile(credentialsPath, 'utf8'));
+      // Carregar do banco de dados
+      console.log('💾 Carregando coleções do banco de dados...');
+      const dbManager = new DatabaseManager();
 
-      if (!credentials.BGG_USER || !credentials.LUDO_USER) {
-        throw new Error('Credenciais de usuário não encontradas');
+      try {
+        [bggCollection, ludoCollection] = await Promise.all([
+          dbManager.getBGGCollection(credentials.BGG_USER),
+          dbManager.getLudopediaCollection(credentials.LUDO_USER || credentials.BGG_USER)
+        ]);
+        
+        console.log(`📊 Carregado do banco: BGG=${bggCollection.length}, Ludopedia=${ludoCollection.length}`);
+        
+        // Se não há dados no banco, tentar carregar via API automaticamente
+        if (bggCollection.length === 0 && ludoCollection.length === 0) {
+          console.log('📭 Banco vazio, tentando carregar via API...');
+          
+          if (!credentials.LUDO_ACCESS_TOKEN) {
+            throw new Error('Nenhuma coleção encontrada no banco de dados e token Ludopedia não configurado para carregar via API.');
+          }
+
+          const bggApi = new BGGApi(credentials.BGG_USER);
+          const ludoApi = new LudopediaApi(credentials.LUDO_ACCESS_TOKEN);
+
+          [bggCollection, ludoCollection] = await Promise.all([
+            bggApi.fetchCollection(),
+            ludoApi.fetchCollection()
+          ]);
+          
+          console.log(`📊 Carregado via API (fallback): BGG=${bggCollection.length}, Ludopedia=${ludoCollection.length}`);
+        }
+      } catch (dbError) {
+        console.error('❌ Erro ao carregar do banco:', dbError.message);
+        throw new Error('Erro ao carregar coleções do banco de dados. Tente carregar via API ou verifique a configuração do banco.');
       }
-
-      // Carregar do arquivo usando os nomes específicos dos usuários
-      const bggFilename = `BGGCollection-${credentials.BGG_USER}.txt`;
-      const ludoFilename = `LudopediaCollection-${credentials.LUDO_USER}.txt`;
-
-      // Carregar do arquivo
-      bggCollection = CollectionLoader.loadFromFile(bggFilename);
-      ludoCollection = CollectionLoader.loadFromFile(ludoFilename);
     }
     
     // Garante que os campos de tipo estejam consistentes
     bggCollection = bggCollection.map(game => ({
       ...game,
-      isExpansion: game.type === 'expansion' || game.subtype === 'expansion'
+      isExpansion: game.type === 'expansion' || game.subtype === 'expansion' || game.isExpansion === true
     }));
     
     ludoCollection = ludoCollection.map(game => ({
       ...game,
-      isExpansion: game.type === 'expansion'
+      isExpansion: game.type === 'expansion' || game.isExpansion === true
     }));
 
     res.json({
       bggCollection,
-      ludoCollection
+      ludoCollection,
+      source: loadType === 'api' ? 'api' : 'database'
     });
 
   } catch (error) {
-    console.error('Error loading collections:', error);
+    console.error('❌ Error loading collections:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -641,17 +748,6 @@ app.post('/api/save-collections', async (req, res) => {
       results.ludoSaved = await dbManager.saveLudopediaCollection(credentials.LUDO_USER, ludoCollection);
     }
 
-    // Também manter backup em arquivos (opcional)
-    const bggFilename = `BGGCollection-${credentials.BGG_USER}.txt`;
-    const ludoFilename = `LudopediaCollection-${credentials.LUDO_USER}.txt`;
-
-    try {
-      CollectionLoader.saveToFile(bggCollection, bggFilename);
-      CollectionLoader.saveToFile(ludoCollection, ludoFilename);
-      console.log('📝 Backup em arquivos criado com sucesso');
-    } catch (fileError) {
-      console.warn('⚠️ Erro ao criar backup em arquivos:', fileError.message);
-    }
 
     console.log('✅ Coleções salvas no banco com sucesso!');
     res.json({ 
