@@ -8,6 +8,7 @@ const LudopediaApi = require('../../api/ludopediaApi');
 const CollectionMatcher = require('../../comparison/matcher');
 const ChatGPTMatcher = require('../../comparison/chatGptMatch');
 const CollectionLoader = require('../../collection/loader');
+const DatabaseManager = require('../database/dbManager');
 const fs = require('fs').promises;
 
 const app = express();
@@ -39,7 +40,7 @@ app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-// Rota para criar database bggludopedia
+// Rota para criar database bggludopedia e suas tabelas
 app.get('/create-database', async (req, res) => {
   try {
     console.log('🏗️ Criando database bggludopedia...');
@@ -58,19 +59,40 @@ app.get('/create-database', async (req, res) => {
     // Verificar se já existe
     const check = await client.query("SELECT 1 FROM pg_database WHERE datname = 'bggludopedia'");
     
+    let databaseCreated = false;
     if (check.rows.length === 0) {
       await client.query('CREATE DATABASE bggludopedia');
       console.log('✅ Database bggludopedia criado!');
+      databaseCreated = true;
     } else {
       console.log('ℹ️ Database já existe!');
     }
     
     await client.end();
     
-    res.json({ 
-      success: true, 
-      message: 'Database bggludopedia criado/verificado com sucesso!' 
-    });
+    // Agora criar as tabelas usando o DatabaseManager
+    console.log('🏗️ Criando tabelas...');
+    const dbManager = new DatabaseManager();
+    
+    try {
+      await dbManager.createTables();
+      console.log('✅ Tabelas criadas/verificadas com sucesso!');
+      
+      res.json({ 
+        success: true, 
+        message: 'Database e tabelas criados/verificados com sucesso!',
+        databaseCreated,
+        tablesCreated: true
+      });
+    } catch (tableError) {
+      console.error('❌ Erro ao criar tabelas:', tableError);
+      res.json({ 
+        success: false, 
+        error: 'Database criado mas erro ao criar tabelas: ' + tableError.message,
+        databaseCreated,
+        tablesCreated: false
+      });
+    }
     
   } catch (error) {
     console.error('❌ Erro:', error);
