@@ -8,7 +8,7 @@ const LudopediaApi = require('../../api/ludopediaApi');
 const CollectionMatcher = require('../../comparison/matcher');
 const ChatGPTMatcher = require('../../comparison/chatGptMatch');
 const CollectionLoader = require('../../collection/loader');
-const DatabaseManager = require('../database/dbManager');
+const DatabaseManager = require('../../database/dbManager');
 const fs = require('fs').promises;
 
 const app = express();
