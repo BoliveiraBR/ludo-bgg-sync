@@ -40,38 +40,34 @@ app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-// Rota para criar database bggludopedia e suas tabelas
+// Rota para criar/verificar database e suas tabelas (funciona apenas no ambiente AWS)
 app.get('/create-database', async (req, res) => {
   try {
-    console.log('🏗️ Criando database bggludopedia...');
+    console.log('🏗️ Verificando/criando setup do banco...');
     
-    // URL para conectar ao postgres (database padrão)
-    const adminUrl = process.env.DATABASE_URL;
-    
-    const client = new Client({
-      connectionString: adminUrl,
-      ssl: { rejectUnauthorized: false }
-    });
-    
-    await client.connect();
-    console.log('✅ Conectado ao postgres!');
-    
-    // Verificar se já existe
-    const check = await client.query("SELECT 1 FROM pg_database WHERE datname = 'bggludopedia'");
-    
-    let databaseCreated = false;
-    if (check.rows.length === 0) {
-      await client.query('CREATE DATABASE bggludopedia');
-      console.log('✅ Database bggludopedia criado!');
-      databaseCreated = true;
-    } else {
-      console.log('ℹ️ Database já existe!');
+    // Verificar se temos DATABASE_URL configurada
+    if (!process.env.DATABASE_URL) {
+      return res.json({ 
+        success: false, 
+        error: 'DATABASE_URL não configurada'
+      });
     }
     
-    await client.end();
+    // Detectar se estamos em ambiente local vs AWS
+    const isLocal = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
     
-    // Agora criar as tabelas usando o DatabaseManager
-    console.log('🏗️ Criando tabelas...');
+    if (isLocal) {
+      return res.json({ 
+        success: false, 
+        error: 'Esta operação só pode ser executada no ambiente AWS devido a restrições de firewall',
+        suggestion: 'Faça deploy para o Elastic Beanstalk e execute lá'
+      });
+    }
+    
+    console.log('🌐 Executando no ambiente AWS...');
+    
+    // Como a DATABASE_URL já aponta para o database bggludopedia,
+    // vamos apenas criar as tabelas diretamente
     const dbManager = new DatabaseManager();
     
     try {
@@ -80,22 +76,63 @@ app.get('/create-database', async (req, res) => {
       
       res.json({ 
         success: true, 
-        message: 'Database e tabelas criados/verificados com sucesso!',
-        databaseCreated,
+        message: 'Database e tabelas verificados/criados com sucesso!',
+        environment: 'AWS',
+        databaseExists: true,
         tablesCreated: true
       });
     } catch (tableError) {
       console.error('❌ Erro ao criar tabelas:', tableError);
-      res.json({ 
-        success: false, 
-        error: 'Database criado mas erro ao criar tabelas: ' + tableError.message,
-        databaseCreated,
-        tablesCreated: false
-      });
+      
+      // Se o erro for relacionado ao database não existir, vamos tentar criar
+      if (tableError.message.includes('database') && tableError.message.includes('does not exist')) {
+        console.log('🔧 Database não existe, tentando criar...');
+        
+        try {
+          // Extrair URL base (sem o database name)
+          const dbUrl = new URL(process.env.DATABASE_URL);
+          const baseUrl = `${dbUrl.protocol}//${dbUrl.username}:${dbUrl.password}@${dbUrl.host}:${dbUrl.port}/postgres`;
+          
+          const adminClient = new Client({
+            connectionString: baseUrl,
+            ssl: { rejectUnauthorized: false }
+          });
+          
+          await adminClient.connect();
+          console.log('✅ Conectado ao postgres admin!');
+          
+          // Criar database
+          await adminClient.query('CREATE DATABASE bggludopedia');
+          console.log('✅ Database bggludopedia criado!');
+          await adminClient.end();
+          
+          // Tentar criar tabelas novamente
+          await dbManager.createTables();
+          
+          res.json({ 
+            success: true, 
+            message: 'Database criado e tabelas configuradas com sucesso!',
+            environment: 'AWS',
+            databaseCreated: true,
+            tablesCreated: true
+          });
+        } catch (createError) {
+          console.error('❌ Erro ao criar database:', createError);
+          res.json({ 
+            success: false, 
+            error: 'Erro ao criar database: ' + createError.message
+          });
+        }
+      } else {
+        res.json({ 
+          success: false, 
+          error: 'Erro ao criar tabelas: ' + tableError.message
+        });
+      }
     }
     
   } catch (error) {
-    console.error('❌ Erro:', error);
+    console.error('❌ Erro geral:', error);
     res.json({ success: false, error: error.message });
   }
 });
