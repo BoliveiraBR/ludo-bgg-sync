@@ -462,7 +462,7 @@ app.get('/callback', async (req, res) => {
   }
 });
 
-// Rota para salvar coleções
+// Rota para salvar coleções no banco de dados
 app.post('/api/save-collections', async (req, res) => {
   try {
     // Carregar credenciais do arquivo
@@ -475,17 +475,43 @@ app.post('/api/save-collections', async (req, res) => {
 
     const { bggCollection, ludoCollection } = req.body;
 
-    // Define os nomes dos arquivos com os usernames
+    console.log(`💾 Salvando coleções no banco de dados...`);
+    console.log(`📊 BGG: ${bggCollection?.length || 0} jogos para ${credentials.BGG_USER}`);
+    console.log(`📊 Ludopedia: ${ludoCollection?.length || 0} jogos para ${credentials.LUDO_USER}`);
+
+    const dbManager = new DatabaseManager();
+
+    // Salvar coleções no banco de dados
+    const results = {};
+
+    if (bggCollection && bggCollection.length > 0) {
+      results.bggSaved = await dbManager.saveBGGCollection(credentials.BGG_USER, bggCollection);
+    }
+
+    if (ludoCollection && ludoCollection.length > 0) {
+      results.ludoSaved = await dbManager.saveLudopediaCollection(credentials.LUDO_USER, ludoCollection);
+    }
+
+    // Também manter backup em arquivos (opcional)
     const bggFilename = `BGGCollection-${credentials.BGG_USER}.txt`;
     const ludoFilename = `LudopediaCollection-${credentials.LUDO_USER}.txt`;
 
-    // Salva as coleções
-    CollectionLoader.saveToFile(bggCollection, bggFilename);
-    CollectionLoader.saveToFile(ludoCollection, ludoFilename);
+    try {
+      CollectionLoader.saveToFile(bggCollection, bggFilename);
+      CollectionLoader.saveToFile(ludoCollection, ludoFilename);
+      console.log('📝 Backup em arquivos criado com sucesso');
+    } catch (fileError) {
+      console.warn('⚠️ Erro ao criar backup em arquivos:', fileError.message);
+    }
 
-    res.json({ success: true });
+    console.log('✅ Coleções salvas no banco com sucesso!');
+    res.json({ 
+      success: true,
+      message: 'Coleções salvas no banco de dados com sucesso!',
+      results
+    });
   } catch (error) {
-    console.error('Error saving collections:', error);
+    console.error('❌ Erro ao salvar coleções:', error);
     res.status(500).json({ error: error.message });
   }
 });
