@@ -428,16 +428,106 @@ app.get('/callback', async (req, res) => {
 
     await fs.writeFile(credentialsPath, JSON.stringify(credentials, null, 2));
 
-    // Fecha a janela e notifica a janela principal
+    // Página de sucesso com mensagem clara
     res.send(`
-      <script>
-        window.opener.postMessage({ 
-          type: 'AUTH_SUCCESS', 
-          token: '${tokenResponse.data.access_token}',
-          user: '${credentials.LUDO_USER || ''}'
-        }, '*');
-        window.close();
-      </script>
+      <!DOCTYPE html>
+      <html lang="pt-BR">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Autenticação Ludopedia - Sucesso</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+          body { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Arial', sans-serif;
+          }
+          .success-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 400px;
+            animation: slideIn 0.5s ease-out;
+          }
+          @keyframes slideIn {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+          }
+          .success-icon {
+            color: #28a745;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+          }
+          .countdown {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="success-card">
+          <div class="success-icon">✅</div>
+          <h2 class="text-success mb-3">Autenticação Realizada com Sucesso!</h2>
+          <p class="mb-2">Sua conta da Ludopedia foi conectada com sucesso.</p>
+          ${credentials.LUDO_USER ? `<p class="text-muted">Usuário: <strong>${credentials.LUDO_USER}</strong></p>` : ''}
+          <hr>
+          <p class="mb-3">Você pode voltar para a aplicação principal.</p>
+          <button class="btn btn-primary" onclick="closeWindow()">
+            <i class="me-2">🔙</i>Voltar para BG Guru
+          </button>
+          <div class="countdown">
+            Esta janela fechará automaticamente em <span id="countdown">10</span> segundos.
+          </div>
+        </div>
+
+        <script>
+          let seconds = 10;
+          const countdownEl = document.getElementById('countdown');
+          
+          const timer = setInterval(() => {
+            seconds--;
+            countdownEl.textContent = seconds;
+            if (seconds <= 0) {
+              clearInterval(timer);
+              closeWindow();
+            }
+          }, 1000);
+
+          function closeWindow() {
+            // Notifica a janela principal sobre o sucesso
+            if (window.opener) {
+              window.opener.postMessage({ 
+                type: 'AUTH_SUCCESS', 
+                token: '${tokenResponse.data.access_token}',
+                user: '${credentials.LUDO_USER || ''}'
+              }, '*');
+            }
+            
+            // Tenta fechar a janela
+            window.close();
+            
+            // Se não conseguir fechar (alguns navegadores bloqueiam), mostra mensagem
+            setTimeout(() => {
+              if (!window.closed) {
+                document.body.innerHTML = \`
+                  <div class="success-card">
+                    <h3>✅ Autenticação Concluída</h3>
+                    <p>Por favor, feche esta aba manualmente e retorne à aplicação.</p>
+                  </div>
+                \`;
+              }
+            }, 1000);
+          }
+        </script>
+      </body>
+      </html>
     `);
   } catch (error) {
     console.error('Error in OAuth callback:', error);
@@ -446,17 +536,76 @@ app.get('/callback', async (req, res) => {
       errorMessage += `: ${error.response.data.error_description}`;
     }
     res.status(500).send(`
-      <html>
-        <body>
-          <h2>Erro na Autenticação</h2>
-          <p>${errorMessage}</p>
-          <p>Por favor, feche esta janela e tente novamente.</p>
-          <script>
-            setTimeout(() => {
+      <!DOCTYPE html>
+      <html lang="pt-BR">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Autenticação Ludopedia - Erro</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+          body { 
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Arial', sans-serif;
+          }
+          .error-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 400px;
+            animation: slideIn 0.5s ease-out;
+          }
+          @keyframes slideIn {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+          }
+          .error-icon {
+            color: #dc3545;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+          }
+          .countdown {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="error-card">
+          <div class="error-icon">❌</div>
+          <h2 class="text-danger mb-3">Erro na Autenticação</h2>
+          <p class="mb-2">${errorMessage}</p>
+          <hr>
+          <p class="mb-3">Por favor, feche esta janela e tente novamente.</p>
+          <button class="btn btn-danger" onclick="window.close()">
+            <i class="me-2">🔙</i>Fechar Janela
+          </button>
+          <div class="countdown">
+            Esta janela fechará automaticamente em <span id="countdown">10</span> segundos.
+          </div>
+        </div>
+
+        <script>
+          let seconds = 10;
+          const countdownEl = document.getElementById('countdown');
+          
+          const timer = setInterval(() => {
+            seconds--;
+            countdownEl.textContent = seconds;
+            if (seconds <= 0) {
+              clearInterval(timer);
               window.close();
-            }, 5000);
-          </script>
-        </body>
+            }
+          }, 1000);
+        </script>
+      </body>
       </html>
     `);
   }

@@ -6,7 +6,7 @@ async function testLoadCollections() {
   try {
     console.log('🧪 Testando carregamento de coleções do arquivo...');
     
-    const response = await axios.post('http://localhost:3000/api/collections', {
+    const response = await axios.post('http://localhost:8080/api/collections', {
       loadType: 'file'
     }, {
       headers: {
@@ -44,14 +44,14 @@ async function testFindMatches() {
     console.log('\n🔍 Testando busca de matches...');
     
     // Primeiro carregar as coleções
-    const collectionsResponse = await axios.post('http://localhost:3000/api/collections', {
+    const collectionsResponse = await axios.post('http://localhost:8080/api/collections', {
       loadType: 'file'
     });
     
     const { bggCollection, ludoCollection } = collectionsResponse.data;
     
     // Depois buscar matches
-    const matchesResponse = await axios.post('http://localhost:3000/api/match-collections', {
+    const matchesResponse = await axios.post('http://localhost:8080/api/match-collections', {
       bggCollection,
       ludoCollection
     });
