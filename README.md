@@ -154,6 +154,46 @@ npm run web:dev
 - `GET /create-database`: Cria banco PostgreSQL
 - `GET /test-database-setup`: Testa configuração do banco
 
+## 🔍 Debug e Monitoramento
+
+### Como Ver Logs na Instância Elastic Beanstalk
+
+Para debugar problemas e monitorar a aplicação em produção:
+
+#### **1. Acesso via SSH à instância:**
+```bash
+eb ssh
+```
+
+#### **2. Ver logs da aplicação em tempo real:**
+```bash
+# Logs principais do Node.js
+sudo tail -f /var/log/web.stdout.log
+
+# Logs de erro
+sudo tail -f /var/log/web.stderr.log
+
+# Logs do Node.js (se disponível)
+sudo tail -f /var/log/nodejs/nodejs.log
+```
+
+#### **3. Gerenciar variáveis de ambiente:**
+```bash
+# Ver todas as variáveis de ambiente configuradas
+eb printenv
+
+# Configurar uma variável de ambiente
+eb setenv VARIABLE_NAME="valor"
+
+### Dicas de Debug:
+
+- **Console.log**: Aparecem em `/var/log/web.stdout.log`
+- **Console.error**: Aparecem em `/var/log/web.stderr.log`
+- **Aplicação travada**: Use `ps aux | grep node` para verificar processos
+- **Erro 502**: Geralmente indica que a aplicação não está rodando
+- **Variáveis de ambiente**: Use `eb printenv` para verificar se estão configuradas
+- **Deploy**: Variáveis só ficam ativas após `eb deploy` ou restart automático
+
 ## 🛠 Tecnologias Utilizadas
 
 - **Backend**: Node.js, Express.js
