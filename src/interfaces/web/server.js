@@ -53,18 +53,7 @@ app.get('/create-database', async (req, res) => {
       });
     }
     
-    // Detectar se estamos em ambiente local vs AWS
-    const isLocal = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
-    
-    if (isLocal) {
-      return res.json({ 
-        success: false, 
-        error: 'Esta operação só pode ser executada no ambiente AWS devido a restrições de firewall',
-        suggestion: 'Faça deploy para o Elastic Beanstalk e execute lá'
-      });
-    }
-    
-    console.log('🌐 Executando no ambiente AWS...');
+    console.log('🌐 Tentando criar/verificar database e tabelas...');
     
     // Como a DATABASE_URL já aponta para o database bggludopedia,
     // vamos apenas criar as tabelas diretamente
