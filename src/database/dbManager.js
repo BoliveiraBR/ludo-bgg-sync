@@ -70,16 +70,32 @@ class DatabaseManager {
                 await this.connect();
             }
 
-            // Remover coleção existente do usuário
-            await this.client.query('DELETE FROM ludopedia_collection WHERE user_name = $1', [userName]);
+            // Deduplificar jogos por ID
+            const gameMap = new Map();
+            games.forEach(game => {
+                if (game.id) {
+                    gameMap.set(game.id, game);
+                }
+            });
+            const uniqueGames = Array.from(gameMap.values());
             
-            // Inserir nova coleção
-            for (const game of games) {
+            if (uniqueGames.length !== games.length) {
+                console.log(`🔄 Removidas ${games.length - uniqueGames.length} duplicatas da Ludopedia`);
+            }
+
+            // Remover coleção existente do usuário
+            const deleteResult = await this.client.query('DELETE FROM ludopedia_collection WHERE user_name = $1', [userName]);
+            console.log(`🗑️ Removidos ${deleteResult.rowCount} jogos antigos da Ludopedia`);
+            
+            // Inserir nova coleção com proteção contra duplicatas
+            let insertedCount = 0;
+            for (const game of uniqueGames) {
                 const query = `
                     INSERT INTO ludopedia_collection (
                         user_name, game_id, name, type, is_expansion, year, 
                         rating, favorite, comment, link, thumbnail, image
                     ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+                    ON CONFLICT (user_name, game_id) DO NOTHING
                 `;
 
                 const values = [
@@ -97,11 +113,16 @@ class DatabaseManager {
                     game.image || null
                 ];
 
-                await this.client.query(query, values);
+                try {
+                    await this.client.query(query, values);
+                    insertedCount++;
+                } catch (insertError) {
+                    console.warn(`⚠️ Erro ao inserir jogo ${game.id} (${game.name}):`, insertError.message);
+                }
             }
             
-            console.log(`✅ Salvos ${games.length} jogos da Ludopedia para ${userName}`);
-            return games.length;
+            console.log(`✅ Salvos ${insertedCount} jogos da Ludopedia para ${userName}`);
+            return insertedCount;
         } catch (error) {
             console.error('❌ Erro ao salvar coleção da Ludopedia:', error);
             throw error;
@@ -117,16 +138,32 @@ class DatabaseManager {
                 await this.connect();
             }
 
-            // Remover coleção existente do usuário
-            await this.client.query('DELETE FROM bgg_collection WHERE user_name = $1', [userName]);
+            // Deduplificar jogos por ID
+            const gameMap = new Map();
+            games.forEach(game => {
+                if (game.id) {
+                    gameMap.set(game.id, game);
+                }
+            });
+            const uniqueGames = Array.from(gameMap.values());
             
-            // Inserir nova coleção
-            for (const game of games) {
+            if (uniqueGames.length !== games.length) {
+                console.log(`🔄 Removidas ${games.length - uniqueGames.length} duplicatas do BGG`);
+            }
+
+            // Remover coleção existente do usuário
+            const deleteResult = await this.client.query('DELETE FROM bgg_collection WHERE user_name = $1', [userName]);
+            console.log(`🗑️ Removidos ${deleteResult.rowCount} jogos antigos do BGG`);
+            
+            // Inserir nova coleção com proteção contra duplicatas
+            let insertedCount = 0;
+            for (const game of uniqueGames) {
                 const query = `
                     INSERT INTO bgg_collection (
                         user_name, game_id, name, type, is_expansion, year, 
                         rating, comment, thumbnail, image, num_plays
                     ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+                    ON CONFLICT (user_name, game_id) DO NOTHING
                 `;
 
                 const values = [
@@ -143,11 +180,16 @@ class DatabaseManager {
                     game.numplays || 0
                 ];
 
-                await this.client.query(query, values);
+                try {
+                    await this.client.query(query, values);
+                    insertedCount++;
+                } catch (insertError) {
+                    console.warn(`⚠️ Erro ao inserir jogo ${game.id} (${game.name}):`, insertError.message);
+                }
             }
             
-            console.log(`✅ Salvos ${games.length} jogos do BGG para ${userName}`);
-            return games.length;
+            console.log(`✅ Salvos ${insertedCount} jogos do BGG para ${userName}`);
+            return insertedCount;
         } catch (error) {
             console.error('❌ Erro ao salvar coleção do BGG:', error);
             throw error;
