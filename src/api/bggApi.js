@@ -122,7 +122,7 @@ class BGGApi {
           comment: String(item.comment || item.comment?.[0] || ''),
           // Campos específicos do BGG
           bggId: String(item.objectid || item.$.objectid || ''),
-          versionId: String(item.versionid || item.$.versionid || '0'), // Extract version/edition ID
+          versionId: String(item.collid || item.versionid || item.$?.versionid || '0'), // Use collid as unique identifier, fallback to versionid or default
           owned: true, // Sempre true pois estamos buscando jogos owned
           rating: this.parseRating(item.rating),
           bggRating: this.parseRating(item.rating)
