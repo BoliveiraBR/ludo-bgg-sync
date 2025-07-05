@@ -92,6 +92,24 @@ function extractValidJSON(content) {
       }
     }
     
+    // Tentativa de recuperar JSON truncado - procura por arrays válidos até o truncamento
+    const arrayMatch = content.match(/\[\s*(\[[\s\S]*)/);
+    if (arrayMatch) {
+      const partialArray = arrayMatch[0];
+      // Tenta encontrar arrays completos dentro do JSON truncado
+      const completeMatches = partialArray.match(/\[.*?\]/g);
+      if (completeMatches && completeMatches.length > 0) {
+        const recoveredJson = '[' + completeMatches.join(',') + ']';
+        try {
+          JSON.parse(recoveredJson);
+          console.log(`✅ JSON recuperado de resposta truncada: ${completeMatches.length} matches`);
+          return recoveredJson;
+        } catch (parseError) {
+          console.warn("⚠️ Não foi possível recuperar JSON da resposta truncada");
+        }
+      }
+    }
+    
     console.error("❌ Nenhum JSON válido encontrado na resposta");
     console.log("📝 Conteúdo recebido:", content.substring(0, 200) + "...");
     return '';
@@ -148,12 +166,18 @@ class ChatGPTMatcher {
         model: "gpt-3.5-turbo", // Era "gpt-4"
         messages: [{ role: "user", content: prompt }],
         temperature: 0.2, // Baixa temperatura para respostas mais consistentes
-        max_tokens: 2000 // Limitar tokens para evitar respostas muito longas
+        max_tokens: 4000 // Aumentado para suportar mais matches
       });
 
       const content = response.choices[0]?.message?.content;
       if (!content) {
         throw new Error('Resposta vazia do ChatGPT');
+      }
+
+      // Verificar se a resposta foi truncada
+      const finishReason = response.choices[0]?.finish_reason;
+      if (finishReason === 'length') {
+        console.warn('⚠️ Resposta do ChatGPT foi truncada por limite de tokens. Alguns matches podem ter sido perdidos.');
       }
 
       // Debug: Gravar resposta crua do ChatGPT em arquivo de log
