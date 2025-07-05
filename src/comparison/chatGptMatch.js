@@ -148,17 +148,22 @@ class ChatGPTMatcher {
       const bggNames = bggGames.map(game => game.name);
       const ludoNames = ludoGames.map(game => game.name);
 
-      const prompt = `Analise estas duas listas de jogos e encontre prováveis matches, 
-        considerando variações de nome, traduções e edições diferentes.
+      const prompt = `Analise estas duas listas de jogos e encontre prováveis matches entre elas.
         
-        IMPORTANTE: Compare apenas os NOMES dos jogos, ignorando qualquer ID que possa aparecer.
+        REGRAS IMPORTANTES:
+        1. Use APENAS os nomes EXATOS das listas fornecidas
+        2. NÃO invente ou modifique nomes
+        3. Compare apenas entre as duas listas abaixo
+        4. Considere variações de nome, traduções e edições
         
-        BGG: ${JSON.stringify(bggNames)}
+        Lista BGG: ${JSON.stringify(bggNames)}
         
-        Ludopedia: ${JSON.stringify(ludoNames)}
+        Lista Ludopedia: ${JSON.stringify(ludoNames)}
         
-        Retorne apenas os matches encontrados no formato JSON array de arrays: 
-        [[nomeLudopedia, nomeBGG], ...]`;
+        Retorne APENAS os matches encontrados no formato JSON array:
+        [[nomeDaListaLudopedia, nomeDaListaBGG], ...]
+        
+        Use os nomes EXATAMENTE como aparecem nas listas acima.`;
       
       console.log('📤 Enviando prompt para o ChatGPT...');
 
@@ -233,7 +238,7 @@ class ChatGPTMatcher {
       const matches = [];
  
       for (const rawMatch of rawMatches) {
-        const [ludoName, bggName] = rawMatch;
+        const [ludoName, bggName] = rawMatch; // ChatGPT retorna [nomeLudopedia, nomeBGG]
         const bggKey = bggName.toLowerCase().trim();
         const ludoKey = ludoName.toLowerCase().trim();
         
