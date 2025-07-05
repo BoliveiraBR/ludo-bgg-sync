@@ -35,7 +35,7 @@ class MatchManager {
     }
 
     /**
-     * Salva múltiplos matches no banco de dados
+     * Salva múltiplos matches no banco de dados com validação anti-duplicação
      */
     async saveMatches(matches) {
         try {
@@ -50,15 +50,35 @@ class MatchManager {
 
             let savedCount = 0;
             for (const match of matches) {
+                // Verificar se o jogo BGG já tem match
+                const bggExistingMatch = await this.client.query(`
+                    SELECT ludopedia_game_id FROM collection_matches 
+                    WHERE bgg_user_name = $1 AND bgg_game_id = $2 AND bgg_version_id = $3
+                `, [match.bggUser, match.bggId, match.bggVersionId || '0']);
+
+                if (bggExistingMatch.rows.length > 0) {
+                    console.error(`❌ INCONSISTÊNCIA: BGG game ${match.bggId} (v${match.bggVersionId || '0'}) já tem match com Ludopedia ${bggExistingMatch.rows[0].ludopedia_game_id}. Tentativa de match com ${match.ludoId} rejeitada.`);
+                    continue;
+                }
+
+                // Verificar se o jogo Ludopedia já tem match
+                const ludoExistingMatch = await this.client.query(`
+                    SELECT bgg_game_id, bgg_version_id FROM collection_matches 
+                    WHERE ludopedia_user_name = $1 AND ludopedia_game_id = $2
+                `, [match.ludoUser, match.ludoId]);
+
+                if (ludoExistingMatch.rows.length > 0) {
+                    const existingBgg = ludoExistingMatch.rows[0];
+                    console.error(`❌ INCONSISTÊNCIA: Ludopedia game ${match.ludoId} já tem match com BGG ${existingBgg.bgg_game_id} (v${existingBgg.bgg_version_id}). Tentativa de match com BGG ${match.bggId} rejeitada.`);
+                    continue;
+                }
+
+                // Se chegou aqui, pode inserir
                 const query = `
                     INSERT INTO collection_matches (
                         bgg_user_name, bgg_game_id, bgg_version_id,
                         ludopedia_user_name, ludopedia_game_id, match_type
                     ) VALUES ($1, $2, $3, $4, $5, $6)
-                    ON CONFLICT (bgg_user_name, bgg_game_id, bgg_version_id, ludopedia_user_name, ludopedia_game_id) 
-                    DO UPDATE SET 
-                        match_type = EXCLUDED.match_type,
-                        updated_at = CURRENT_TIMESTAMP
                 `;
 
                 const values = [
@@ -73,8 +93,9 @@ class MatchManager {
                 try {
                     await this.client.query(query, values);
                     savedCount++;
+                    console.log(`✅ Match salvo: BGG ${match.bggId} ↔ Ludopedia ${match.ludoId} (${match.matchType})`);
                 } catch (insertError) {
-                    console.warn(`⚠️ Erro ao inserir match ${match.bggId} <-> ${match.ludoId}:`, insertError.message);
+                    console.error(`❌ Erro ao inserir match ${match.bggId} <-> ${match.ludoId}:`, insertError.message);
                 }
             }
 

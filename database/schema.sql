@@ -91,8 +91,12 @@ CREATE TABLE IF NOT EXISTS collection_matches (
     FOREIGN KEY (bgg_user_name, bgg_game_id, bgg_version_id) REFERENCES bgg_collection(user_name, game_id, version_id) ON DELETE CASCADE,
     FOREIGN KEY (ludopedia_user_name, ludopedia_game_id) REFERENCES ludopedia_collection(user_name, game_id) ON DELETE CASCADE,
     
-    -- Constraint para evitar matches duplicados
-    UNIQUE(bgg_user_name, bgg_game_id, bgg_version_id, ludopedia_user_name, ludopedia_game_id)
+    -- Constraint para evitar matches duplicados (mesmo par exato)
+    UNIQUE(bgg_user_name, bgg_game_id, bgg_version_id, ludopedia_user_name, ludopedia_game_id),
+    
+    -- Constraints para garantir 1:1 mapping
+    CONSTRAINT unique_bgg_game_match UNIQUE (bgg_user_name, bgg_game_id, bgg_version_id),
+    CONSTRAINT unique_ludopedia_game_match UNIQUE (ludopedia_user_name, ludopedia_game_id)
 );
 
 -- Índices para otimizar consultas de matches

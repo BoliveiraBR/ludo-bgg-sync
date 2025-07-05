@@ -785,34 +785,31 @@ app.post('/api/match-collections', async (req, res) => {
     // Remover jogos já pareados das listas
     const previousMatchCount = previousMatches.length;
 
-    // Criar um mapa de pares BGG-Ludo dos matches anteriores
-    const matchPairs = new Map();
+    // Criar sets de jogos já matcheados para filtragem
+    const matchedBggGames = new Set();
+    const matchedLudoGames = new Set();
+    
     previousMatches.forEach(match => {
         const bggKey = `${match.bggId}_${match.bggVersionId}`;
-        matchPairs.set(bggKey, match.ludoId);
-        matchPairs.set(match.ludoId, bggKey);
+        matchedBggGames.add(bggKey);
+        matchedLudoGames.add(match.ludoId);
     });
 
-    // Guardar as coleções originais para verificação cruzada
-    const originalBggCollection = [...bggCollection];
-    const originalLudoCollection = [...ludoCollection];
-
-    // Remover jogos já pareados das listas
+    // Filtrar jogos que já têm matches (não devem aparecer para novo matching)
+    const originalBggCount = bggCollection.length;
+    const originalLudoCount = ludoCollection.length;
+    
     bggCollection = bggCollection.filter(bggGame => {
         const bggKey = `${bggGame.id}_${bggGame.versionId || '0'}`;
-        const matchedLudoId = matchPairs.get(bggKey);
-        if (!matchedLudoId) return true;
-        return !originalLudoCollection.some(ludoGame => ludoGame.id === matchedLudoId);
+        return !matchedBggGames.has(bggKey);
     });
 
     ludoCollection = ludoCollection.filter(ludoGame => {
-        const matchedBggKey = matchPairs.get(ludoGame.id);
-        if (!matchedBggKey) return true;
-        const [matchedBggId, matchedVersionId] = matchedBggKey.split('_');
-        return !originalBggCollection.some(bggGame => 
-            bggGame.id === matchedBggId && (bggGame.versionId || '0') === matchedVersionId
-        );
+        return !matchedLudoGames.has(ludoGame.id);
     });
+
+    console.log(`🔍 Filtrados ${originalBggCount - bggCollection.length} jogos BGG já matcheados`);
+    console.log(`🔍 Filtrados ${originalLudoCount - ludoCollection.length} jogos Ludopedia já matcheados`);
 
     // Usar o matcher para comparar as coleções restantes
     const comparison = CollectionMatcher.compareCollections(bggCollection, ludoCollection);
@@ -855,19 +852,10 @@ app.post('/api/match-collections', async (req, res) => {
       })
       .filter(match => match !== null);
     
-    // Garantir que os arrays onlyIn também contenham objetos válidos e não estejam pareados no banco
-    // com um par presente na coleção atual
+    // Arrays de jogos únicos (já filtrados automaticamente pois collections não incluem matcheados)
     const onlyInBGG = comparison.onlyInBGG
       .map(name => bggGameMap.get(name))
-      .filter(game => {
-        if (!game || !game.name) return false;
-        const bggKey = `${game.id}_${game.versionId || '0'}`;
-        const matchedLudoId = matchPairs.get(bggKey);
-        if (matchedLudoId) {
-          return !originalLudoCollection.some(ludoGame => ludoGame.id === matchedLudoId);
-        }
-        return true;
-      })
+      .filter(game => game && game.name)
       .map(game => ({
         id: game.id,
         versionId: game.versionId || '0',
@@ -878,17 +866,7 @@ app.post('/api/match-collections', async (req, res) => {
 
     const onlyInLudo = comparison.onlyInLudo
       .map(name => ludoGameMap.get(name))
-      .filter(game => {
-        if (!game || !game.name) return false;
-        const matchedBggKey = matchPairs.get(game.id);
-        if (matchedBggKey) {
-          const [matchedBggId, matchedVersionId] = matchedBggKey.split('_');
-          return !originalBggCollection.some(bggGame => 
-            bggGame.id === matchedBggId && (bggGame.versionId || '0') === matchedVersionId
-          );
-        }
-        return true;
-      })
+      .filter(game => game && game.name)
       .map(game => ({
         id: game.id,
         name: game.name,
@@ -934,34 +912,31 @@ app.post('/api/match-collections-ai', async (req, res) => {
     const previousMatches = await matchManager.getMatches(bggUser, ludoUser);
     await matchManager.disconnect();
 
-    // Remover jogos já pareados das listas (mesma lógica do endpoint regular)
-    const matchPairs = new Map();
+    // Filtrar jogos já matcheados (mesma lógica do endpoint regular)
+    const matchedBggGames = new Set();
+    const matchedLudoGames = new Set();
+    
     previousMatches.forEach(match => {
         const bggKey = `${match.bggId}_${match.bggVersionId}`;
-        matchPairs.set(bggKey, match.ludoId);
-        matchPairs.set(match.ludoId, bggKey);
+        matchedBggGames.add(bggKey);
+        matchedLudoGames.add(match.ludoId);
     });
 
-    // Guardar as coleções originais para verificação cruzada
-    const originalBggCollection = [...bggCollection];
-    const originalLudoCollection = [...ludoCollection];
-
-    // Remover apenas jogos que formam pares completos
+    // Filtrar jogos que já têm matches
+    const originalBggCount = bggCollection.length;
+    const originalLudoCount = ludoCollection.length;
+    
     bggCollection = bggCollection.filter(bggGame => {
         const bggKey = `${bggGame.id}_${bggGame.versionId || '0'}`;
-        const matchedLudoId = matchPairs.get(bggKey);
-        if (!matchedLudoId) return true;
-        return !originalLudoCollection.some(ludoGame => ludoGame.id === matchedLudoId);
+        return !matchedBggGames.has(bggKey);
     });
 
     ludoCollection = ludoCollection.filter(ludoGame => {
-        const matchedBggKey = matchPairs.get(ludoGame.id);
-        if (!matchedBggKey) return true;
-        const [matchedBggId, matchedVersionId] = matchedBggKey.split('_');
-        return !originalBggCollection.some(bggGame => 
-            bggGame.id === matchedBggId && (bggGame.versionId || '0') === matchedVersionId
-        );
+        return !matchedLudoGames.has(ludoGame.id);
     });
+
+    console.log(`🤖 AI: Filtrados ${originalBggCount - bggCollection.length} jogos BGG já matcheados`);
+    console.log(`🤖 AI: Filtrados ${originalLudoCount - ludoCollection.length} jogos Ludopedia já matcheados`);
 
     // Usar o matcher para comparar as coleções filtradas
     const comparison = CollectionMatcher.compareCollections(bggCollection, ludoCollection);
