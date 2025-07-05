@@ -223,14 +223,22 @@ class ChatGPTMatcher {
       // Criar mapas para busca rápida por nome
       const bggGameMap = new Map(bggGames.map(game => [game.name.toLowerCase().trim(), game]));
       const ludoGameMap = new Map(ludoGames.map(game => [game.name.toLowerCase().trim(), game]));
+      
+      console.log(`🔍 Debug: BGG games enviados para AI: ${bggGames.length}`);
+      console.log(`🔍 Debug: Ludopedia games enviados para AI: ${ludoGames.length}`);
+      console.log(`🔍 Debug: Primeiros BGG: ${[...bggGameMap.keys()].slice(0, 3).join(', ')}`);
+      console.log(`🔍 Debug: Primeiros Ludopedia: ${[...ludoGameMap.keys()].slice(0, 3).join(', ')}`);
 
       // Converter matches do ChatGPT para incluir IDs
       const matches = [];
  
       for (const rawMatch of rawMatches) {
         const [ludoName, bggName] = rawMatch;
-        const bggGame = bggGameMap.get(bggName.toLowerCase().trim());
-        const ludoGame = ludoGameMap.get(ludoName.toLowerCase().trim());
+        const bggKey = bggName.toLowerCase().trim();
+        const ludoKey = ludoName.toLowerCase().trim();
+        
+        const bggGame = bggGameMap.get(bggKey);
+        const ludoGame = ludoGameMap.get(ludoKey);
 
         if (bggGame && ludoGame) {
           matches.push({
@@ -241,8 +249,26 @@ class ChatGPTMatcher {
           });
         } else {
           console.warn(`⚠️ Match não encontrado nas coleções: "${ludoName}" ↔ "${bggName}"`);
-          if (!bggGame) console.warn(`   BGG não encontrado: "${bggName}"`);
-          if (!ludoGame) console.warn(`   Ludopedia não encontrado: "${ludoName}"`);
+          if (!bggGame) {
+            console.warn(`   BGG não encontrado: "${bggName}" (normalized: "${bggKey}")`);
+            // Debug: mostrar jogos BGG disponíveis similares
+            const similarBgg = [...bggGameMap.keys()].filter(key => 
+              key.includes(bggKey.substring(0, 10)) || bggKey.includes(key.substring(0, 10))
+            );
+            if (similarBgg.length > 0) {
+              console.warn(`   Similares BGG: ${similarBgg.slice(0, 3).join(', ')}`);
+            }
+          }
+          if (!ludoGame) {
+            console.warn(`   Ludopedia não encontrado: "${ludoName}" (normalized: "${ludoKey}")`);
+            // Debug: mostrar jogos Ludopedia disponíveis similares
+            const similarLudo = [...ludoGameMap.keys()].filter(key => 
+              key.includes(ludoKey.substring(0, 10)) || ludoKey.includes(key.substring(0, 10))
+            );
+            if (similarLudo.length > 0) {
+              console.warn(`   Similares Ludopedia: ${similarLudo.slice(0, 3).join(', ')}`);
+            }
+          }
         }
       }
 
