@@ -1036,10 +1036,10 @@ app.post('/api/accept-matches', async (req, res) => {
     // Converter matches para formato do banco
     const dbMatches = matches.map(match => ({
       bggUser,
-      bggId: match.bggGame.id,
-      bggVersionId: match.bggGame.versionId || '0',
+      bggId: match.bggId,
+      bggVersionId: match.bggVersionId || '0',
       ludoUser,
-      ludoId: match.ludoGame.id,
+      ludoId: match.ludoId,
       matchType: 'name'
     }));
 
@@ -1070,10 +1070,10 @@ app.post('/api/save-matches-ai', async (req, res) => {
     // Converter matches para formato do banco
     const dbMatches = matches.map(match => ({
       bggUser,
-      bggId: match.bgg.id,
-      bggVersionId: match.bgg.versionId || '0',
+      bggId: match.bggId,
+      bggVersionId: match.bggVersionId || '0',
       ludoUser,
-      ludoId: match.ludo.id,
+      ludoId: match.ludoId,
       matchType: 'ai'
     }));
 
