@@ -138,11 +138,12 @@ class DatabaseManager {
                 await this.connect();
             }
 
-            // Deduplificar jogos por ID
+            // Deduplificar jogos por ID + version_id
             const gameMap = new Map();
             games.forEach(game => {
                 if (game.id) {
-                    gameMap.set(game.id, game);
+                    const key = `${game.id}_${game.versionId || '0'}`;
+                    gameMap.set(key, game);
                 }
             });
             const uniqueGames = Array.from(gameMap.values());
@@ -160,15 +161,16 @@ class DatabaseManager {
             for (const game of uniqueGames) {
                 const query = `
                     INSERT INTO bgg_collection (
-                        user_name, game_id, name, type, is_expansion, year, 
+                        user_name, game_id, version_id, name, type, is_expansion, year, 
                         rating, comment, thumbnail, image, num_plays
-                    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-                    ON CONFLICT (user_name, game_id) DO NOTHING
+                    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+                    ON CONFLICT (user_name, game_id, version_id) DO NOTHING
                 `;
 
                 const values = [
                     userName,
                     game.id,
+                    game.versionId || '0',
                     game.name,
                     game.type || 'base',
                     game.isExpansion || false,
@@ -231,11 +233,11 @@ class DatabaseManager {
             }
 
             const query = `
-                SELECT game_id as id, name, type, is_expansion as "isExpansion",
+                SELECT game_id as id, version_id as "versionId", name, type, is_expansion as "isExpansion",
                        year, rating, comment, thumbnail, image, num_plays as numplays
                 FROM bgg_collection 
                 WHERE user_name = $1 
-                ORDER BY name;
+                ORDER BY name, version_id;
             `;
 
             const result = await this.client.query(query, [userName]);

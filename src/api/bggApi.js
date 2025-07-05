@@ -79,7 +79,8 @@ class BGGApi {
   }
 
   async fetchCollectionByType(subtype, label) {
-    const url = `${this.baseUrl}/collection?username=${this.username}&own=1&subtype=${subtype}${subtype === 'boardgame' ? '&excludesubtype=boardgameexpansion' : ''}`;
+    // Include version=1 to get version/edition information
+    const url = `${this.baseUrl}/collection?username=${this.username}&own=1&subtype=${subtype}&version=1${subtype === 'boardgame' ? '&excludesubtype=boardgameexpansion' : ''}`;
     
     try {
       const response = await this.retryRequest(url, label);
@@ -121,6 +122,7 @@ class BGGApi {
           comment: String(item.comment || item.comment?.[0] || ''),
           // Campos específicos do BGG
           bggId: String(item.objectid || item.$.objectid || ''),
+          versionId: String(item.versionid || item.$.versionid || '0'), // Extract version/edition ID
           owned: true, // Sempre true pois estamos buscando jogos owned
           rating: this.parseRating(item.rating),
           bggRating: this.parseRating(item.rating)
