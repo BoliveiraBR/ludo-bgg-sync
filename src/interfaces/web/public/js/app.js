@@ -185,6 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 return {
                     bggId: match.bggGame.id,
+                    bggVersionId: match.bggGame.versionId,
                     ludoId: match.ludoGame.id,
                     bggName: match.bggGame.name,
                     ludoName: match.ludoGame.name
@@ -897,6 +898,7 @@ async function handleAcceptAIMatches() {
             }
             return {
                 bggId: match.bgg.id,
+                bggVersionId: match.bgg.versionId,
                 ludoId: match.ludopedia.id,
                 bggName: match.bgg.name,
                 ludoName: match.ludopedia.name,
@@ -1124,6 +1126,7 @@ async function handleAcceptManualMatch() {
     try {
         const manualMatch = {
             bggId: selectedManualBggGame.id,
+            bggVersionId: selectedManualBggGame.versionId,
             ludoId: selectedManualLudoGame.id,
             bggName: selectedManualBggGame.name,
             ludoName: selectedManualLudoGame.name,

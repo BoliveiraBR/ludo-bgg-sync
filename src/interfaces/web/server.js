@@ -8,6 +8,7 @@ const LudopediaApi = require('../../api/ludopediaApi');
 const CollectionMatcher = require('../../comparison/matcher');
 const ChatGPTMatcher = require('../../comparison/chatGptMatch');
 const DatabaseManager = require('../../database/dbManager');
+const MatchManager = require('../../database/matchManager');
 const fs = require('fs').promises;
 
 const app = express();
@@ -765,52 +766,53 @@ app.post('/api/save-collections', async (req, res) => {
 app.post('/api/match-collections', async (req, res) => {
   try {
     let { bggCollection, ludoCollection } = req.body;
-    const matchesPath = path.join(__dirname, '../../../data/matches.txt');
 
     // Criar cópias das coleções para não interferir nas originais
     bggCollection = [...bggCollection];
     ludoCollection = [...ludoCollection];
     
-    // Carregar matches prévios
-    let previousMatches = [];
-    try {
-      const content = await fs.readFile(matchesPath, 'utf8');
-      previousMatches = JSON.parse(content);
-    } catch (error) {
-      console.log('Nenhum match prévio encontrado');
-    }
+    // Carregar credenciais para obter usernames
+    const credentials = JSON.parse(await fs.readFile('./data/credentials.txt', 'utf8'));
+    const bggUser = credentials.BGG_USER;
+    const ludoUser = credentials.LUDO_USER || bggUser;
+    
+    // Carregar matches prévios do banco
+    const matchManager = new MatchManager();
+    await matchManager.connect();
+    const previousMatches = await matchManager.getMatches(bggUser, ludoUser);
+    await matchManager.disconnect();
 
-   // Remover jogos já pareados das listas
-const previousMatchCount = previousMatches.length;
+    // Remover jogos já pareados das listas
+    const previousMatchCount = previousMatches.length;
 
-// Primeiro, criar um mapa de pares BGG-Ludo dos matches anteriores
-const matchPairs = new Map();
-previousMatches.forEach(match => {
-    matchPairs.set(match.bggId, match.ludoId);
-    matchPairs.set(match.ludoId, match.bggId);
-});
+    // Criar um mapa de pares BGG-Ludo dos matches anteriores
+    const matchPairs = new Map();
+    previousMatches.forEach(match => {
+        const bggKey = `${match.bggId}_${match.bggVersionId}`;
+        matchPairs.set(bggKey, match.ludoId);
+        matchPairs.set(match.ludoId, bggKey);
+    });
 
-// Remover apenas jogos que formam pares completos
-const bggBeforeFilter = bggCollection.length;
-const ludoBeforeFilter = ludoCollection.length;
+    // Guardar as coleções originais para verificação cruzada
+    const originalBggCollection = [...bggCollection];
+    const originalLudoCollection = [...ludoCollection];
 
-// Guardar as coleções originais para verificação cruzada
-const originalBggCollection = [...bggCollection];
-const originalLudoCollection = [...ludoCollection];
+    // Remover jogos já pareados das listas
+    bggCollection = bggCollection.filter(bggGame => {
+        const bggKey = `${bggGame.id}_${bggGame.versionId || '0'}`;
+        const matchedLudoId = matchPairs.get(bggKey);
+        if (!matchedLudoId) return true;
+        return !originalLudoCollection.some(ludoGame => ludoGame.id === matchedLudoId);
+    });
 
-bggCollection = bggCollection.filter(bggGame => {
-    const matchedLudoId = matchPairs.get(bggGame.id);
-    // Manter o jogo se não tiver match ou se o par dele não existir na coleção ORIGINAL
-    if (!matchedLudoId) return true;
-    return !originalLudoCollection.some(ludoGame => ludoGame.id === matchedLudoId);
-});
-
-ludoCollection = ludoCollection.filter(ludoGame => {
-    const matchedBggId = matchPairs.get(ludoGame.id);
-    // Manter o jogo se não tiver match ou se o par dele não existir na coleção ORIGINAL
-    if (!matchedBggId) return true;
-    return !originalBggCollection.some(bggGame => bggGame.id === matchedBggId);
-});
+    ludoCollection = ludoCollection.filter(ludoGame => {
+        const matchedBggKey = matchPairs.get(ludoGame.id);
+        if (!matchedBggKey) return true;
+        const [matchedBggId, matchedVersionId] = matchedBggKey.split('_');
+        return !originalBggCollection.some(bggGame => 
+            bggGame.id === matchedBggId && (bggGame.versionId || '0') === matchedVersionId
+        );
+    });
 
     // Usar o matcher para comparar as coleções restantes
     const comparison = CollectionMatcher.compareCollections(bggCollection, ludoCollection);
@@ -835,6 +837,7 @@ ludoCollection = ludoCollection.filter(ludoGame => {
           return {
             bggGame: {
               id: bggGame.id,
+              versionId: bggGame.versionId || '0',
               name: bggGame.name,
               type: bggGame.type,
               isExpansion: bggGame.isExpansion
@@ -852,21 +855,22 @@ ludoCollection = ludoCollection.filter(ludoGame => {
       })
       .filter(match => match !== null);
     
-    // Garantir que os arrays onlyIn também contenham objetos válidos e não estejam em matches.txt
+    // Garantir que os arrays onlyIn também contenham objetos válidos e não estejam pareados no banco
     // com um par presente na coleção atual
     const onlyInBGG = comparison.onlyInBGG
       .map(name => bggGameMap.get(name))
       .filter(game => {
         if (!game || !game.name) return false;
-        // Se o jogo tem um match em matches.txt, removê-lo da lista "Somente BGG"
-        const matchedLudoId = matchPairs.get(game.id);
+        const bggKey = `${game.id}_${game.versionId || '0'}`;
+        const matchedLudoId = matchPairs.get(bggKey);
         if (matchedLudoId) {
-          return false; // Remover todos os jogos que já foram pareados anteriormente
+          return !originalLudoCollection.some(ludoGame => ludoGame.id === matchedLudoId);
         }
-        return true; // Manter apenas jogos que nunca foram pareados
+        return true;
       })
       .map(game => ({
         id: game.id,
+        versionId: game.versionId || '0',
         name: game.name,
         type: game.type,
         isExpansion: game.isExpansion
@@ -876,13 +880,14 @@ ludoCollection = ludoCollection.filter(ludoGame => {
       .map(name => ludoGameMap.get(name))
       .filter(game => {
         if (!game || !game.name) return false;
-        
-        // Se o jogo tem um match em matches.txt, removê-lo da lista "Somente Ludopedia"
-        const matchedBggId = matchPairs.get(game.id);
-        if (matchedBggId) {
-          return false; // Remover todos os jogos que já foram pareados anteriormente
+        const matchedBggKey = matchPairs.get(game.id);
+        if (matchedBggKey) {
+          const [matchedBggId, matchedVersionId] = matchedBggKey.split('_');
+          return !originalBggCollection.some(bggGame => 
+            bggGame.id === matchedBggId && (bggGame.versionId || '0') === matchedVersionId
+          );
         }
-        return true; // Manter apenas jogos que nunca foram pareados
+        return true;
       })
       .map(game => ({
         id: game.id,
@@ -913,26 +918,28 @@ app.post('/api/match-collections-ai', async (req, res) => {
 
     let { bggCollection, ludoCollection } = req.body;
     const chatGptMatcher = new ChatGPTMatcher(process.env.OPENAI_API_KEY);
-    const matchesPath = path.join(__dirname, '../../../data/matches.txt');
     
     // Criar cópias das coleções para não interferir nas originais
     bggCollection = [...bggCollection];
     ludoCollection = [...ludoCollection];
 
-    // Carregar matches prévios e aplicar a mesma filtragem do endpoint regular
-    let previousMatches = [];
-    try {
-      const content = await fs.readFile(matchesPath, 'utf8');
-      previousMatches = JSON.parse(content);
-    } catch (error) {
-      console.log('Nenhum match prévio encontrado');
-    }
+    // Carregar credenciais para obter usernames
+    const credentials = JSON.parse(await fs.readFile('./data/credentials.txt', 'utf8'));
+    const bggUser = credentials.BGG_USER;
+    const ludoUser = credentials.LUDO_USER || bggUser;
+
+    // Carregar matches prévios do banco
+    const matchManager = new MatchManager();
+    await matchManager.connect();
+    const previousMatches = await matchManager.getMatches(bggUser, ludoUser);
+    await matchManager.disconnect();
 
     // Remover jogos já pareados das listas (mesma lógica do endpoint regular)
     const matchPairs = new Map();
     previousMatches.forEach(match => {
-        matchPairs.set(match.bggId, match.ludoId);
-        matchPairs.set(match.ludoId, match.bggId);
+        const bggKey = `${match.bggId}_${match.bggVersionId}`;
+        matchPairs.set(bggKey, match.ludoId);
+        matchPairs.set(match.ludoId, bggKey);
     });
 
     // Guardar as coleções originais para verificação cruzada
@@ -941,15 +948,19 @@ app.post('/api/match-collections-ai', async (req, res) => {
 
     // Remover apenas jogos que formam pares completos
     bggCollection = bggCollection.filter(bggGame => {
-        const matchedLudoId = matchPairs.get(bggGame.id);
+        const bggKey = `${bggGame.id}_${bggGame.versionId || '0'}`;
+        const matchedLudoId = matchPairs.get(bggKey);
         if (!matchedLudoId) return true;
         return !originalLudoCollection.some(ludoGame => ludoGame.id === matchedLudoId);
     });
 
     ludoCollection = ludoCollection.filter(ludoGame => {
-        const matchedBggId = matchPairs.get(ludoGame.id);
-        if (!matchedBggId) return true;
-        return !originalBggCollection.some(bggGame => bggGame.id === matchedBggId);
+        const matchedBggKey = matchPairs.get(ludoGame.id);
+        if (!matchedBggKey) return true;
+        const [matchedBggId, matchedVersionId] = matchedBggKey.split('_');
+        return !originalBggCollection.some(bggGame => 
+            bggGame.id === matchedBggId && (bggGame.versionId || '0') === matchedVersionId
+        );
     });
 
     // Usar o matcher para comparar as coleções filtradas
@@ -1016,24 +1027,30 @@ app.post('/api/match-collections-ai', async (req, res) => {
 app.post('/api/accept-matches', async (req, res) => {
   try {
     const { matches } = req.body;
-    const matchesPath = path.join(__dirname, '../../../data/matches.txt');
+    
+    // Carregar credenciais para obter usernames
+    const credentials = JSON.parse(await fs.readFile('./data/credentials.txt', 'utf8'));
+    const bggUser = credentials.BGG_USER;
+    const ludoUser = credentials.LUDO_USER || bggUser;
 
-    // Ler matches existentes ou criar array vazio
-    let existingMatches = [];
-    try {
-      const content = await fs.readFile(matchesPath, 'utf8');
-      existingMatches = JSON.parse(content);
-    } catch (error) {
-      console.log('Arquivo de matches não encontrado, será criado um novo');
-    }
+    // Converter matches para formato do banco
+    const dbMatches = matches.map(match => ({
+      bggUser,
+      bggId: match.bggGame.id,
+      bggVersionId: match.bggGame.versionId || '0',
+      ludoUser,
+      ludoId: match.ludoGame.id,
+      matchType: 'name'
+    }));
 
-    // Adicionar novos matches
-    existingMatches.push(...matches);
+    // Salvar no banco de dados
+    const matchManager = new MatchManager();
+    await matchManager.connect();
+    const savedCount = await matchManager.saveMatches(dbMatches);
+    await matchManager.disconnect();
 
-    // Salvar arquivo atualizado
-    await fs.writeFile(matchesPath, JSON.stringify(existingMatches, null, 2));
-
-    res.json({ success: true });
+    console.log(`✅ Salvos ${savedCount} matches automáticos por nome`);
+    res.json({ success: true, savedCount });
   } catch (error) {
     console.error('Error saving matches:', error);
     res.status(500).json({ error: error.message });
@@ -1044,24 +1061,30 @@ app.post('/api/accept-matches', async (req, res) => {
 app.post('/api/save-matches-ai', async (req, res) => {
   try {
     const { matches } = req.body;
-    const matchesPath = path.join(__dirname, '../../../data/matches.txt');
+    
+    // Carregar credenciais para obter usernames
+    const credentials = JSON.parse(await fs.readFile('./data/credentials.txt', 'utf8'));
+    const bggUser = credentials.BGG_USER;
+    const ludoUser = credentials.LUDO_USER || bggUser;
 
-    // Ler matches existentes ou criar array vazio
-    let existingMatches = [];
-    try {
-      const content = await fs.readFile(matchesPath, 'utf8');
-      existingMatches = JSON.parse(content);
-    } catch (error) {
-      console.log('Arquivo de matches não encontrado, será criado um novo');
-    }
+    // Converter matches para formato do banco
+    const dbMatches = matches.map(match => ({
+      bggUser,
+      bggId: match.bgg.id,
+      bggVersionId: match.bgg.versionId || '0',
+      ludoUser,
+      ludoId: match.ludo.id,
+      matchType: 'ai'
+    }));
 
-    // Adicionar novos matches
-    existingMatches.push(...matches);
+    // Salvar no banco de dados
+    const matchManager = new MatchManager();
+    await matchManager.connect();
+    const savedCount = await matchManager.saveMatches(dbMatches);
+    await matchManager.disconnect();
 
-    // Salvar arquivo atualizado
-    await fs.writeFile(matchesPath, JSON.stringify(existingMatches, null, 2));
-
-    res.json({ success: true });
+    console.log(`✅ Salvos ${savedCount} matches sugeridos por AI`);
+    res.json({ success: true, savedCount });
   } catch (error) {
     console.error('Error saving AI matches:', error);
     res.status(500).json({ error: error.message });
@@ -1072,39 +1095,39 @@ app.post('/api/save-matches-ai', async (req, res) => {
 app.post('/api/save-manual-match', async (req, res) => {
   try {
     const { match } = req.body;
-    const matchesPath = path.join(__dirname, '../../../data/matches.txt');
 
     // Validar dados do match
-    if (!match || !match.bggId || !match.ludoId || !match.bggName || !match.ludoName) {
+    if (!match || !match.bggId || !match.ludoId) {
       return res.status(400).json({ error: 'Dados do match inválidos' });
     }
 
-    // Ler matches existentes ou criar array vazio
-    let existingMatches = [];
-    try {
-      const content = await fs.readFile(matchesPath, 'utf8');
-      existingMatches = JSON.parse(content);
-    } catch (error) {
-      console.log('Arquivo de matches não encontrado, será criado um novo');
+    // Carregar credenciais para obter usernames
+    const credentials = JSON.parse(await fs.readFile('./data/credentials.txt', 'utf8'));
+    const bggUser = credentials.BGG_USER;
+    const ludoUser = credentials.LUDO_USER || bggUser;
+
+    // Preparar match para o banco
+    const dbMatches = [{
+      bggUser,
+      bggId: match.bggId,
+      bggVersionId: match.bggVersionId || '0',
+      ludoUser,
+      ludoId: match.ludoId,
+      matchType: 'manual'
+    }];
+
+    // Salvar no banco de dados
+    const matchManager = new MatchManager();
+    await matchManager.connect();
+    const savedCount = await matchManager.saveMatches(dbMatches);
+    await matchManager.disconnect();
+
+    if (savedCount > 0) {
+      console.log(`✅ Match manual salvo: ${match.bggName || match.bggId} ↔ ${match.ludoName || match.ludoId}`);
+      res.json({ success: true });
+    } else {
+      res.status(409).json({ error: 'Match já existe ou erro ao salvar' });
     }
-
-    // Verificar se o match já existe (evitar duplicatas)
-    const matchExists = existingMatches.some(existingMatch => 
-      existingMatch.bggId === match.bggId && existingMatch.ludoId === match.ludoId
-    );
-
-    if (matchExists) {
-      return res.status(409).json({ error: 'Este match já existe' });
-    }
-
-    // Adicionar novo match manual
-    existingMatches.push(match);
-
-    // Salvar arquivo atualizado
-    await fs.writeFile(matchesPath, JSON.stringify(existingMatches, null, 2));
-
-    console.log(`✅ Match manual salvo: ${match.bggName} ↔ ${match.ludoName}`);
-    res.json({ success: true });
   } catch (error) {
     console.error('Error saving manual match:', error);
     res.status(500).json({ error: error.message });
