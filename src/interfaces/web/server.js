@@ -938,11 +938,8 @@ app.post('/api/match-collections-ai', async (req, res) => {
     console.log(`🤖 AI: Filtrados ${originalBggCount - bggCollection.length} jogos BGG já matcheados`);
     console.log(`🤖 AI: Filtrados ${originalLudoCount - ludoCollection.length} jogos Ludopedia já matcheados`);
 
-    // Usar o matcher para comparar as coleções filtradas
-    const comparison = CollectionMatcher.compareCollections(bggCollection, ludoCollection);
-    
     // Verificar se temos jogos para comparar
-    if (comparison.onlyInBGG.length === 0 || comparison.onlyInLudo.length === 0) {
+    if (bggCollection.length === 0 || ludoCollection.length === 0) {
       return res.json({ 
         matches: [],
         message: "Não há jogos não pareados para comparar com AI"
@@ -952,16 +949,18 @@ app.post('/api/match-collections-ai', async (req, res) => {
     // Buscar matches adicionais usando AI
     let aiMatches;
     try {
-      // Converter as listas para formato {id, versionId, name} 
-      const bggGamesForAI = comparison.onlyInBGG.map(name => {
-        const game = bggCollection.find(g => g.name.trim().toLowerCase() === name);
-        return { id: game.id, versionId: game.versionId, name: game.name };
-      });
+      // Enviar TODOS os jogos não matcheados diretamente para o ChatGPT
+      // IMPORTANTE: Não usar comparação por nomes, apenas IDs únicos
+      const bggGamesForAI = bggCollection.map(game => ({
+        id: game.id,
+        versionId: game.versionId,
+        name: game.name
+      }));
       
-      const ludoGamesForAI = comparison.onlyInLudo.map(name => {
-        const game = ludoCollection.find(g => g.name.trim().toLowerCase() === name);
-        return { id: game.id, name: game.name };
-      });
+      const ludoGamesForAI = ludoCollection.map(game => ({
+        id: game.id,
+        name: game.name
+      }));
 
       aiMatches = await chatGptMatcher.findMatches(bggGamesForAI, ludoGamesForAI);
     } catch (aiError) {
