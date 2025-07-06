@@ -38,7 +38,9 @@ CREATE TABLE IF NOT EXISTS bgg_collection (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
-    PRIMARY KEY (user_name, game_id, version_id)
+    PRIMARY KEY (user_name, game_id, version_id),
+    -- Constraint única para (user_name, version_id) - version_id é único por usuário
+    CONSTRAINT unique_bgg_user_version_id UNIQUE (user_name, version_id)
 );
 
 -- Índices para otimizar consultas comuns
@@ -69,11 +71,15 @@ COMMENT ON COLUMN ludopedia_collection.favorite IS 'Indica se é um jogo favorit
 
 COMMENT ON COLUMN bgg_collection.user_name IS 'Nome do usuário no BoardGameGeek';
 COMMENT ON COLUMN bgg_collection.game_id IS 'ID único do jogo no BoardGameGeek';
-COMMENT ON COLUMN bgg_collection.version_id IS 'ID da versão/edição específica do jogo no BGG';
+COMMENT ON COLUMN bgg_collection.version_id IS 'ID da versão/edição específica do jogo no BGG (collid) - único por usuário';
 COMMENT ON COLUMN bgg_collection.type IS 'Tipo do jogo: base, expansion, etc.';
 COMMENT ON COLUMN bgg_collection.is_expansion IS 'Indica se é uma expansão';
 COMMENT ON COLUMN bgg_collection.rating IS 'Avaliação do usuário (1-10, permite decimais)';
 COMMENT ON COLUMN bgg_collection.num_plays IS 'Número de partidas jogadas';
+
+-- Comentário da constraint
+COMMENT ON CONSTRAINT unique_bgg_user_version_id ON bgg_collection 
+IS 'Garante que cada usuário não pode ter o mesmo version_id (collid) duplicado em sua coleção. O version_id é a verdadeira chave única no BGG por usuário.';
 
 -- Tabela para armazenar matches/pareamentos entre BGG e Ludopedia
 CREATE TABLE IF NOT EXISTS collection_matches (

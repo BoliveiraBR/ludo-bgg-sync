@@ -144,26 +144,42 @@ class ChatGPTMatcher {
       console.log(`📊 Analisando ${bggGames.length} jogos do BGG e ${ludoGames.length} jogos da Ludopedia`);
       console.log('🔄 Preparando dados para análise...');
 
-      // Extrair apenas os nomes para o prompt (ChatGPT vai comparar apenas os nomes)
-      const bggNames = bggGames.map(game => game.name);
-      const ludoNames = ludoGames.map(game => game.name);
+      // Criar listas com IDs únicos para identificação precisa
+      // IMPORTANTE: BGG usa version_id como chave única (collid), não game_id
+      // Ludopedia usa game_id como chave única
+      const bggGamesWithIds = bggGames.map(game => ({
+        id: `BGG_VERSION_${game.versionId || '0'}`, // version_id é a chave única no BGG
+        name: game.name,
+        gameId: game.id // game_id pode ser repetido, apenas para referência
+      }));
+      
+      const ludoGamesWithIds = ludoGames.map(game => ({
+        id: `LUDO_GAME_${game.id}`, // game_id é a chave única na Ludopedia
+        name: game.name
+      }));
 
       const prompt = `Analise estas duas listas de jogos e encontre prováveis matches entre elas.
         
         REGRAS IMPORTANTES:
-        1. Use APENAS os nomes EXATOS das listas fornecidas
-        2. NÃO invente ou modifique nomes
-        3. Compare apenas entre as duas listas abaixo
-        4. Considere variações de nome, traduções e edições
+        1. Compare apenas os jogos das listas fornecidas
+        2. Considere variações de nome, traduções e edições diferentes
+        3. Retorne os IDs únicos dos matches encontrados
         
-        Lista BGG: ${JSON.stringify(bggNames)}
+        Lista BGG: ${JSON.stringify(bggGamesWithIds)}
         
-        Lista Ludopedia: ${JSON.stringify(ludoNames)}
+        Lista Ludopedia: ${JSON.stringify(ludoGamesWithIds)}
         
         Retorne APENAS os matches encontrados no formato JSON array:
-        [[nomeDaListaLudopedia, nomeDaListaBGG], ...]
+        [
+          {
+            "ludoId": "LUDO_GAME_id",
+            "ludoName": "Nome do jogo na Ludopedia",
+            "bggId": "BGG_VERSION_id", 
+            "bggName": "Nome do jogo no BGG"
+          }
+        ]
         
-        Use os nomes EXATAMENTE como aparecem nas listas acima.`;
+        Use os IDs EXATOS das listas acima (ex: "LUDO_GAME_123", "BGG_VERSION_456").`;
       
       console.log('📤 Enviando prompt para o ChatGPT...');
 
@@ -225,54 +241,52 @@ class ChatGPTMatcher {
         throw new Error('Erro ao processar resposta do ChatGPT: ' + parseError.message);
       }
 
-      // Criar mapas para busca rápida por nome
-      const bggGameMap = new Map(bggGames.map(game => [game.name.toLowerCase().trim(), game]));
-      const ludoGameMap = new Map(ludoGames.map(game => [game.name.toLowerCase().trim(), game]));
+      // Criar mapas para busca rápida por IDs únicos (não mais por nomes!)
+      // BGG: version_id é a chave única (collid)
+      // Ludopedia: game_id é a chave única
+      const bggGameMap = new Map(bggGames.map(game => [`BGG_VERSION_${game.versionId || '0'}`, game]));
+      const ludoGameMap = new Map(ludoGames.map(game => [`LUDO_GAME_${game.id}`, game]));
       
       console.log(`🔍 Debug: BGG games enviados para AI: ${bggGames.length}`);
       console.log(`🔍 Debug: Ludopedia games enviados para AI: ${ludoGames.length}`);
-      console.log(`🔍 Debug: Primeiros BGG: ${[...bggGameMap.keys()].slice(0, 3).join(', ')}`);
-      console.log(`🔍 Debug: Primeiros Ludopedia: ${[...ludoGameMap.keys()].slice(0, 3).join(', ')}`);
+      console.log(`🔍 Debug: Primeiros BGG IDs: ${[...bggGameMap.keys()].slice(0, 3).join(', ')}`);
+      console.log(`🔍 Debug: Primeiros Ludopedia IDs: ${[...ludoGameMap.keys()].slice(0, 3).join(', ')}`);
 
-      // Converter matches do ChatGPT para incluir IDs
+      // Converter matches do ChatGPT (agora usando IDs únicos)
       const matches = [];
  
       for (const rawMatch of rawMatches) {
-        const [ludoName, bggName] = rawMatch; // ChatGPT retorna [nomeLudopedia, nomeBGG]
-        const bggKey = bggName.toLowerCase().trim();
-        const ludoKey = ludoName.toLowerCase().trim();
+        // ChatGPT agora retorna objetos com IDs únicos
+        const ludoId = rawMatch.ludoId;
+        const bggId = rawMatch.bggId;
+        const ludoName = rawMatch.ludoName;
+        const bggName = rawMatch.bggName;
         
-        const bggGame = bggGameMap.get(bggKey);
-        const ludoGame = ludoGameMap.get(ludoKey);
+        const bggGame = bggGameMap.get(bggId);
+        const ludoGame = ludoGameMap.get(ludoId);
 
         if (bggGame && ludoGame) {
           matches.push({
-            bggId: bggGame.id,
+            bggId: bggGame.id,           // game_id (para compatibilidade)
+            bggVersionId: bggGame.versionId || '0', // version_id (chave única real)
             bggName: bggGame.name,
-            ludoId: ludoGame.id,
+            ludoId: ludoGame.id,         // game_id (chave única)
             ludoName: ludoGame.name
           });
+          console.log(`✅ Match válido: ${ludoName} ↔ ${bggName} (${ludoId} ↔ ${bggId})`);
         } else {
-          console.warn(`⚠️ Match não encontrado nas coleções: "${ludoName}" ↔ "${bggName}"`);
+          console.warn(`⚠️ Match com IDs inválidos: "${ludoName}" (${ludoId}) ↔ "${bggName}" (${bggId})`);
           if (!bggGame) {
-            console.warn(`   BGG não encontrado: "${bggName}" (normalized: "${bggKey}")`);
-            // Debug: mostrar jogos BGG disponíveis similares
-            const similarBgg = [...bggGameMap.keys()].filter(key => 
-              key.includes(bggKey.substring(0, 10)) || bggKey.includes(key.substring(0, 10))
-            );
-            if (similarBgg.length > 0) {
-              console.warn(`   Similares BGG: ${similarBgg.slice(0, 3).join(', ')}`);
-            }
+            console.warn(`   BGG ID não encontrado: ${bggId}`);
+            // Debug: mostrar IDs BGG disponíveis similares
+            const availableBggIds = [...bggGameMap.keys()].slice(0, 5);
+            console.warn(`   IDs BGG disponíveis: ${availableBggIds.join(', ')}`);
           }
           if (!ludoGame) {
-            console.warn(`   Ludopedia não encontrado: "${ludoName}" (normalized: "${ludoKey}")`);
-            // Debug: mostrar jogos Ludopedia disponíveis similares
-            const similarLudo = [...ludoGameMap.keys()].filter(key => 
-              key.includes(ludoKey.substring(0, 10)) || ludoKey.includes(key.substring(0, 10))
-            );
-            if (similarLudo.length > 0) {
-              console.warn(`   Similares Ludopedia: ${similarLudo.slice(0, 3).join(', ')}`);
-            }
+            console.warn(`   Ludopedia ID não encontrado: ${ludoId}`);
+            // Debug: mostrar IDs Ludopedia disponíveis similares
+            const availableLudoIds = [...ludoGameMap.keys()].slice(0, 5);
+            console.warn(`   IDs Ludopedia disponíveis: ${availableLudoIds.join(', ')}`);
           }
         }
       }
