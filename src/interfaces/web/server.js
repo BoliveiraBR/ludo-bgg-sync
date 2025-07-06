@@ -952,10 +952,10 @@ app.post('/api/match-collections-ai', async (req, res) => {
     // Buscar matches adicionais usando AI
     let aiMatches;
     try {
-      // Converter as listas para formato {id, name} 
+      // Converter as listas para formato {id, versionId, name} 
       const bggGamesForAI = comparison.onlyInBGG.map(name => {
         const game = bggCollection.find(g => g.name.trim().toLowerCase() === name);
-        return { id: game.id, name: game.name };
+        return { id: game.id, versionId: game.versionId, name: game.name };
       });
       
       const ludoGamesForAI = comparison.onlyInLudo.map(name => {
