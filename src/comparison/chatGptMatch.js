@@ -143,12 +143,23 @@ class ChatGPTMatcher {
       console.log('🤖 Iniciando análise com ChatGPT...');
       console.log(`📊 Analisando ${bggGames.length} jogos do BGG e ${ludoGames.length} jogos da Ludopedia`);
       console.log('🔄 Preparando dados para análise...');
+      
+      // Debug: verificar estrutura dos primeiros jogos BGG
+      if (bggGames.length > 0) {
+        const firstBgg = bggGames[0];
+        console.log('🔍 Debug BGG game structure:', {
+          id: firstBgg.id,
+          versionId: firstBgg.versionId,
+          version_id: firstBgg.version_id,
+          name: firstBgg.name?.substring(0, 30) + '...'
+        });
+      }
 
       // Criar listas com IDs únicos para identificação precisa
       // IMPORTANTE: BGG usa version_id como chave única (collid), não game_id
       // Ludopedia usa game_id como chave única
       const bggGamesWithIds = bggGames.map(game => ({
-        id: `BGG_VERSION_${game.versionId || '0'}`, // version_id é a chave única no BGG
+        id: `BGG_VERSION_${game.versionId || game.version_id || '0'}`, // version_id é a chave única no BGG
         name: game.name,
         gameId: game.id // game_id pode ser repetido, apenas para referência
       }));
@@ -244,7 +255,7 @@ class ChatGPTMatcher {
       // Criar mapas para busca rápida por IDs únicos (não mais por nomes!)
       // BGG: version_id é a chave única (collid)
       // Ludopedia: game_id é a chave única
-      const bggGameMap = new Map(bggGames.map(game => [`BGG_VERSION_${game.versionId || '0'}`, game]));
+      const bggGameMap = new Map(bggGames.map(game => [`BGG_VERSION_${game.versionId || game.version_id || '0'}`, game]));
       const ludoGameMap = new Map(ludoGames.map(game => [`LUDO_GAME_${game.id}`, game]));
       
       console.log(`🔍 Debug: BGG games enviados para AI: ${bggGames.length}`);
@@ -268,7 +279,7 @@ class ChatGPTMatcher {
         if (bggGame && ludoGame) {
           matches.push({
             bggId: bggGame.id,           // game_id (para compatibilidade)
-            bggVersionId: bggGame.versionId || '0', // version_id (chave única real)
+            bggVersionId: bggGame.versionId || bggGame.version_id || '0', // version_id (chave única real)
             bggName: bggGame.name,
             ludoId: ludoGame.id,         // game_id (chave única)
             ludoName: ludoGame.name
