@@ -82,6 +82,7 @@ COMMENT ON CONSTRAINT unique_bgg_user_version_id ON bgg_collection
 IS 'Garante que cada usuário não pode ter o mesmo version_id (collid) duplicado em sua coleção. O version_id é a verdadeira chave única no BGG por usuário.';
 
 -- Tabela para armazenar matches/pareamentos entre BGG e Ludopedia
+-- IMPORTANTE: Sem foreign keys para preservar matches mesmo quando jogos saem das coleções
 CREATE TABLE IF NOT EXISTS collection_matches (
     id SERIAL PRIMARY KEY,
     bgg_user_name VARCHAR(50) NOT NULL,
@@ -92,10 +93,6 @@ CREATE TABLE IF NOT EXISTS collection_matches (
     match_type VARCHAR(20) NOT NULL DEFAULT 'manual', -- 'name', 'ai', 'manual'
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    
-    -- Foreign keys para garantir integridade referencial
-    FOREIGN KEY (bgg_user_name, bgg_game_id, bgg_version_id) REFERENCES bgg_collection(user_name, game_id, version_id) ON DELETE CASCADE,
-    FOREIGN KEY (ludopedia_user_name, ludopedia_game_id) REFERENCES ludopedia_collection(user_name, game_id) ON DELETE CASCADE,
     
     -- Constraint para evitar matches duplicados (mesmo par exato)
     UNIQUE(bgg_user_name, bgg_game_id, bgg_version_id, ludopedia_user_name, ludopedia_game_id),
@@ -112,7 +109,7 @@ CREATE INDEX IF NOT EXISTS idx_collection_matches_type ON collection_matches(mat
 CREATE INDEX IF NOT EXISTS idx_collection_matches_created ON collection_matches(created_at);
 
 -- Comentários da tabela de matches
-COMMENT ON TABLE collection_matches IS 'Pareamentos/matches entre jogos do BGG e Ludopedia';
+COMMENT ON TABLE collection_matches IS 'Pareamentos/matches entre jogos do BGG e Ludopedia. Matches são preservados independentemente da presença dos jogos nas coleções, representando correlações semânticas permanentes.';
 COMMENT ON COLUMN collection_matches.bgg_user_name IS 'Nome do usuário no BGG';
 COMMENT ON COLUMN collection_matches.bgg_game_id IS 'ID do jogo no BGG';
 COMMENT ON COLUMN collection_matches.bgg_version_id IS 'ID da versão do jogo no BGG';
