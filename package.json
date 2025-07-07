@@ -18,9 +18,11 @@
     "cors-anywhere": "^0.4.4",
     "dotenv": "^16.5.0",
     "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
     "node-fetch": "^3.3.2",
     "openai": "^4.104.0",
     "pg": "^8.16.0",
+    "uuid": "^11.1.0",
     "xml2js": "^0.6.0"
   },
   "devDependencies": {

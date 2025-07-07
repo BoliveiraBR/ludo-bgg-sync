@@ -140,11 +140,47 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // TODO: Implementar lógica de login real
-            alert('Login ainda não implementado. Por enquanto, apenas o layout está pronto.');
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const submitBtn = document.querySelector('button[type="submit"]');
+            
+            // Desabilitar botão durante o login
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Entrando...';
+            
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    // Salvar token no localStorage
+                    localStorage.setItem('authToken', result.token);
+                    localStorage.setItem('user', JSON.stringify(result.user));
+                    
+                    // Redirecionar para aplicação principal
+                    window.location.href = '/';
+                } else {
+                    alert('❌ ' + result.error);
+                }
+                
+            } catch (error) {
+                console.error('Erro no login:', error);
+                alert('❌ Erro ao fazer login. Verifique sua conexão e tente novamente.');
+            } finally {
+                // Reabilitar botão
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="bi bi-box-arrow-in-right me-2"></i>Entrar';
+            }
         });
     </script>
 </body>

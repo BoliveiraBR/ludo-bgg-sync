@@ -366,8 +366,8 @@
                 const result = await response.json();
                 
                 if (response.ok) {
-                    alert('🎉 Cadastro realizado com sucesso!\n\nBem-vindo ao BoardGameGuru, ' + result.user.name + '!');
-                    // Redirecionar para login ou diretamente para app
+                    alert('🎉 Cadastro realizado com sucesso!\n\nBem-vindo ao BoardGameGuru, ' + result.user.name + '!\n\nVocê será redirecionado para fazer login.');
+                    // Redirecionar para login
                     window.location.href = '/login';
                 } else {
                     // Mostrar erro específico retornado pelo servidor

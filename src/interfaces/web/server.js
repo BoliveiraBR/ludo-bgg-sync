@@ -4,6 +4,8 @@ const path = require('path');
 const axios = require('axios');
 const { Client } = require('pg');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { v4: uuidv4 } = require('uuid');
 const BGGApi = require('../../api/bggApi');
 const LudopediaApi = require('../../api/ludopediaApi');
 const CollectionMatcher = require('../../comparison/matcher');
@@ -12,7 +14,70 @@ const DatabaseManager = require('../../database/dbManager');
 const MatchManager = require('../../database/matchManager');
 const UserManager = require('../../database/userManager');
 
+// JWT Configuration
+const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production';
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d'; // 7 dias
+
 const app = express();
+
+// Middleware de autenticação JWT
+async function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+
+  if (!token) {
+    return res.status(401).json({ error: 'Token de acesso necessário' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const userManager = new UserManager();
+    await userManager.connect();
+    
+    try {
+      // Validar sessão no banco de dados
+      const user = await userManager.validateSession(decoded.jti);
+      if (!user) {
+        return res.status(403).json({ error: 'Sessão inválida ou expirada' });
+      }
+      
+      req.user = user;
+      next();
+    } finally {
+      await userManager.disconnect();
+    }
+  } catch (error) {
+    console.error('❌ Erro na autenticação:', error);
+    return res.status(403).json({ error: 'Token inválido' });
+  }
+}
+
+// Função para gerar JWT
+function generateJWT(user, jwtId) {
+  return jwt.sign(
+    {
+      userId: user.id,
+      email: user.email,
+      jti: jwtId // JWT ID único para controle de sessão
+    },
+    JWT_SECRET,
+    { expiresIn: JWT_EXPIRES_IN }
+  );
+}
+
+// Função para extrair informações do usuário do token (opcional, sem validar sessão)
+function getUserFromToken(req) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  
+  if (!token) return null;
+  
+  try {
+    return jwt.verify(token, JWT_SECRET);
+  } catch {
+    return null;
+  }
+}
 
 // Aumentar limite do body parser
 app.use(express.json({ limit: '50mb' }));
@@ -33,13 +98,14 @@ app.use(express.static(path.join(__dirname, 'public'), {
 
 // Rota principal - mostra tela inicial para visitantes não autenticados
 app.get('/', (req, res) => {
-  // TODO: Implementar verificação de sessão real
-  // Por enquanto, sempre mostra a tela inicial
-  const hasSession = false; // Placeholder para verificação de sessão
+  // Verificar se usuário está autenticado via JWT
+  const tokenData = getUserFromToken(req);
   
-  if (hasSession) {
+  if (tokenData) {
+    // Usuário tem token válido, mostrar aplicação principal
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
   } else {
+    // Visitante não autenticado, mostrar tela de boas-vindas
     res.sendFile(path.join(__dirname, 'public', 'welcome.html'));
   }
 });
@@ -241,11 +307,9 @@ app.get('/test-database-setup', async (req, res) => {
 });
 
 // API para sincronização
-app.post('/api/sync', async (req, res) => {
+app.post('/api/sync', authenticateToken, async (req, res) => {
   try {
-    // TODO: Implementar autenticação real com JWT
-    // Por enquanto, usaremos usuário padrão ID 1
-    const userId = 1;
+    const userId = req.user.id;
     
     const userManager = new UserManager();
     await userManager.connect();
@@ -296,11 +360,9 @@ app.post('/api/sync', async (req, res) => {
 });
 
 // Rota para carregar coleções automaticamente do banco (sem parâmetros)
-app.get('/api/collections', async (req, res) => {
+app.get('/api/collections', authenticateToken, async (req, res) => {
   try {
-    // TODO: Implementar autenticação real com JWT
-    // Por enquanto, usaremos usuário padrão ID 1
-    const userId = 1;
+    const userId = req.user.id;
     
     const userManager = new UserManager();
     await userManager.connect();
@@ -387,14 +449,12 @@ app.get('/api/collections', async (req, res) => {
 });
 
 // Rota para carregar coleções (API ou banco de dados)
-app.post('/api/collections', async (req, res) => {
+app.post('/api/collections', authenticateToken, async (req, res) => {
   try {
     const { loadType } = req.body;
     let bggCollection, ludoCollection;
 
-    // TODO: Implementar autenticação real com JWT
-    // Por enquanto, usaremos usuário padrão ID 1
-    const userId = 1;
+    const userId = req.user.id;
     
     const userManager = new UserManager();
     await userManager.connect();
@@ -518,11 +578,9 @@ app.post('/api/collections', async (req, res) => {
 });
 
 // Rota para obter configurações
-app.get('/api/config', async (req, res) => {
+app.get('/api/config', authenticateToken, async (req, res) => {
   try {
-    // TODO: Implementar autenticação real com JWT
-    // Por enquanto, usaremos usuário padrão ID 1
-    const userId = 1;
+    const userId = req.user.id;
     
     const userManager = new UserManager();
     
@@ -570,11 +628,9 @@ app.get('/api/auth/ludopedia', (req, res) => {
 });
 
 // Rota para salvar configurações
-app.post('/api/config', async (req, res) => {
+app.post('/api/config', authenticateToken, async (req, res) => {
   try {
-    // TODO: Implementar autenticação real com JWT
-    // Por enquanto, usaremos usuário padrão ID 1
-    const userId = 1;
+    const userId = req.user.id;
     
     const userManager = new UserManager();
     await userManager.connect();
@@ -656,8 +712,8 @@ app.get('/callback', async (req, res) => {
       throw error;
     });
 
-    // TODO: Implementar autenticação real com JWT
-    // Por enquanto, usaremos usuário padrão ID 1
+    // Para o callback OAuth, vamos usar usuário padrão por agora
+    // TODO: Melhorar isso para associar com usuário logado via estado da sessão
     const userId = 1;
     
     const userManager = new UserManager();
@@ -980,12 +1036,155 @@ app.post('/api/signup', async (req, res) => {
   }
 });
 
-// Rota para salvar coleções no banco de dados
-app.post('/api/save-collections', async (req, res) => {
+// Endpoint de login
+app.post('/api/login', async (req, res) => {
   try {
-    // TODO: Implementar autenticação real com JWT
-    // Por enquanto, usaremos usuário padrão ID 1
-    const userId = 1;
+    const { email, password } = req.body;
+    
+    // Validar campos obrigatórios
+    if (!email || !password) {
+      return res.status(400).json({
+        error: 'Email e senha são obrigatórios'
+      });
+    }
+    
+    const userManager = new UserManager();
+    await userManager.connect();
+    
+    try {
+      // Buscar usuário por email
+      const user = await userManager.getUserByEmail(email.toLowerCase().trim());
+      if (!user) {
+        return res.status(401).json({
+          error: 'Email ou senha incorretos'
+        });
+      }
+      
+      // Verificar senha
+      const passwordMatch = await bcrypt.compare(password, user.password_hash);
+      if (!passwordMatch) {
+        return res.status(401).json({
+          error: 'Email ou senha incorretos'
+        });
+      }
+      
+      // Gerar JWT ID único para esta sessão
+      const jwtId = uuidv4();
+      
+      // Calcular data de expiração
+      const expiresAt = new Date();
+      expiresAt.setDate(expiresAt.getDate() + 7); // 7 dias
+      
+      // Criar sessão no banco
+      await userManager.createSession(
+        user.id,
+        jwtId,
+        expiresAt,
+        req.headers['user-agent'],
+        req.ip
+      );
+      
+      // Gerar JWT
+      const token = generateJWT(user, jwtId);
+      
+      // Retornar dados do usuário (sem senha) e token
+      const { password_hash, ...userResponse } = user;
+      
+      console.log(`✅ Login bem-sucedido: ${user.email}`);
+      
+      res.json({
+        success: true,
+        message: 'Login realizado com sucesso',
+        token,
+        user: userResponse
+      });
+      
+    } finally {
+      await userManager.disconnect();
+    }
+  } catch (error) {
+    console.error('❌ Erro no login:', error);
+    res.status(500).json({
+      error: 'Erro interno do servidor. Tente novamente mais tarde.'
+    });
+  }
+});
+
+// Endpoint de logout
+app.post('/api/logout', authenticateToken, async (req, res) => {
+  try {
+    const userManager = new UserManager();
+    await userManager.connect();
+    
+    try {
+      // Extrair JWT ID do token decodificado
+      const authHeader = req.headers['authorization'];
+      const token = authHeader.split(' ')[1];
+      const decoded = jwt.verify(token, JWT_SECRET);
+      
+      // Revogar sessão específica
+      await userManager.revokeSession(decoded.jti);
+      
+      console.log(`✅ Logout realizado: usuário ${req.user.email}`);
+      
+      res.json({
+        success: true,
+        message: 'Logout realizado com sucesso'
+      });
+      
+    } finally {
+      await userManager.disconnect();
+    }
+  } catch (error) {
+    console.error('❌ Erro no logout:', error);
+    res.status(500).json({
+      error: 'Erro interno do servidor'
+    });
+  }
+});
+
+// Endpoint para logout global (todas as sessões do usuário)
+app.post('/api/logout-all', authenticateToken, async (req, res) => {
+  try {
+    const userManager = new UserManager();
+    await userManager.connect();
+    
+    try {
+      // Revogar todas as sessões do usuário
+      const revokedCount = await userManager.revokeAllUserSessions(req.user.id);
+      
+      console.log(`✅ Logout global: usuário ${req.user.email}, ${revokedCount} sessões revogadas`);
+      
+      res.json({
+        success: true,
+        message: `Logout realizado em ${revokedCount} dispositivos`,
+        revokedSessions: revokedCount
+      });
+      
+    } finally {
+      await userManager.disconnect();
+    }
+  } catch (error) {
+    console.error('❌ Erro no logout global:', error);
+    res.status(500).json({
+      error: 'Erro interno do servidor'
+    });
+  }
+});
+
+// Endpoint para validar token atual
+app.get('/api/me', authenticateToken, (req, res) => {
+  // req.user já foi populado pelo middleware authenticateToken
+  res.json({
+    success: true,
+    user: req.user
+  });
+});
+
+// Rota para salvar coleções no banco de dados
+app.post('/api/save-collections', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
     
     const userManager = new UserManager();
     await userManager.connect();
@@ -1033,7 +1232,7 @@ app.post('/api/save-collections', async (req, res) => {
 });
 
 // Rota para encontrar matches entre coleções
-app.post('/api/match-collections', async (req, res) => {
+app.post('/api/match-collections', authenticateToken, async (req, res) => {
   try {
     let { bggCollection, ludoCollection } = req.body;
 
@@ -1041,9 +1240,7 @@ app.post('/api/match-collections', async (req, res) => {
     bggCollection = [...bggCollection];
     ludoCollection = [...ludoCollection];
     
-    // TODO: Implementar autenticação real com JWT
-    // Por enquanto, usaremos usuário padrão ID 1
-    const userId = 1;
+    const userId = req.user.id;
     
     const userManager = new UserManager();
     await userManager.connect();
@@ -1177,7 +1374,7 @@ app.post('/api/match-collections', async (req, res) => {
 });
 
 // Rota para encontrar matches com AI entre coleções
-app.post('/api/match-collections-ai', async (req, res) => {
+app.post('/api/match-collections-ai', authenticateToken, async (req, res) => {
   try {
     // Verificar se a API key da OpenAI está configurada
     if (!process.env.OPENAI_API_KEY) {
@@ -1191,9 +1388,7 @@ app.post('/api/match-collections-ai', async (req, res) => {
     bggCollection = [...bggCollection];
     ludoCollection = [...ludoCollection];
 
-    // TODO: Implementar autenticação real com JWT
-    // Por enquanto, usaremos usuário padrão ID 1
-    const userId = 1;
+    const userId = req.user.id;
     
     const userManager = new UserManager();
     await userManager.connect();
@@ -1308,13 +1503,11 @@ app.post('/api/match-collections-ai', async (req, res) => {
 });
 
 // Rota para salvar matches regulares aceitos
-app.post('/api/accept-matches', async (req, res) => {
+app.post('/api/accept-matches', authenticateToken, async (req, res) => {
   try {
     const { matches } = req.body;
     
-    // TODO: Implementar autenticação real com JWT
-    // Por enquanto, usaremos usuário padrão ID 1
-    const userId = 1;
+    const userId = req.user.id;
     
     const userManager = new UserManager();
     await userManager.connect();
@@ -1360,13 +1553,11 @@ app.post('/api/accept-matches', async (req, res) => {
 });
 
 // Rota para salvar matches da AI
-app.post('/api/save-matches-ai', async (req, res) => {
+app.post('/api/save-matches-ai', authenticateToken, async (req, res) => {
   try {
     const { matches } = req.body;
     
-    // TODO: Implementar autenticação real com JWT
-    // Por enquanto, usaremos usuário padrão ID 1
-    const userId = 1;
+    const userId = req.user.id;
     
     const userManager = new UserManager();
     await userManager.connect();
@@ -1412,7 +1603,7 @@ app.post('/api/save-matches-ai', async (req, res) => {
 });
 
 // Rota para salvar match manual
-app.post('/api/save-manual-match', async (req, res) => {
+app.post('/api/save-manual-match', authenticateToken, async (req, res) => {
   try {
     const { match } = req.body;
 
@@ -1421,9 +1612,7 @@ app.post('/api/save-manual-match', async (req, res) => {
       return res.status(400).json({ error: 'Dados do match inválidos' });
     }
 
-    // TODO: Implementar autenticação real com JWT
-    // Por enquanto, usaremos usuário padrão ID 1
-    const userId = 1;
+    const userId = req.user.id;
     
     const userManager = new UserManager();
     await userManager.connect();
@@ -1472,8 +1661,26 @@ app.post('/api/save-manual-match', async (req, res) => {
   }
 });
 
+// Limpeza de sessões expiradas (executa a cada hora)
+setInterval(async () => {
+  try {
+    const userManager = new UserManager();
+    await userManager.connect();
+    const cleanedCount = await userManager.cleanupExpiredSessions();
+    await userManager.disconnect();
+    
+    if (cleanedCount > 0) {
+      console.log(`🧹 Limpeza automática: ${cleanedCount} sessões expiradas removidas`);
+    }
+  } catch (error) {
+    console.error('❌ Erro na limpeza de sessões:', error);
+  }
+}, 60 * 60 * 1000); // 1 hora
+
 // Iniciar servidor
 const port = process.env.PORT || 8080;
 app.listen(port, '0.0.0.0', () => {
   console.log(`🚀 Servidor rodando na porta ${port}`);
+  console.log(`🔐 Sistema JWT ativado com expiração de ${JWT_EXPIRES_IN}`);
+  console.log(`🧹 Limpeza automática de sessões a cada hora`);
 });

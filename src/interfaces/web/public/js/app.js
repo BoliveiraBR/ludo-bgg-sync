@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Enviar para o servidor
-            const response = await fetch('/api/accept-matches', {
+            const response = await window.authManager.authenticatedFetch('/api/accept-matches', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -390,7 +390,7 @@ function renderGameList(games, container) {
 async function loadConfig() {
     try {
         console.log('Carregando configurações...');
-        const response = await fetch('/api/config');
+        const response = await window.authManager.authenticatedFetch('/api/config');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -415,7 +415,7 @@ async function loadConfig() {
 // Salvar configurações no servidor
 async function saveConfig() {
     try {
-        const response = await fetch('/api/config', {
+        const response = await window.authManager.authenticatedFetch('/api/config', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -476,7 +476,7 @@ async function saveCollections() {
         setLoading(true);
         saveBtn.disabled = true;
 
-        const response = await fetch('/api/save-collections', {
+        const response = await window.authManager.authenticatedFetch('/api/save-collections', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -510,7 +510,7 @@ async function loadCollections() {
         saveBtn.disabled = true;
         
         // Carregar do banco usando GET (sem body)
-        const response = await fetch('/api/collections');
+        const response = await window.authManager.authenticatedFetch('/api/collections');
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -577,7 +577,7 @@ async function loadCollectionsFromAPI() {
         setLoading(true);
         saveBtn.disabled = true;
         
-        const response = await fetch('/api/collections', {
+        const response = await window.authManager.authenticatedFetch('/api/collections', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -646,7 +646,7 @@ async function findMatches() {
 
     try {
         console.log('Buscando matches no servidor...');
-        const response = await fetch('/api/match-collections', {
+        const response = await window.authManager.authenticatedFetch('/api/match-collections', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -753,7 +753,7 @@ async function findAIMatches() {
         aiStatusMessage.style.display = 'block';
         
         //aiStatusMessage.textContent = 'Preparando dados para análise...';
-        const response = await fetch('/api/match-collections-ai', {
+        const response = await window.authManager.authenticatedFetch('/api/match-collections-ai', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -913,7 +913,7 @@ async function handleAcceptAIMatches() {
         }
 
         // Enviar para o servidor
-        const response = await fetch('/api/save-matches-ai', {
+        const response = await window.authManager.authenticatedFetch('/api/save-matches-ai', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -1134,7 +1134,7 @@ async function handleAcceptManualMatch() {
             reasoning: 'Match manual criado pelo usuário'
         };
         
-        const response = await fetch('/api/save-manual-match', {
+        const response = await window.authManager.authenticatedFetch('/api/save-manual-match', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
