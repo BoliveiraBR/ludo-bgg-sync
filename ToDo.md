@@ -1,5 +1,17 @@
 # 📋 ToDo List
 
+## TODO Urgente
+- [ ] Criar a tela inicial para visitantes não autenticados, com formulário de login
+- [ ] Desenvolver a tela e lógica de cadastro de usuário:
+  - [ ] Nome, email, senha
+  - [ ] Login via OAuth na Ludopedia
+  - [ ] Informar username do BGG
+  - [ ] Escolher plataforma preferida (BGG ou Ludopedia)
+  - [ ] Verificação de e-mail com PIN enviado
+- [ ] Criar toda a lógica de autenticação via JWT, incluindo geração, verificação e expiração dos tokens
+- [ ] Implementar controle de sessão no frontend usando JWT, com armazenamento seguro (ex: httpOnly cookies ou memory + fallback)
+- [ ] Corrigir excesso de conexões com o banco: implementar um padrão singleton para garantir reutilização da instância de conexão
+
 ## Próximos Passos
 
 ### Alta Prioridade
