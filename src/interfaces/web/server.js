@@ -311,7 +311,10 @@ app.get('/api/collections', async (req, res) => {
     try {
       [bggCollection, ludoCollection] = await Promise.all([
         dbManager.getBGGCollection(userData.bgg_username),
-        dbManager.getLudopediaCollection(userData.ludopedia_username || userData.bgg_username)
+        // Só carrega Ludopedia se o username estiver configurado
+        userData.ludopedia_username ? 
+          dbManager.getLudopediaCollection(userData.ludopedia_username) : 
+          Promise.resolve([])
       ]);
       
       console.log(`📊 Carregado do banco: BGG=${bggCollection.length}, Ludopedia=${ludoCollection.length}`);
@@ -390,10 +393,24 @@ app.post('/api/collections', async (req, res) => {
         const bggApi = new BGGApi(userData.bgg_username);
         const ludoApi = new LudopediaApi(userData.tokens.ludopedia.access_token);
         
-        [bggCollection, ludoCollection] = await Promise.all([
-          bggApi.fetchCollection(),
-          ludoApi.fetchCollection()
-        ]);
+        try {
+          [bggCollection, ludoCollection] = await Promise.all([
+            bggApi.fetchCollection(),
+            ludoApi.fetchCollection()
+          ]);
+        } catch (apiError) {
+          console.error('❌ Erro ao carregar via API:', apiError.message);
+          
+          // Verificar se é erro específico da Ludopedia (autenticação)
+          if (apiError.message.includes('401') || apiError.message.includes('403') || 
+              apiError.message.includes('token') || apiError.message.includes('unauthorized') ||
+              apiError.message.includes('Authentication') || apiError.message.includes('Invalid token')) {
+            throw new Error('Houve um erro ao carregar a coleção da Ludopedia. A autenticação na Ludopedia precisa ser refeita. Clique no ícone de configurações para autenticar novamente.');
+          }
+          
+          // Para outros erros, manter mensagem original
+          throw new Error(`Erro ao carregar coleções via API: ${apiError.message}`);
+        }
         
         console.log(`📊 Carregado via API: BGG=${bggCollection.length}, Ludopedia=${ludoCollection.length}`);
       } else {
@@ -404,7 +421,10 @@ app.post('/api/collections', async (req, res) => {
         try {
           [bggCollection, ludoCollection] = await Promise.all([
             dbManager.getBGGCollection(userData.bgg_username),
-            dbManager.getLudopediaCollection(userData.ludopedia_username || userData.bgg_username)
+            // Só carrega Ludopedia se o username estiver configurado
+            userData.ludopedia_username ? 
+              dbManager.getLudopediaCollection(userData.ludopedia_username) : 
+              Promise.resolve([])
           ]);
           
           console.log(`📊 Carregado do banco: BGG=${bggCollection.length}, Ludopedia=${ludoCollection.length}`);
@@ -420,10 +440,24 @@ app.post('/api/collections', async (req, res) => {
             const bggApi = new BGGApi(userData.bgg_username);
             const ludoApi = new LudopediaApi(userData.tokens.ludopedia.access_token);
             
-            [bggCollection, ludoCollection] = await Promise.all([
-              bggApi.fetchCollection(),
-              ludoApi.fetchCollection()
-            ]);
+            try {
+              [bggCollection, ludoCollection] = await Promise.all([
+                bggApi.fetchCollection(),
+                ludoApi.fetchCollection()
+              ]);
+            } catch (apiError) {
+              console.error('❌ Erro ao carregar via API (fallback):', apiError.message);
+              
+              // Verificar se é erro específico da Ludopedia (autenticação)
+              if (apiError.message.includes('401') || apiError.message.includes('403') || 
+                  apiError.message.includes('token') || apiError.message.includes('unauthorized') ||
+                  apiError.message.includes('Authentication') || apiError.message.includes('Invalid token')) {
+                throw new Error('Houve um erro ao carregar a coleção da Ludopedia. A autenticação na Ludopedia precisa ser refeita. Clique no ícone de configurações para autenticar novamente.');
+              }
+              
+              // Para outros erros, manter mensagem original
+              throw new Error(`Erro ao carregar coleções via API: ${apiError.message}`);
+            }
             
             console.log(`📊 Carregado via API (fallback): BGG=${bggCollection.length}, Ludopedia=${ludoCollection.length}`);
           }
@@ -832,15 +866,15 @@ app.post('/api/save-collections', async (req, res) => {
     try {
       userData = await userManager.getUserWithTokens(userId);
       
-      if (!userData || !userData.bgg_username || !userData.ludopedia_username) {
-        throw new Error('Credenciais de usuário não encontradas');
+      if (!userData || !userData.bgg_username) {
+        throw new Error('Usuário BGG não configurado');
       }
       
       const { bggCollection, ludoCollection } = req.body;
       
       console.log(`💾 Salvando coleções no banco de dados...`);
       console.log(`📊 BGG: ${bggCollection?.length || 0} jogos para ${userData.bgg_username}`);
-      console.log(`📊 Ludopedia: ${ludoCollection?.length || 0} jogos para ${userData.ludopedia_username}`);
+      console.log(`📊 Ludopedia: ${ludoCollection?.length || 0} jogos para ${userData.ludopedia_username || 'não configurado'}`);
       
       const dbManager = new DatabaseManager();
       
@@ -851,7 +885,7 @@ app.post('/api/save-collections', async (req, res) => {
         results.bggSaved = await dbManager.saveBGGCollection(userData.bgg_username, bggCollection);
       }
       
-      if (ludoCollection && ludoCollection.length > 0) {
+      if (ludoCollection && ludoCollection.length > 0 && userData.ludopedia_username) {
         results.ludoSaved = await dbManager.saveLudopediaCollection(userData.ludopedia_username, ludoCollection);
       }
       
@@ -895,7 +929,10 @@ app.post('/api/match-collections', async (req, res) => {
       }
       
       bggUser = userData.bgg_username;
-      ludoUser = userData.ludopedia_username || bggUser;
+      if (!userData.ludopedia_username) {
+        throw new Error('Usuário Ludopedia não configurado. Configure a autenticação da Ludopedia primeiro.');
+      }
+      ludoUser = userData.ludopedia_username;
       
       // Carregar matches prévios do banco
       const matchManager = new MatchManager();
@@ -1042,7 +1079,10 @@ app.post('/api/match-collections-ai', async (req, res) => {
       }
       
       bggUser = userData.bgg_username;
-      ludoUser = userData.ludopedia_username || bggUser;
+      if (!userData.ludopedia_username) {
+        throw new Error('Usuário Ludopedia não configurado. Configure a autenticação da Ludopedia primeiro.');
+      }
+      ludoUser = userData.ludopedia_username;
       
       // Carregar matches prévios do banco
       const matchManager = new MatchManager();
@@ -1159,7 +1199,10 @@ app.post('/api/accept-matches', async (req, res) => {
       }
       
       const bggUser = userData.bgg_username;
-      const ludoUser = userData.ludopedia_username || bggUser;
+      if (!userData.ludopedia_username) {
+        throw new Error('Usuário Ludopedia não configurado. Configure a autenticação da Ludopedia primeiro.');
+      }
+      const ludoUser = userData.ludopedia_username;
       
       // Converter matches para formato do banco
       const dbMatches = matches.map(match => ({
@@ -1208,7 +1251,10 @@ app.post('/api/save-matches-ai', async (req, res) => {
       }
       
       const bggUser = userData.bgg_username;
-      const ludoUser = userData.ludopedia_username || bggUser;
+      if (!userData.ludopedia_username) {
+        throw new Error('Usuário Ludopedia não configurado. Configure a autenticação da Ludopedia primeiro.');
+      }
+      const ludoUser = userData.ludopedia_username;
       
       // Converter matches para formato do banco
       const dbMatches = matches.map(match => ({
@@ -1262,7 +1308,10 @@ app.post('/api/save-manual-match', async (req, res) => {
       }
       
       const bggUser = userData.bgg_username;
-      const ludoUser = userData.ludopedia_username || bggUser;
+      if (!userData.ludopedia_username) {
+        throw new Error('Usuário Ludopedia não configurado. Configure a autenticação da Ludopedia primeiro.');
+      }
+      const ludoUser = userData.ludopedia_username;
       
       // Preparar match para o banco
       const dbMatches = [{
