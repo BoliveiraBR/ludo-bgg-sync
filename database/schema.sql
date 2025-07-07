@@ -1,5 +1,60 @@
--- Schema para substituir arquivos de texto por tabelas relacionais
--- Criado para armazenar coleções de jogos de tabuleiro de usuários
+-- Schema para sistema multi-usuário do BoardGameGuru
+-- Armazena usuários, coleções de jogos e pareamentos entre plataformas
+
+-- Tabela de usuários do BoardGameGuru
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    bgg_username VARCHAR(100),
+    ludopedia_username VARCHAR(100),
+    preferred_platform VARCHAR(20) DEFAULT 'bgg' CHECK (preferred_platform IN ('bgg', 'ludopedia')),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    active BOOLEAN DEFAULT TRUE
+);
+
+-- Tokens OAuth para serviços externos (Ludopedia)
+CREATE TABLE IF NOT EXISTS user_oauth_tokens (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL, -- SEM FK para preservar dados
+    provider VARCHAR(50) NOT NULL,
+    access_token TEXT NOT NULL, -- criptografado
+    expires_at TIMESTAMP,
+    scope TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    UNIQUE(user_id, provider)
+);
+
+-- Refresh tokens para logout remoto do BoardGameGuru
+CREATE TABLE IF NOT EXISTS refresh_tokens (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id INTEGER NOT NULL, -- SEM FK para preservar dados
+    token_hash VARCHAR(255) NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_used TIMESTAMP,
+    revoked BOOLEAN DEFAULT FALSE
+);
+
+-- Índices para tabelas de usuários
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+CREATE INDEX IF NOT EXISTS idx_users_bgg_username ON users(bgg_username);
+CREATE INDEX IF NOT EXISTS idx_users_ludopedia_username ON users(ludopedia_username);
+CREATE INDEX IF NOT EXISTS idx_user_oauth_tokens_user_provider ON user_oauth_tokens(user_id, provider);
+CREATE INDEX IF NOT EXISTS idx_refresh_tokens_user_id ON refresh_tokens(user_id);
+CREATE INDEX IF NOT EXISTS idx_refresh_tokens_expires ON refresh_tokens(expires_at);
+
+-- Comentários das tabelas de usuários
+COMMENT ON TABLE users IS 'Usuários do BoardGameGuru com conexões para BGG e Ludopedia';
+COMMENT ON COLUMN users.email IS 'Email único do usuário no BoardGameGuru';
+COMMENT ON COLUMN users.bgg_username IS 'Username público do usuário no BoardGameGeek';
+COMMENT ON COLUMN users.ludopedia_username IS 'Username do usuário na Ludopedia, obtido via OAuth';
+COMMENT ON COLUMN users.preferred_platform IS 'Plataforma preferida para manter coleção e partidas (bgg ou ludopedia)';
+COMMENT ON TABLE user_oauth_tokens IS 'Tokens OAuth criptografados para serviços externos (Ludopedia)';
+COMMENT ON TABLE refresh_tokens IS 'Tokens de refresh para logout remoto e controle de sessão';
 
 -- Tabela para coleção da Ludopedia
 CREATE TABLE IF NOT EXISTS ludopedia_collection (
