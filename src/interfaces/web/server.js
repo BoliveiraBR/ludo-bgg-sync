@@ -9,7 +9,7 @@ const CollectionMatcher = require('../../comparison/matcher');
 const ChatGPTMatcher = require('../../comparison/chatGptMatch');
 const DatabaseManager = require('../../database/dbManager');
 const MatchManager = require('../../database/matchManager');
-const fs = require('fs').promises;
+const UserManager = require('../../database/userManager');
 
 const app = express();
 
@@ -219,16 +219,23 @@ app.get('/test-database-setup', async (req, res) => {
 // API para sincronização
 app.post('/api/sync', async (req, res) => {
   try {
-    // Carregar credenciais do arquivo
-    const credentialsPath = path.join(__dirname, '../../../data/credentials.txt');
-    const credentials = JSON.parse(await fs.readFile(credentialsPath, 'utf8'));
-
-    if (!credentials.BGG_USER || !credentials.LUDO_ACCESS_TOKEN) {
-      throw new Error('Credenciais não configuradas. Clique no ícone de configurações para configurar.');
-    }
-
-    const bggApi = new BGGApi(credentials.BGG_USER);
-    const ludoApi = new LudopediaApi(credentials.LUDO_ACCESS_TOKEN);
+    // TODO: Implementar autenticação real com JWT
+    // Por enquanto, usaremos usuário padrão ID 1
+    const userId = 1;
+    
+    const userManager = new UserManager();
+    await userManager.connect();
+    
+    let userData;
+    try {
+      userData = await userManager.getUserWithTokens(userId);
+      
+      if (!userData || !userData.bgg_username || !userData.tokens?.ludopedia?.access_token) {
+        throw new Error('Credenciais não configuradas. Clique no ícone de configurações para configurar.');
+      }
+      
+      const bggApi = new BGGApi(userData.bgg_username);
+      const ludoApi = new LudopediaApi(userData.tokens.ludopedia.access_token);
 
     // Buscar coleções
     const [bggCollection, ludoCollection] = await Promise.all([
@@ -255,7 +262,10 @@ app.post('/api/sync', async (req, res) => {
       onlyInBGG: comparison.onlyInBGG,
       onlyInLudo: comparison.onlyInLudo
     });
-
+    
+    } finally {
+      await userManager.disconnect();
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -264,29 +274,33 @@ app.post('/api/sync', async (req, res) => {
 // Rota para carregar coleções automaticamente do banco (sem parâmetros)
 app.get('/api/collections', async (req, res) => {
   try {
-    // Carregar credenciais do arquivo
-    const credentialsPath = path.join(__dirname, '../../../data/credentials.txt');
-    let credentials;
+    // TODO: Implementar autenticação real com JWT
+    // Por enquanto, usaremos usuário padrão ID 1
+    const userId = 1;
+    
+    const userManager = new UserManager();
+    await userManager.connect();
     
     try {
-      credentials = JSON.parse(await fs.readFile(credentialsPath, 'utf8'));
-    } catch (credError) {
-      return res.json({
-        bggCollection: [],
-        ludoCollection: [],
-        source: 'none',
-        message: 'Nenhuma configuração encontrada. Configure suas credenciais primeiro.'
-      });
-    }
-
-    if (!credentials.BGG_USER) {
-      return res.json({
-        bggCollection: [],
-        ludoCollection: [],
-        source: 'none',
-        message: 'Usuário BGG não configurado. Configure suas credenciais primeiro.'
-      });
-    }
+      const userData = await userManager.getUserWithTokens(userId);
+      
+      if (!userData) {
+        return res.json({
+          bggCollection: [],
+          ludoCollection: [],
+          source: 'none',
+          message: 'Usuário não encontrado. Faça login primeiro.'
+        });
+      }
+      
+      if (!userData.bgg_username) {
+        return res.json({
+          bggCollection: [],
+          ludoCollection: [],
+          source: 'none',
+          message: 'Usuário BGG não configurado. Configure suas credenciais primeiro.'
+        });
+      }
 
     // Carregar do banco de dados
     console.log('💾 Carregando coleções do banco de dados automaticamente...');
@@ -296,8 +310,8 @@ app.get('/api/collections', async (req, res) => {
 
     try {
       [bggCollection, ludoCollection] = await Promise.all([
-        dbManager.getBGGCollection(credentials.BGG_USER),
-        dbManager.getLudopediaCollection(credentials.LUDO_USER || credentials.BGG_USER)
+        dbManager.getBGGCollection(userData.bgg_username),
+        dbManager.getLudopediaCollection(userData.ludopedia_username || userData.bgg_username)
       ]);
       
       console.log(`📊 Carregado do banco: BGG=${bggCollection.length}, Ludopedia=${ludoCollection.length}`);
@@ -331,6 +345,9 @@ app.get('/api/collections', async (req, res) => {
         : null
     });
 
+    } finally {
+      await userManager.disconnect();
+    }
   } catch (error) {
     console.error('❌ Error loading collections automatically:', error);
     res.status(500).json({ 
@@ -348,66 +365,73 @@ app.post('/api/collections', async (req, res) => {
     const { loadType } = req.body;
     let bggCollection, ludoCollection;
 
-    // Carregar credenciais do arquivo
-    const credentialsPath = path.join(__dirname, '../../../data/credentials.txt');
-    const credentials = JSON.parse(await fs.readFile(credentialsPath, 'utf8'));
-
-    if (!credentials.BGG_USER) {
-      throw new Error('Usuário BGG não configurado. Clique no ícone de configurações para configurar.');
-    }
-
-    if (loadType === 'api') {
-      if (!credentials.LUDO_ACCESS_TOKEN) {
-        throw new Error('Token Ludopedia não configurado. Clique no ícone de configurações para configurar.');
-      }
-
-      // Carregar via API
-      console.log('📡 Carregando coleções via API...');
-      const bggApi = new BGGApi(credentials.BGG_USER);
-      const ludoApi = new LudopediaApi(credentials.LUDO_ACCESS_TOKEN);
-
-      [bggCollection, ludoCollection] = await Promise.all([
-        bggApi.fetchCollection(),
-        ludoApi.fetchCollection()
-      ]);
+    // TODO: Implementar autenticação real com JWT
+    // Por enquanto, usaremos usuário padrão ID 1
+    const userId = 1;
+    
+    const userManager = new UserManager();
+    await userManager.connect();
+    
+    let userData;
+    try {
+      userData = await userManager.getUserWithTokens(userId);
       
-      console.log(`📊 Carregado via API: BGG=${bggCollection.length}, Ludopedia=${ludoCollection.length}`);
-    } else {
-      // Carregar do banco de dados
-      console.log('💾 Carregando coleções do banco de dados...');
-      const dbManager = new DatabaseManager();
-
-      try {
+      if (!userData || !userData.bgg_username) {
+        throw new Error('Usuário BGG não configurado. Clique no ícone de configurações para configurar.');
+      }
+      
+      if (loadType === 'api') {
+        if (!userData.tokens?.ludopedia?.access_token) {
+          throw new Error('Token Ludopedia não configurado. Clique no ícone de configurações para configurar.');
+        }
+        
+        // Carregar via API
+        console.log('📡 Carregando coleções via API...');
+        const bggApi = new BGGApi(userData.bgg_username);
+        const ludoApi = new LudopediaApi(userData.tokens.ludopedia.access_token);
+        
         [bggCollection, ludoCollection] = await Promise.all([
-          dbManager.getBGGCollection(credentials.BGG_USER),
-          dbManager.getLudopediaCollection(credentials.LUDO_USER || credentials.BGG_USER)
+          bggApi.fetchCollection(),
+          ludoApi.fetchCollection()
         ]);
         
-        console.log(`📊 Carregado do banco: BGG=${bggCollection.length}, Ludopedia=${ludoCollection.length}`);
+        console.log(`📊 Carregado via API: BGG=${bggCollection.length}, Ludopedia=${ludoCollection.length}`);
+      } else {
+        // Carregar do banco de dados
+        console.log('💾 Carregando coleções do banco de dados...');
+        const dbManager = new DatabaseManager();
         
-        // Se não há dados no banco, tentar carregar via API automaticamente
-        if (bggCollection.length === 0 && ludoCollection.length === 0) {
-          console.log('📭 Banco vazio, tentando carregar via API...');
-          
-          if (!credentials.LUDO_ACCESS_TOKEN) {
-            throw new Error('Nenhuma coleção encontrada no banco de dados e token Ludopedia não configurado para carregar via API.');
-          }
-
-          const bggApi = new BGGApi(credentials.BGG_USER);
-          const ludoApi = new LudopediaApi(credentials.LUDO_ACCESS_TOKEN);
-
+        try {
           [bggCollection, ludoCollection] = await Promise.all([
-            bggApi.fetchCollection(),
-            ludoApi.fetchCollection()
+            dbManager.getBGGCollection(userData.bgg_username),
+            dbManager.getLudopediaCollection(userData.ludopedia_username || userData.bgg_username)
           ]);
           
-          console.log(`📊 Carregado via API (fallback): BGG=${bggCollection.length}, Ludopedia=${ludoCollection.length}`);
+          console.log(`📊 Carregado do banco: BGG=${bggCollection.length}, Ludopedia=${ludoCollection.length}`);
+          
+          // Se não há dados no banco, tentar carregar via API automaticamente
+          if (bggCollection.length === 0 && ludoCollection.length === 0) {
+            console.log('📭 Banco vazio, tentando carregar via API...');
+            
+            if (!userData.tokens?.ludopedia?.access_token) {
+              throw new Error('Nenhuma coleção encontrada no banco de dados e token Ludopedia não configurado para carregar via API.');
+            }
+            
+            const bggApi = new BGGApi(userData.bgg_username);
+            const ludoApi = new LudopediaApi(userData.tokens.ludopedia.access_token);
+            
+            [bggCollection, ludoCollection] = await Promise.all([
+              bggApi.fetchCollection(),
+              ludoApi.fetchCollection()
+            ]);
+            
+            console.log(`📊 Carregado via API (fallback): BGG=${bggCollection.length}, Ludopedia=${ludoCollection.length}`);
+          }
+        } catch (dbError) {
+          console.error('❌ Erro ao carregar do banco:', dbError.message);
+          throw new Error('Erro ao carregar coleções do banco de dados. Tente carregar via API ou verifique a configuração do banco.');
         }
-      } catch (dbError) {
-        console.error('❌ Erro ao carregar do banco:', dbError.message);
-        throw new Error('Erro ao carregar coleções do banco de dados. Tente carregar via API ou verifique a configuração do banco.');
       }
-    }
     
     // Garante que os campos de tipo estejam consistentes
     bggCollection = bggCollection.map(game => ({
@@ -425,7 +449,10 @@ app.post('/api/collections', async (req, res) => {
       ludoCollection,
       source: loadType === 'api' ? 'api' : 'database'
     });
-
+    
+    } finally {
+      await userManager.disconnect();
+    }
   } catch (error) {
     console.error('❌ Error loading collections:', error);
     res.status(500).json({ error: error.message });
@@ -435,11 +462,33 @@ app.post('/api/collections', async (req, res) => {
 // Rota para obter configurações
 app.get('/api/config', async (req, res) => {
   try {
-    const credentialsPath = path.join(__dirname, '../../../data/credentials.txt');
-    const credentials = JSON.parse(await fs.readFile(credentialsPath, 'utf8'));
-    res.json(credentials);
+    // TODO: Implementar autenticação real com JWT
+    // Por enquanto, usaremos usuário padrão ID 1
+    const userId = 1;
+    
+    const userManager = new UserManager();
+    await userManager.connect();
+    
+    try {
+      const userData = await userManager.getUserWithTokens(userId);
+      
+      if (!userData) {
+        return res.status(404).json({ error: 'Usuário não encontrado' });
+      }
+      
+      // Retornar apenas dados necessários para o frontend
+      const config = {
+        BGG_USER: userData.bgg_username,
+        LUDO_USER: userData.ludopedia_username,
+        LUDO_ACCESS_TOKEN: userData.tokens?.ludopedia?.access_token || null
+      };
+      
+      res.json(config);
+    } finally {
+      await userManager.disconnect();
+    }
   } catch (error) {
-    console.error('Error reading credentials:', error);
+    console.error('Error reading user config:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -461,25 +510,53 @@ app.get('/api/auth/ludopedia', (req, res) => {
 // Rota para salvar configurações
 app.post('/api/config', async (req, res) => {
   try {
-    const credentialsPath = path.join(__dirname, '../../../data/credentials.txt');
+    // TODO: Implementar autenticação real com JWT
+    // Por enquanto, usaremos usuário padrão ID 1
+    const userId = 1;
     
-    // Lê as credenciais existentes
-    let credentials = {};
+    const userManager = new UserManager();
+    await userManager.connect();
+    
     try {
-      credentials = JSON.parse(await fs.readFile(credentialsPath, 'utf8'));
-    } catch (error) {
-      console.warn('No existing credentials found');
+      // Verificar se usuário existe
+      let userData = await userManager.getUserById(userId);
+      
+      if (!userData) {
+        // Criar usuário padrão se não existir
+        userData = await userManager.createUser({
+          email: 'default@boardgameguru.com',
+          password_hash: 'temp_hash', // TODO: Remover quando implementar autenticação real
+          name: 'Usuário Padrão',
+          bgg_username: req.body.BGG_USER,
+          ludopedia_username: req.body.LUDO_USER,
+          preferred_platform: 'bgg'
+        });
+      } else {
+        // Atualizar dados do usuário
+        const updateData = {};
+        if (req.body.BGG_USER) updateData.bgg_username = req.body.BGG_USER;
+        if (req.body.LUDO_USER) updateData.ludopedia_username = req.body.LUDO_USER;
+        
+        if (Object.keys(updateData).length > 0) {
+          userData = await userManager.updateUser(userId, updateData);
+        }
+      }
+      
+      // Salvar token OAuth da Ludopedia se fornecido
+      if (req.body.LUDO_ACCESS_TOKEN) {
+        await userManager.saveOAuthToken(
+          userId,
+          'ludopedia',
+          req.body.LUDO_ACCESS_TOKEN
+        );
+      }
+      
+      res.json({ success: true });
+    } finally {
+      await userManager.disconnect();
     }
-
-    // Atualiza as credenciais com os valores fornecidos
-    Object.assign(credentials, req.body);
-
-    // Salva as credenciais atualizadas
-    await fs.writeFile(credentialsPath, JSON.stringify(credentials, null, 2));
-    
-    res.json({ success: true });
   } catch (error) {
-    console.error('Error saving credentials:', error);
+    console.error('Error saving user config:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -517,24 +594,38 @@ app.get('/callback', async (req, res) => {
       throw error;
     });
 
-    // Salva o token nas credenciais
-    const credentialsPath = path.join(__dirname, '../../../data/credentials.txt');
-    const credentials = JSON.parse(await fs.readFile(credentialsPath, 'utf8'));
-    credentials.LUDO_ACCESS_TOKEN = tokenResponse.data.access_token;
-
-    // Buscar o usuário da Ludopedia
+    // TODO: Implementar autenticação real com JWT
+    // Por enquanto, usaremos usuário padrão ID 1
+    const userId = 1;
+    
+    const userManager = new UserManager();
+    await userManager.connect();
+    
     try {
-      const userResponse = await axios.get('https://ludopedia.com.br/api/v1/me', {
-        headers: {
-          Authorization: `Bearer ${tokenResponse.data.access_token}`
-        }
-      });
-      credentials.LUDO_USER = userResponse.data.usuario;
-    } catch (error) {
-      console.error('Erro ao buscar usuário da Ludopedia:', error);
-    }
-
-    await fs.writeFile(credentialsPath, JSON.stringify(credentials, null, 2));
+      // Salvar token OAuth da Ludopedia
+      await userManager.saveOAuthToken(
+        userId,
+        'ludopedia',
+        tokenResponse.data.access_token
+      );
+      
+      // Buscar o usuário da Ludopedia
+      let ludoUsername = null;
+      try {
+        const userResponse = await axios.get('https://ludopedia.com.br/api/v1/me', {
+          headers: {
+            Authorization: `Bearer ${tokenResponse.data.access_token}`
+          }
+        });
+        ludoUsername = userResponse.data.usuario;
+        
+        // Atualizar username da Ludopedia no perfil do usuário
+        await userManager.updateUser(userId, {
+          ludopedia_username: ludoUsername
+        });
+      } catch (error) {
+        console.error('Erro ao buscar usuário da Ludopedia:', error);
+      }
 
     // Página de sucesso com mensagem clara
     res.send(`
@@ -584,7 +675,7 @@ app.get('/callback', async (req, res) => {
           <div class="success-icon">✅</div>
           <h2 class="text-success mb-3">Autenticação Realizada com Sucesso!</h2>
           <p class="mb-2">Sua conta da Ludopedia foi conectada com sucesso.</p>
-          ${credentials.LUDO_USER ? `<p class="text-muted">Usuário: <strong>${credentials.LUDO_USER}</strong></p>` : ''}
+          ${ludoUsername ? `<p class="text-muted">Usuário: <strong>${ludoUsername}</strong></p>` : ''}
           <hr>
           <p class="mb-3">Você pode voltar para a aplicação principal.</p>
           <button class="btn btn-primary" onclick="closeWindow()">
@@ -614,7 +705,7 @@ app.get('/callback', async (req, res) => {
               window.opener.postMessage({ 
                 type: 'AUTH_SUCCESS', 
                 token: '${tokenResponse.data.access_token}',
-                user: '${credentials.LUDO_USER || ''}'
+                user: '${ludoUsername || ''}'
               }, '*');
             }
             
@@ -637,6 +728,10 @@ app.get('/callback', async (req, res) => {
       </body>
       </html>
     `);
+    
+    } finally {
+      await userManager.disconnect();
+    }
   } catch (error) {
     console.error('Error in OAuth callback:', error);
     let errorMessage = 'Erro na autenticação';
@@ -722,40 +817,49 @@ app.get('/callback', async (req, res) => {
 // Rota para salvar coleções no banco de dados
 app.post('/api/save-collections', async (req, res) => {
   try {
-    // Carregar credenciais do arquivo
-    const credentialsPath = path.join(__dirname, '../../../data/credentials.txt');
-    const credentials = JSON.parse(await fs.readFile(credentialsPath, 'utf8'));
-
-    if (!credentials.BGG_USER || !credentials.LUDO_USER) {
-      throw new Error('Credenciais de usuário não encontradas');
+    // TODO: Implementar autenticação real com JWT
+    // Por enquanto, usaremos usuário padrão ID 1
+    const userId = 1;
+    
+    const userManager = new UserManager();
+    await userManager.connect();
+    
+    let userData;
+    try {
+      userData = await userManager.getUserWithTokens(userId);
+      
+      if (!userData || !userData.bgg_username || !userData.ludopedia_username) {
+        throw new Error('Credenciais de usuário não encontradas');
+      }
+      
+      const { bggCollection, ludoCollection } = req.body;
+      
+      console.log(`💾 Salvando coleções no banco de dados...`);
+      console.log(`📊 BGG: ${bggCollection?.length || 0} jogos para ${userData.bgg_username}`);
+      console.log(`📊 Ludopedia: ${ludoCollection?.length || 0} jogos para ${userData.ludopedia_username}`);
+      
+      const dbManager = new DatabaseManager();
+      
+      // Salvar coleções no banco de dados
+      const results = {};
+      
+      if (bggCollection && bggCollection.length > 0) {
+        results.bggSaved = await dbManager.saveBGGCollection(userData.bgg_username, bggCollection);
+      }
+      
+      if (ludoCollection && ludoCollection.length > 0) {
+        results.ludoSaved = await dbManager.saveLudopediaCollection(userData.ludopedia_username, ludoCollection);
+      }
+      
+      console.log('✅ Coleções salvas no banco com sucesso!');
+      res.json({ 
+        success: true,
+        message: 'Coleções salvas no banco de dados com sucesso!',
+        results
+      });
+    } finally {
+      await userManager.disconnect();
     }
-
-    const { bggCollection, ludoCollection } = req.body;
-
-    console.log(`💾 Salvando coleções no banco de dados...`);
-    console.log(`📊 BGG: ${bggCollection?.length || 0} jogos para ${credentials.BGG_USER}`);
-    console.log(`📊 Ludopedia: ${ludoCollection?.length || 0} jogos para ${credentials.LUDO_USER}`);
-
-    const dbManager = new DatabaseManager();
-
-    // Salvar coleções no banco de dados
-    const results = {};
-
-    if (bggCollection && bggCollection.length > 0) {
-      results.bggSaved = await dbManager.saveBGGCollection(credentials.BGG_USER, bggCollection);
-    }
-
-    if (ludoCollection && ludoCollection.length > 0) {
-      results.ludoSaved = await dbManager.saveLudopediaCollection(credentials.LUDO_USER, ludoCollection);
-    }
-
-
-    console.log('✅ Coleções salvas no banco com sucesso!');
-    res.json({ 
-      success: true,
-      message: 'Coleções salvas no banco de dados com sucesso!',
-      results
-    });
   } catch (error) {
     console.error('❌ Erro ao salvar coleções:', error);
     res.status(500).json({ error: error.message });
@@ -771,16 +875,29 @@ app.post('/api/match-collections', async (req, res) => {
     bggCollection = [...bggCollection];
     ludoCollection = [...ludoCollection];
     
-    // Carregar credenciais para obter usernames
-    const credentials = JSON.parse(await fs.readFile('./data/credentials.txt', 'utf8'));
-    const bggUser = credentials.BGG_USER;
-    const ludoUser = credentials.LUDO_USER || bggUser;
+    // TODO: Implementar autenticação real com JWT
+    // Por enquanto, usaremos usuário padrão ID 1
+    const userId = 1;
     
-    // Carregar matches prévios do banco
-    const matchManager = new MatchManager();
-    await matchManager.connect();
-    const previousMatches = await matchManager.getMatches(bggUser, ludoUser);
-    await matchManager.disconnect();
+    const userManager = new UserManager();
+    await userManager.connect();
+    
+    let bggUser, ludoUser;
+    try {
+      const userData = await userManager.getUserWithTokens(userId);
+      
+      if (!userData || !userData.bgg_username) {
+        throw new Error('Dados do usuário não encontrados');
+      }
+      
+      bggUser = userData.bgg_username;
+      ludoUser = userData.ludopedia_username || bggUser;
+      
+      // Carregar matches prévios do banco
+      const matchManager = new MatchManager();
+      await matchManager.connect();
+      const previousMatches = await matchManager.getMatches(bggUser, ludoUser);
+      await matchManager.disconnect();
 
     // Remover jogos já pareados das listas
     const previousMatchCount = previousMatches.length;
@@ -880,6 +997,10 @@ app.post('/api/match-collections', async (req, res) => {
       onlyInLudo,
       previousMatchCount
     });
+    
+    } finally {
+      await userManager.disconnect();
+    }
   } catch (error) {
     console.error('Error matching collections:', error);
     res.status(500).json({ error: error.message });
@@ -901,16 +1022,29 @@ app.post('/api/match-collections-ai', async (req, res) => {
     bggCollection = [...bggCollection];
     ludoCollection = [...ludoCollection];
 
-    // Carregar credenciais para obter usernames
-    const credentials = JSON.parse(await fs.readFile('./data/credentials.txt', 'utf8'));
-    const bggUser = credentials.BGG_USER;
-    const ludoUser = credentials.LUDO_USER || bggUser;
-
-    // Carregar matches prévios do banco
-    const matchManager = new MatchManager();
-    await matchManager.connect();
-    const previousMatches = await matchManager.getMatches(bggUser, ludoUser);
-    await matchManager.disconnect();
+    // TODO: Implementar autenticação real com JWT
+    // Por enquanto, usaremos usuário padrão ID 1
+    const userId = 1;
+    
+    const userManager = new UserManager();
+    await userManager.connect();
+    
+    let bggUser, ludoUser;
+    try {
+      const userData = await userManager.getUserWithTokens(userId);
+      
+      if (!userData || !userData.bgg_username) {
+        throw new Error('Dados do usuário não encontrados');
+      }
+      
+      bggUser = userData.bgg_username;
+      ludoUser = userData.ludopedia_username || bggUser;
+      
+      // Carregar matches prévios do banco
+      const matchManager = new MatchManager();
+      await matchManager.connect();
+      const previousMatches = await matchManager.getMatches(bggUser, ludoUser);
+      await matchManager.disconnect();
 
     // Filtrar jogos já matcheados (mesma lógica do endpoint regular)
     const matchedBggGames = new Set();
@@ -991,6 +1125,10 @@ app.post('/api/match-collections-ai', async (req, res) => {
     }
     
     res.json({ matches });
+    
+    } finally {
+      await userManager.disconnect();
+    }
   } catch (error) {
     console.error('Error matching collections with AI:', error);
     res.status(500).json({ error: error.message });
@@ -1002,29 +1140,44 @@ app.post('/api/accept-matches', async (req, res) => {
   try {
     const { matches } = req.body;
     
-    // Carregar credenciais para obter usernames
-    const credentials = JSON.parse(await fs.readFile('./data/credentials.txt', 'utf8'));
-    const bggUser = credentials.BGG_USER;
-    const ludoUser = credentials.LUDO_USER || bggUser;
-
-    // Converter matches para formato do banco
-    const dbMatches = matches.map(match => ({
-      bggUser,
-      bggId: match.bggId,
-      bggVersionId: match.bggVersionId || '0',
-      ludoUser,
-      ludoId: match.ludoId,
-      matchType: 'name'
-    }));
-
-    // Salvar no banco de dados
-    const matchManager = new MatchManager();
-    await matchManager.connect();
-    const savedCount = await matchManager.saveMatches(dbMatches);
-    await matchManager.disconnect();
-
-    console.log(`✅ Salvos ${savedCount} matches automáticos por nome`);
-    res.json({ success: true, savedCount });
+    // TODO: Implementar autenticação real com JWT
+    // Por enquanto, usaremos usuário padrão ID 1
+    const userId = 1;
+    
+    const userManager = new UserManager();
+    await userManager.connect();
+    
+    try {
+      const userData = await userManager.getUserWithTokens(userId);
+      
+      if (!userData || !userData.bgg_username) {
+        throw new Error('Dados do usuário não encontrados');
+      }
+      
+      const bggUser = userData.bgg_username;
+      const ludoUser = userData.ludopedia_username || bggUser;
+      
+      // Converter matches para formato do banco
+      const dbMatches = matches.map(match => ({
+        bggUser,
+        bggId: match.bggId,
+        bggVersionId: match.bggVersionId || '0',
+        ludoUser,
+        ludoId: match.ludoId,
+        matchType: 'name'
+      }));
+      
+      // Salvar no banco de dados
+      const matchManager = new MatchManager();
+      await matchManager.connect();
+      const savedCount = await matchManager.saveMatches(dbMatches);
+      await matchManager.disconnect();
+      
+      console.log(`✅ Salvos ${savedCount} matches automáticos por nome`);
+      res.json({ success: true, savedCount });
+    } finally {
+      await userManager.disconnect();
+    }
   } catch (error) {
     console.error('Error saving matches:', error);
     res.status(500).json({ error: error.message });
@@ -1036,29 +1189,44 @@ app.post('/api/save-matches-ai', async (req, res) => {
   try {
     const { matches } = req.body;
     
-    // Carregar credenciais para obter usernames
-    const credentials = JSON.parse(await fs.readFile('./data/credentials.txt', 'utf8'));
-    const bggUser = credentials.BGG_USER;
-    const ludoUser = credentials.LUDO_USER || bggUser;
-
-    // Converter matches para formato do banco
-    const dbMatches = matches.map(match => ({
-      bggUser,
-      bggId: match.bggId,
-      bggVersionId: match.bggVersionId || '0',
-      ludoUser,
-      ludoId: match.ludoId,
-      matchType: 'ai'
-    }));
-
-    // Salvar no banco de dados
-    const matchManager = new MatchManager();
-    await matchManager.connect();
-    const savedCount = await matchManager.saveMatches(dbMatches);
-    await matchManager.disconnect();
-
-    console.log(`✅ Salvos ${savedCount} matches sugeridos por AI`);
-    res.json({ success: true, savedCount });
+    // TODO: Implementar autenticação real com JWT
+    // Por enquanto, usaremos usuário padrão ID 1
+    const userId = 1;
+    
+    const userManager = new UserManager();
+    await userManager.connect();
+    
+    try {
+      const userData = await userManager.getUserWithTokens(userId);
+      
+      if (!userData || !userData.bgg_username) {
+        throw new Error('Dados do usuário não encontrados');
+      }
+      
+      const bggUser = userData.bgg_username;
+      const ludoUser = userData.ludopedia_username || bggUser;
+      
+      // Converter matches para formato do banco
+      const dbMatches = matches.map(match => ({
+        bggUser,
+        bggId: match.bggId,
+        bggVersionId: match.bggVersionId || '0',
+        ludoUser,
+        ludoId: match.ludoId,
+        matchType: 'ai'
+      }));
+      
+      // Salvar no banco de dados
+      const matchManager = new MatchManager();
+      await matchManager.connect();
+      const savedCount = await matchManager.saveMatches(dbMatches);
+      await matchManager.disconnect();
+      
+      console.log(`✅ Salvos ${savedCount} matches sugeridos por AI`);
+      res.json({ success: true, savedCount });
+    } finally {
+      await userManager.disconnect();
+    }
   } catch (error) {
     console.error('Error saving AI matches:', error);
     res.status(500).json({ error: error.message });
@@ -1075,32 +1243,47 @@ app.post('/api/save-manual-match', async (req, res) => {
       return res.status(400).json({ error: 'Dados do match inválidos' });
     }
 
-    // Carregar credenciais para obter usernames
-    const credentials = JSON.parse(await fs.readFile('./data/credentials.txt', 'utf8'));
-    const bggUser = credentials.BGG_USER;
-    const ludoUser = credentials.LUDO_USER || bggUser;
-
-    // Preparar match para o banco
-    const dbMatches = [{
-      bggUser,
-      bggId: match.bggId,
-      bggVersionId: match.bggVersionId || '0',
-      ludoUser,
-      ludoId: match.ludoId,
-      matchType: 'manual'
-    }];
-
-    // Salvar no banco de dados
-    const matchManager = new MatchManager();
-    await matchManager.connect();
-    const savedCount = await matchManager.saveMatches(dbMatches);
-    await matchManager.disconnect();
-
-    if (savedCount > 0) {
-      console.log(`✅ Match manual salvo: ${match.bggName || match.bggId} ↔ ${match.ludoName || match.ludoId}`);
-      res.json({ success: true });
-    } else {
-      res.status(409).json({ error: 'Match já existe ou erro ao salvar' });
+    // TODO: Implementar autenticação real com JWT
+    // Por enquanto, usaremos usuário padrão ID 1
+    const userId = 1;
+    
+    const userManager = new UserManager();
+    await userManager.connect();
+    
+    try {
+      const userData = await userManager.getUserWithTokens(userId);
+      
+      if (!userData || !userData.bgg_username) {
+        throw new Error('Dados do usuário não encontrados');
+      }
+      
+      const bggUser = userData.bgg_username;
+      const ludoUser = userData.ludopedia_username || bggUser;
+      
+      // Preparar match para o banco
+      const dbMatches = [{
+        bggUser,
+        bggId: match.bggId,
+        bggVersionId: match.bggVersionId || '0',
+        ludoUser,
+        ludoId: match.ludoId,
+        matchType: 'manual'
+      }];
+      
+      // Salvar no banco de dados
+      const matchManager = new MatchManager();
+      await matchManager.connect();
+      const savedCount = await matchManager.saveMatches(dbMatches);
+      await matchManager.disconnect();
+      
+      if (savedCount > 0) {
+        console.log(`✅ Match manual salvo: ${match.bggName || match.bggId} ↔ ${match.ludoName || match.ludoId}`);
+        res.json({ success: true });
+      } else {
+        res.status(409).json({ error: 'Match já existe ou erro ao salvar' });
+      }
+    } finally {
+      await userManager.disconnect();
     }
   } catch (error) {
     console.error('Error saving manual match:', error);
