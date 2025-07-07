@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - BoardGameGuru</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .signup-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
+        }
+        .signup-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            max-width: 500px;
+            width: 100%;
+            margin: 20px;
+        }
+        .signup-header {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        .signup-body {
+            padding: 2rem;
+        }
+        .form-control, .form-select {
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e9ecef;
+            transition: border-color 0.3s ease;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+        .btn-signup {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+        }
+        .btn-signup:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #218838 0%, #1ea085 100%);
+        }
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e9ecef;
+        }
+        .divider span {
+            background: white;
+            padding: 0 1rem;
+            color: #6c757d;
+        }
+        .back-link {
+            color: #28a745;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .back-link:hover {
+            color: #218838;
+        }
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+            font-weight: 600;
+            color: #6c757d;
+        }
+        .step.active {
+            background: #28a745;
+            color: white;
+        }
+        .step.completed {
+            background: #20c997;
+            color: white;
+        }
+        .step-line {
+            height: 2px;
+            width: 40px;
+            background: #e9ecef;
+            margin: 0 5px;
+        }
+        .step-line.completed {
+            background: #20c997;
+        }
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #28a745;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 5px;
+        }
+        .info-box h6 {
+            color: #28a745;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <div class="signup-card">
+            <div class="signup-header">
+                <h2 class="mb-0">
+                    <i class="bi bi-controller me-2"></i>
+                    BoardGameGuru
+                </h2>
+                <p class="mb-0 mt-2 opacity-90">Crie sua conta e comece a comparar suas coleções</p>
+            </div>
+            <div class="signup-body">
+                <div class="step-indicator">
+                    <div class="step active">1</div>
+                    <div class="step-line"></div>
+                    <div class="step">2</div>
+                    <div class="step-line"></div>
+                    <div class="step">3</div>
+                </div>
+
+                <div class="info-box">
+                    <h6><i class="bi bi-info-circle me-2"></i>Como funciona?</h6>
+                    <p class="mb-0 small">
+                        Após criar sua conta, você poderá conectar suas contas do BGG e Ludopedia 
+                        para comparar suas coleções automaticamente.
+                    </p>
+                </div>
+
+                <form id="signupForm">
+                    <!-- Campos obrigatórios -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label">Nome Completo *</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">E-mail *</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Senha *</label>
+                        <input type="password" class="form-control" id="password" required>
+                    </div>
+
+                    <!-- Conexão com Ludopedia -->
+                    <div class="mb-4">
+                        <label class="form-label">Conectar com Ludopedia</label>
+                        <div class="d-flex gap-2">
+                            <div class="flex-grow-1">
+                                <input type="text" class="form-control" id="ludoTokenDisplay" disabled placeholder="Token será exibido após autenticação">
+                                <small id="ludoUserDisplay" class="text-muted"></small>
+                            </div>
+                            <button type="button" class="btn btn-primary" id="ludoAuthBtn">
+                                <i class="bi bi-box-arrow-in-right"></i>
+                                Conectar Ludopedia
+                            </button>
+                        </div>
+                        <small class="text-muted">Conecte-se à Ludopedia para habilitar os próximos campos</small>
+                    </div>
+
+                    <!-- Campos que são habilitados após OAuth -->
+                    <div id="postOAuthFields" style="opacity: 0.5; pointer-events: none;">
+                        <div class="mb-3">
+                            <label for="bggUsername" class="form-label">
+                                <i class="bi bi-globe me-1"></i>
+                                Usuário BGG
+                            </label>
+                            <input type="text" class="form-control" id="bggUsername" placeholder="Seu username no BoardGameGeek" disabled>
+                            <small class="text-muted">Informe seu username do BoardGameGeek</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Plataforma Preferida</label>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="preferredPlatform" id="prefBGG" value="bgg" disabled>
+                                <label class="btn btn-outline-primary" for="prefBGG">
+                                    <i class="bi bi-globe me-1"></i>
+                                    BGG
+                                </label>
+                                <input type="radio" class="btn-check" name="preferredPlatform" id="prefLudopedia" value="ludopedia" checked disabled>
+                                <label class="btn btn-outline-primary" for="prefLudopedia">
+                                    <i class="bi bi-puzzle me-1"></i>
+                                    Ludopedia
+                                </label>
+                            </div>
+                            <small class="text-muted">Escolha sua plataforma principal de referência</small>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="acceptTerms" required>
+                        <label class="form-check-label" for="acceptTerms">
+                            Eu aceito os termos de uso e política de privacidade
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-signup btn-success w-100" id="submitBtn" disabled>
+                        <i class="bi bi-person-plus me-2"></i>
+                        Cadastrar
+                    </button>
+                </form>
+                
+                <div class="divider">
+                    <span>ou</span>
+                </div>
+                
+                <div class="text-center">
+                    <p class="mb-2">Já tem uma conta?</p>
+                    <a href="/login" class="btn btn-outline-success">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>
+                        Fazer Login
+                    </a>
+                </div>
+                
+                <div class="text-center mt-3">
+                    <a href="/" class="back-link">
+                        <i class="bi bi-arrow-left me-1"></i>
+                        Voltar ao início
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let ludopediaToken = null;
+        let ludopediaUser = null;
+
+        // Iniciar autenticação Ludopedia (mesmo código do app.js)
+        async function startLudopediaAuth() {
+            try {
+                const response = await fetch('/api/auth/ludopedia');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const { authUrl } = await response.json();
+                const authWindow = window.open(authUrl, 'LudopediaAuth', 'width=600,height=600');
+
+                // Receber mensagem de sucesso da autenticação
+                window.addEventListener('message', async (event) => {
+                    if (event.data.type === 'AUTH_SUCCESS') {
+                        authWindow.close();
+                        ludopediaToken = event.data.token;
+                        ludopediaUser = event.data.user;
+                        
+                        // Atualizar interface
+                        document.getElementById('ludoTokenDisplay').value = 'Token obtido com sucesso!';
+                        document.getElementById('ludoUserDisplay').textContent = ludopediaUser ? `Usuário: ${ludopediaUser}` : '';
+                        
+                        // Habilitar campos pós-OAuth
+                        enablePostOAuthFields();
+                    }
+                }, { once: true });
+            } catch (error) {
+                console.error('Error starting auth:', error);
+                alert('Erro ao iniciar autenticação: ' + error.message);
+            }
+        }
+
+        function enablePostOAuthFields() {
+            const postOAuthDiv = document.getElementById('postOAuthFields');
+            const bggInput = document.getElementById('bggUsername');
+            const radioButtons = document.querySelectorAll('input[name="preferredPlatform"]');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // Habilitar visualmente
+            postOAuthDiv.style.opacity = '1';
+            postOAuthDiv.style.pointerEvents = 'auto';
+            
+            // Habilitar campos
+            bggInput.disabled = false;
+            radioButtons.forEach(radio => radio.disabled = false);
+            
+            // Verificar se pode habilitar botão de cadastro
+            checkFormValidity();
+        }
+
+        function checkFormValidity() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const acceptTerms = document.getElementById('acceptTerms').checked;
+            
+            const isValid = name && email && password && acceptTerms && ludopediaToken;
+            document.getElementById('submitBtn').disabled = !isValid;
+        }
+
+        // Event listeners
+        document.getElementById('ludoAuthBtn').addEventListener('click', startLudopediaAuth);
+
+        // Verificar validade do formulário quando campos obrigatórios mudarem
+        ['name', 'email', 'password', 'acceptTerms'].forEach(id => {
+            const element = document.getElementById(id);
+            element.addEventListener('change', checkFormValidity);
+            element.addEventListener('input', checkFormValidity);
+        });
+
+        // Envio do formulário
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!ludopediaToken) {
+                alert('Por favor, conecte-se à Ludopedia primeiro.');
+                return;
+            }
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                bggUsername: document.getElementById('bggUsername').value,
+                ludopediaToken: ludopediaToken,
+                ludopediaUser: ludopediaUser,
+                preferredPlatform: document.querySelector('input[name="preferredPlatform"]:checked').value
+            };
+            
+            try {
+                // TODO: Implementar endpoint de cadastro
+                console.log('Dados do cadastro:', formData);
+                alert('Cadastro ainda não implementado no backend. Dados preparados com sucesso!\n\nToken Ludopedia: ' + (ludopediaToken ? 'Obtido' : 'Não obtido') + '\nUsuário Ludopedia: ' + (ludopediaUser || 'N/A'));
+                
+                // Em um cenário real, enviaria para /api/signup
+                // const response = await fetch('/api/signup', {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify(formData)
+                // });
+                
+            } catch (error) {
+                console.error('Erro no cadastro:', error);
+                alert('Erro ao realizar cadastro. Tente novamente.');
+            }
+        });
+    </script>
+</body>
+</html>

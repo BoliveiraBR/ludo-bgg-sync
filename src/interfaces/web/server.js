@@ -30,8 +30,31 @@ app.use(express.static(path.join(__dirname, 'public'), {
   }
 }));
 
-// Rota principal
+// Rota principal - mostra tela inicial para visitantes não autenticados
 app.get('/', (req, res) => {
+  // TODO: Implementar verificação de sessão real
+  // Por enquanto, sempre mostra a tela inicial
+  const hasSession = false; // Placeholder para verificação de sessão
+  
+  if (hasSession) {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  } else {
+    res.sendFile(path.join(__dirname, 'public', 'welcome.html'));
+  }
+});
+
+// Rota para página de login
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
+// Rota para página de cadastro
+app.get('/cadastro', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'cadastro.html'));
+});
+
+// Rota para acessar a aplicação principal (quando autenticado)
+app.get('/app', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
