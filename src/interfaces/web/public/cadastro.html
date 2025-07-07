@@ -350,20 +350,38 @@
             };
             
             try {
-                // TODO: Implementar endpoint de cadastro
-                console.log('Dados do cadastro:', formData);
-                alert('Cadastro ainda não implementado no backend. Dados preparados com sucesso!\n\nToken Ludopedia: ' + (ludopediaToken ? 'Obtido' : 'Não obtido') + '\nUsuário Ludopedia: ' + (ludopediaUser || 'N/A'));
+                // Desabilitar botão durante o envio
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Cadastrando...';
                 
-                // Em um cenário real, enviaria para /api/signup
-                // const response = await fetch('/api/signup', {
-                //     method: 'POST',
-                //     headers: { 'Content-Type': 'application/json' },
-                //     body: JSON.stringify(formData)
-                // });
+                console.log('Enviando dados do cadastro:', formData);
+                
+                const response = await fetch('/api/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    alert('🎉 Cadastro realizado com sucesso!\n\nBem-vindo ao BoardGameGuru, ' + result.user.name + '!');
+                    // Redirecionar para login ou diretamente para app
+                    window.location.href = '/login';
+                } else {
+                    // Mostrar erro específico retornado pelo servidor
+                    alert('❌ Erro no cadastro:\n' + result.error);
+                }
                 
             } catch (error) {
                 console.error('Erro no cadastro:', error);
-                alert('Erro ao realizar cadastro. Tente novamente.');
+                alert('❌ Erro ao realizar cadastro. Verifique sua conexão e tente novamente.');
+            } finally {
+                // Reabilitar botão
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.disabled = !ludopediaToken;
+                submitBtn.innerHTML = '<i class="bi bi-person-plus me-2"></i>Cadastrar';
             }
         });
     </script>

@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const axios = require('axios');
 const { Client } = require('pg');
+const bcrypt = require('bcrypt');
 const BGGApi = require('../../api/bggApi');
 const LudopediaApi = require('../../api/ludopediaApi');
 const CollectionMatcher = require('../../comparison/matcher');
@@ -872,6 +873,110 @@ app.get('/callback', async (req, res) => {
       </body>
       </html>
     `);
+  }
+});
+
+// Rota para cadastro de novo usuário
+app.post('/api/signup', async (req, res) => {
+  try {
+    const { name, email, password, bggUsername, ludopediaToken, ludopediaUser, preferredPlatform } = req.body;
+    
+    // Validar campos obrigatórios
+    if (!name || !email || !password || !ludopediaToken) {
+      return res.status(400).json({
+        error: 'Campos obrigatórios: name, email, password, ludopediaToken'
+      });
+    }
+    
+    // Validar formato do email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        error: 'Formato de email inválido'
+      });
+    }
+    
+    // Validar força da senha (mínimo 6 caracteres)
+    if (password.length < 6) {
+      return res.status(400).json({
+        error: 'Senha deve ter pelo menos 6 caracteres'
+      });
+    }
+    
+    const userManager = new UserManager();
+    await userManager.connect();
+    
+    try {
+      // Verificar se email já existe
+      const existingUser = await userManager.getUserByEmail(email);
+      if (existingUser) {
+        return res.status(409).json({
+          error: 'Este email já está sendo usado por outra conta'
+        });
+      }
+      
+      // Verificar se username BGG já está sendo usado (se fornecido)
+      if (bggUsername) {
+        const existingBggUser = await userManager.getUserByBggUsername(bggUsername);
+        if (existingBggUser) {
+          return res.status(409).json({
+            error: 'Este username do BGG já está sendo usado por outra conta'
+          });
+        }
+      }
+      
+      // Hash da senha
+      const passwordHash = await bcrypt.hash(password, 12);
+      
+      // Criar usuário
+      const newUser = await userManager.createUser({
+        email: email.toLowerCase().trim(),
+        password_hash: passwordHash,
+        name: name.trim(),
+        bgg_username: bggUsername ? bggUsername.trim() : null,
+        ludopedia_username: ludopediaUser ? ludopediaUser.trim() : null,
+        preferred_platform: preferredPlatform || 'ludopedia'
+      });
+      
+      console.log(`✅ Novo usuário criado: ${newUser.name} (${newUser.email})`);
+      
+      // Salvar token OAuth da Ludopedia
+      if (ludopediaToken) {
+        await userManager.saveOAuthToken(
+          newUser.id,
+          'ludopedia',
+          ludopediaToken
+        );
+        console.log(`🔐 Token OAuth da Ludopedia salvo para usuário ${newUser.id}`);
+      }
+      
+      // Retornar dados do usuário (sem senha)
+      const { password_hash, ...userResponse } = newUser;
+      
+      res.status(201).json({
+        success: true,
+        message: 'Usuário criado com sucesso!',
+        user: userResponse
+      });
+      
+    } finally {
+      await userManager.disconnect();
+    }
+  } catch (error) {
+    console.error('❌ Erro no cadastro:', error);
+    
+    // Tratar erros específicos do banco
+    if (error.code === '23505') { // Unique violation
+      if (error.constraint === 'users_email_key') {
+        return res.status(409).json({
+          error: 'Este email já está sendo usado por outra conta'
+        });
+      }
+    }
+    
+    res.status(500).json({
+      error: 'Erro interno do servidor. Tente novamente mais tarde.'
+    });
   }
 });
 

@@ -108,6 +108,28 @@ class UserManager {
     }
 
     /**
+     * Busca usuário por username do BGG
+     * @param {string} bggUsername - Username do BGG
+     * @returns {Promise<Object|null>} - Dados do usuário ou null se não encontrado
+     */
+    async getUserByBggUsername(bggUsername) {
+        const query = `
+            SELECT id, email, name, bgg_username, ludopedia_username, 
+                   preferred_platform, created_at, active
+            FROM users 
+            WHERE bgg_username = $1 AND active = TRUE
+        `;
+
+        try {
+            const result = await this.client.query(query, [bggUsername]);
+            return result.rows[0] || null;
+        } catch (error) {
+            console.error('❌ Erro ao buscar usuário por username BGG:', error);
+            throw error;
+        }
+    }
+
+    /**
      * Atualiza dados do usuário
      * @param {number} userId - ID do usuário
      * @param {Object} updateData - Dados para atualizar
