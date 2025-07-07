@@ -255,83 +255,106 @@ class UserManager {
     }
 
     /**
-     * Cria um refresh token para o usuário
+     * Cria uma sessão de usuário para JWT
      * @param {number} userId - ID do usuário
-     * @param {string} tokenHash - Hash do refresh token
+     * @param {string} jwtId - JWT ID único (jti claim)
      * @param {Date} expiresAt - Data de expiração
-     * @returns {Promise<string>} - UUID do refresh token
+     * @param {string} userAgent - User-Agent do navegador
+     * @param {string} ipAddress - Endereço IP do usuário
+     * @returns {Promise<string>} - UUID da sessão
      */
-    async createRefreshToken(userId, tokenHash, expiresAt) {
+    async createSession(userId, jwtId, expiresAt, userAgent = null, ipAddress = null) {
         const query = `
-            INSERT INTO refresh_tokens (user_id, token_hash, expires_at)
-            VALUES ($1, $2, $3)
+            INSERT INTO user_sessions (user_id, jwt_jti, expires_at, user_agent, ip_address)
+            VALUES ($1, $2, $3, $4, $5)
             RETURNING id
         `;
 
         try {
-            const result = await this.client.query(query, [userId, tokenHash, expiresAt]);
+            const result = await this.client.query(query, [userId, jwtId, expiresAt, userAgent, ipAddress]);
             return result.rows[0].id;
         } catch (error) {
-            console.error('❌ Erro ao criar refresh token:', error);
+            console.error('❌ Erro ao criar sessão:', error);
             throw error;
         }
     }
 
     /**
-     * Valida e atualiza refresh token
-     * @param {string} tokenId - UUID do token
-     * @param {string} tokenHash - Hash do token para validação
-     * @returns {Promise<Object|null>} - Dados do usuário se token válido
+     * Valida se uma sessão JWT ainda é válida
+     * @param {string} jwtId - JWT ID para validação
+     * @returns {Promise<Object|null>} - Dados do usuário se sessão válida
      */
-    async validateRefreshToken(tokenId, tokenHash) {
+    async validateSession(jwtId) {
         const query = `
-            UPDATE refresh_tokens 
+            UPDATE user_sessions 
             SET last_used = CURRENT_TIMESTAMP
-            WHERE id = $1 AND token_hash = $2 AND expires_at > CURRENT_TIMESTAMP AND revoked = FALSE
+            WHERE jwt_jti = $1 AND expires_at > CURRENT_TIMESTAMP AND revoked = FALSE
             RETURNING user_id
         `;
 
         try {
-            const result = await this.client.query(query, [tokenId, tokenHash]);
+            const result = await this.client.query(query, [jwtId]);
             if (result.rows.length === 0) return null;
 
             const userId = result.rows[0].user_id;
             return await this.getUserById(userId);
         } catch (error) {
-            console.error('❌ Erro ao validar refresh token:', error);
+            console.error('❌ Erro ao validar sessão:', error);
             throw error;
         }
     }
 
     /**
-     * Revoga refresh token
-     * @param {string} tokenId - UUID do token
-     * @returns {Promise<boolean>} - True se token foi revogado
+     * Revoga uma sessão específica
+     * @param {string} jwtId - JWT ID da sessão
+     * @returns {Promise<boolean>} - True se sessão foi revogada
      */
-    async revokeRefreshToken(tokenId) {
+    async revokeSession(jwtId) {
         const query = `
-            UPDATE refresh_tokens 
+            UPDATE user_sessions 
             SET revoked = TRUE
-            WHERE id = $1
+            WHERE jwt_jti = $1
             RETURNING id
         `;
 
         try {
-            const result = await this.client.query(query, [tokenId]);
+            const result = await this.client.query(query, [jwtId]);
             return result.rows.length > 0;
         } catch (error) {
-            console.error('❌ Erro ao revogar refresh token:', error);
+            console.error('❌ Erro ao revogar sessão:', error);
             throw error;
         }
     }
 
     /**
-     * Remove refresh tokens expirados
-     * @returns {Promise<number>} - Número de tokens removidos
+     * Revoga todas as sessões de um usuário (logout global)
+     * @param {number} userId - ID do usuário
+     * @returns {Promise<number>} - Número de sessões revogadas
      */
-    async cleanupExpiredTokens() {
+    async revokeAllUserSessions(userId) {
         const query = `
-            DELETE FROM refresh_tokens 
+            UPDATE user_sessions 
+            SET revoked = TRUE
+            WHERE user_id = $1 AND revoked = FALSE
+            RETURNING id
+        `;
+
+        try {
+            const result = await this.client.query(query, [userId]);
+            return result.rowCount;
+        } catch (error) {
+            console.error('❌ Erro ao revogar todas as sessões do usuário:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Remove sessões expiradas e revogadas
+     * @returns {Promise<number>} - Número de sessões removidas
+     */
+    async cleanupExpiredSessions() {
+        const query = `
+            DELETE FROM user_sessions 
             WHERE expires_at < CURRENT_TIMESTAMP OR revoked = TRUE
         `;
 
@@ -339,7 +362,7 @@ class UserManager {
             const result = await this.client.query(query);
             return result.rowCount;
         } catch (error) {
-            console.error('❌ Erro ao limpar tokens expirados:', error);
+            console.error('❌ Erro ao limpar sessões expiradas:', error);
             throw error;
         }
     }

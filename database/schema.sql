@@ -28,15 +28,17 @@ CREATE TABLE IF NOT EXISTS user_oauth_tokens (
     UNIQUE(user_id, provider)
 );
 
--- Refresh tokens para logout remoto do BoardGameGuru
-CREATE TABLE IF NOT EXISTS refresh_tokens (
+-- Sessões de usuário para autenticação JWT (sem refresh tokens)
+CREATE TABLE IF NOT EXISTS user_sessions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id INTEGER NOT NULL, -- SEM FK para preservar dados
-    token_hash VARCHAR(255) NOT NULL,
-    expires_at TIMESTAMP NOT NULL,
+    jwt_jti VARCHAR(255) NOT NULL UNIQUE, -- JWT ID para revogação
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP NOT NULL,
     last_used TIMESTAMP,
-    revoked BOOLEAN DEFAULT FALSE
+    revoked BOOLEAN DEFAULT FALSE,
+    user_agent TEXT,
+    ip_address INET
 );
 
 -- Índices para tabelas de usuários
@@ -44,8 +46,9 @@ CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 CREATE INDEX IF NOT EXISTS idx_users_bgg_username ON users(bgg_username);
 CREATE INDEX IF NOT EXISTS idx_users_ludopedia_username ON users(ludopedia_username);
 CREATE INDEX IF NOT EXISTS idx_user_oauth_tokens_user_provider ON user_oauth_tokens(user_id, provider);
-CREATE INDEX IF NOT EXISTS idx_refresh_tokens_user_id ON refresh_tokens(user_id);
-CREATE INDEX IF NOT EXISTS idx_refresh_tokens_expires ON refresh_tokens(expires_at);
+CREATE INDEX IF NOT EXISTS idx_user_sessions_user_id ON user_sessions(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_sessions_jti ON user_sessions(jwt_jti);
+CREATE INDEX IF NOT EXISTS idx_user_sessions_expires ON user_sessions(expires_at);
 
 -- Comentários das tabelas de usuários
 COMMENT ON TABLE users IS 'Usuários do BoardGameGuru com conexões para BGG e Ludopedia';
@@ -54,7 +57,11 @@ COMMENT ON COLUMN users.bgg_username IS 'Username público do usuário no BoardG
 COMMENT ON COLUMN users.ludopedia_username IS 'Username do usuário na Ludopedia, obtido via OAuth';
 COMMENT ON COLUMN users.preferred_platform IS 'Plataforma preferida para manter coleção e partidas (bgg ou ludopedia)';
 COMMENT ON TABLE user_oauth_tokens IS 'Tokens OAuth criptografados para serviços externos (Ludopedia)';
-COMMENT ON TABLE refresh_tokens IS 'Tokens de refresh para logout remoto e controle de sessão';
+COMMENT ON TABLE user_sessions IS 'Sessões de usuário com JWT para controle de acesso (sem refresh tokens)';
+COMMENT ON COLUMN user_sessions.user_id IS 'ID do usuário (sem FK para preservar dados)';
+COMMENT ON COLUMN user_sessions.jwt_jti IS 'JWT ID único para identificar e revogar sessões específicas';
+COMMENT ON COLUMN user_sessions.user_agent IS 'User-Agent do navegador para identificação da sessão';
+COMMENT ON COLUMN user_sessions.ip_address IS 'Endereço IP do usuário para auditoria';
 
 -- Tabela para coleção da Ludopedia
 CREATE TABLE IF NOT EXISTS ludopedia_collection (
