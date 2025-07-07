@@ -467,9 +467,10 @@ app.get('/api/config', async (req, res) => {
     const userId = 1;
     
     const userManager = new UserManager();
-    await userManager.connect();
     
     try {
+      await userManager.connect();
+      
       const userData = await userManager.getUserWithTokens(userId);
       
       if (!userData) {
@@ -484,6 +485,9 @@ app.get('/api/config', async (req, res) => {
       };
       
       res.json(config);
+    } catch (dbError) {
+      console.error('❌ Erro ao conectar com banco de dados:', dbError.message);
+      return res.status(500).json({ error: 'Erro de conexão com banco de dados. Execute a migração primeiro.' });
     } finally {
       await userManager.disconnect();
     }
