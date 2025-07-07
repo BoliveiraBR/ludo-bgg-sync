@@ -385,7 +385,7 @@ app.post('/api/collections', async (req, res) => {
       
       if (loadType === 'api') {
         if (!userData.tokens?.ludopedia?.access_token) {
-          throw new Error('Token Ludopedia não configurado. Clique no ícone de configurações para configurar.');
+          throw new Error('Para carregar coleções via API, você precisa autenticar na Ludopedia primeiro. Clique no ícone de configurações (⚙️) e depois em "Autenticar Ludopedia".');
         }
         
         // Carregar via API
@@ -434,7 +434,7 @@ app.post('/api/collections', async (req, res) => {
             console.log('📭 Banco vazio, tentando carregar via API...');
             
             if (!userData.tokens?.ludopedia?.access_token) {
-              throw new Error('Nenhuma coleção encontrada no banco de dados e token Ludopedia não configurado para carregar via API.');
+              throw new Error('Nenhuma coleção encontrada no banco de dados. Para carregar automaticamente via API, você precisa autenticar na Ludopedia primeiro. Clique no ícone de configurações (⚙️) e depois em "Autenticar Ludopedia", ou use o botão "Carregar Coleções via API".');
             }
             
             const bggApi = new BGGApi(userData.bgg_username);
