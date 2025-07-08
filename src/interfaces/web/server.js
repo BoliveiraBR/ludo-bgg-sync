@@ -981,6 +981,16 @@ app.post('/api/signup', async (req, res) => {
         }
       }
       
+      // Verificar se username Ludopedia já está sendo usado (se fornecido)
+      if (ludopediaUser) {
+        const existingLudopediaUser = await userManager.getUserByLudopediaUsername(ludopediaUser);
+        if (existingLudopediaUser) {
+          return res.status(409).json({
+            error: 'Este username da Ludopedia já está sendo usado por outra conta'
+          });
+        }
+      }
+      
       // Hash da senha
       const passwordHash = await bcrypt.hash(password, 12);
       
@@ -1538,11 +1548,11 @@ app.post('/api/accept-matches', authenticateToken, async (req, res) => {
       // Salvar no banco de dados
       const matchManager = new MatchManager();
       await matchManager.connect();
-      const savedCount = await matchManager.saveMatches(dbMatches);
+      const result = await matchManager.saveMatches(dbMatches);
       await matchManager.disconnect();
       
-      console.log(`✅ Salvos ${savedCount} matches automáticos por nome`);
-      res.json({ success: true, savedCount });
+      console.log(`✅ Salvos ${result.savedCount} matches automáticos por nome`);
+      res.json({ success: true, savedCount: result.savedCount });
     } finally {
       await userManager.disconnect();
     }
@@ -1588,11 +1598,11 @@ app.post('/api/save-matches-ai', authenticateToken, async (req, res) => {
       // Salvar no banco de dados
       const matchManager = new MatchManager();
       await matchManager.connect();
-      const savedCount = await matchManager.saveMatches(dbMatches);
+      const result = await matchManager.saveMatches(dbMatches);
       await matchManager.disconnect();
       
-      console.log(`✅ Salvos ${savedCount} matches sugeridos por AI`);
-      res.json({ success: true, savedCount });
+      console.log(`✅ Salvos ${result.savedCount} matches sugeridos por AI`);
+      res.json({ success: true, savedCount: result.savedCount });
     } finally {
       await userManager.disconnect();
     }
@@ -1640,21 +1650,24 @@ app.post('/api/save-manual-match', authenticateToken, async (req, res) => {
         matchType: 'manual'
       }];
       
-      console.log(`🔍 DEBUG: Dados do match preparado:`, JSON.stringify(dbMatches, null, 2));
       
       // Salvar no banco de dados
       const matchManager = new MatchManager();
       await matchManager.connect();
-      const savedCount = await matchManager.saveMatches(dbMatches);
+      const result = await matchManager.saveMatches(dbMatches);
       await matchManager.disconnect();
       
-      if (savedCount > 0) {
+      if (result.savedCount > 0) {
         console.log(`✅ Match manual salvo: ${match.bggName || match.bggId} ↔ ${match.ludoName || match.ludoId}`);
-        console.log(`🔍 DEBUG: ${savedCount} matches salvos no banco`);
         res.json({ success: true });
       } else {
-        console.log(`❌ DEBUG: Nenhum match foi salvo. savedCount: ${savedCount}`);
-        res.status(409).json({ error: 'Match já existe ou erro ao salvar' });
+        if (result.hasConflicts) {
+          res.status(409).json({ 
+            error: 'Não foi possível salvar o pareamento. Os jogos selecionados já possuem pareamentos existentes na base de dados.'
+          });
+        } else {
+          res.status(409).json({ error: 'Erro ao salvar pareamento' });
+        }
       }
     } finally {
       await userManager.disconnect();

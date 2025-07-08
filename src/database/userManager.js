@@ -130,6 +130,28 @@ class UserManager {
     }
 
     /**
+     * Busca usuário por username da Ludopedia
+     * @param {string} ludopediaUsername - Username da Ludopedia do usuário
+     * @returns {Promise<Object|null>} - Dados do usuário ou null se não encontrado
+     */
+    async getUserByLudopediaUsername(ludopediaUsername) {
+        const query = `
+            SELECT id, email, name, bgg_username, ludopedia_username, 
+                   preferred_platform, created_at, active
+            FROM users 
+            WHERE ludopedia_username = $1 AND active = TRUE
+        `;
+
+        try {
+            const result = await this.client.query(query, [ludopediaUsername]);
+            return result.rows[0] || null;
+        } catch (error) {
+            console.error('❌ Erro ao buscar usuário por username Ludopedia:', error);
+            throw error;
+        }
+    }
+
+    /**
      * Atualiza dados do usuário
      * @param {number} userId - ID do usuário
      * @param {Object} updateData - Dados para atualizar
