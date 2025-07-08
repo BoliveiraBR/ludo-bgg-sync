@@ -96,13 +96,16 @@ app.get('/', async (req, res) => {
     const tagline = await dbManager.getRandomTagline();
     await dbManager.disconnect();
     
-    // Substituir placeholder da tagline
+    // Substituir placeholders da tagline (navbar e aba início)
     if (tagline) {
       console.log('✅ Tagline encontrada:', tagline);
-      html = html.replace('{{TAGLINE}}', ` – "${tagline}"`);
+      // Substituir todas as ocorrências: navbar com formato especial, aba início apenas texto
+      html = html.replace('<span class="navbar-tagline"> {{TAGLINE}}</span>', `<span class="navbar-tagline"> – "${tagline}"</span>`);
+      html = html.replace('<p class="hero-subtitle">\n                                {{TAGLINE}}\n                            </p>', `<p class="hero-subtitle">\n                                ${tagline}\n                            </p>`);
     } else {
       console.log('⚠️ Nenhuma tagline encontrada no banco');
-      html = html.replace('{{TAGLINE}}', '');
+      // Remover todos os placeholders
+      html = html.replace(/{{TAGLINE}}/g, '');
     }
   } catch (error) {
     console.error('❌ Erro ao buscar tagline:', error);
@@ -141,13 +144,16 @@ app.get('/app', async (req, res) => {
     const tagline = await dbManager.getRandomTagline();
     await dbManager.disconnect();
     
-    // Substituir placeholder da tagline
+    // Substituir placeholders da tagline (navbar e aba início)
     if (tagline) {
       console.log('✅ Tagline encontrada:', tagline);
-      html = html.replace('{{TAGLINE}}', ` – "${tagline}"`);
+      // Substituir todas as ocorrências: navbar com formato especial, aba início apenas texto
+      html = html.replace('<span class="navbar-tagline"> {{TAGLINE}}</span>', `<span class="navbar-tagline"> – "${tagline}"</span>`);
+      html = html.replace('<p class="hero-subtitle">\n                                {{TAGLINE}}\n                            </p>', `<p class="hero-subtitle">\n                                ${tagline}\n                            </p>`);
     } else {
       console.log('⚠️ Nenhuma tagline encontrada no banco');
-      html = html.replace('{{TAGLINE}}', '');
+      // Remover todos os placeholders
+      html = html.replace(/{{TAGLINE}}/g, '');
     }
   } catch (error) {
     console.error('❌ Erro ao buscar tagline:', error);
