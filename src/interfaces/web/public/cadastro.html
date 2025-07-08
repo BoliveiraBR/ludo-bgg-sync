@@ -30,7 +30,7 @@
             margin: 20px;
         }
         .signup-header {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 2rem;
             text-align: center;
@@ -45,11 +45,11 @@
             transition: border-color 0.3s ease;
         }
         .form-control:focus, .form-select:focus {
-            border-color: #28a745;
-            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
         }
         .btn-signup {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border: none;
             border-radius: 10px;
             padding: 0.75rem 1.5rem;
@@ -58,7 +58,7 @@
         }
         .btn-signup:hover {
             transform: translateY(-2px);
-            background: linear-gradient(135deg, #218838 0%, #1ea085 100%);
+            background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
         }
         .divider {
             text-align: center;
@@ -80,57 +80,22 @@
             color: #6c757d;
         }
         .back-link {
-            color: #28a745;
+            color: #667eea;
             text-decoration: none;
             font-weight: 500;
         }
         .back-link:hover {
-            color: #218838;
-        }
-        .step-indicator {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-        .step {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: #e9ecef;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 5px;
-            font-weight: 600;
-            color: #6c757d;
-        }
-        .step.active {
-            background: #28a745;
-            color: white;
-        }
-        .step.completed {
-            background: #20c997;
-            color: white;
-        }
-        .step-line {
-            height: 2px;
-            width: 40px;
-            background: #e9ecef;
-            margin: 0 5px;
-        }
-        .step-line.completed {
-            background: #20c997;
+            color: #5a67d8;
         }
         .info-box {
             background: #f8f9fa;
-            border-left: 4px solid #28a745;
+            border-left: 4px solid #667eea;
             padding: 1rem;
             margin-bottom: 1.5rem;
             border-radius: 5px;
         }
         .info-box h6 {
-            color: #28a745;
+            color: #667eea;
             margin-bottom: 0.5rem;
         }
     </style>
@@ -146,33 +111,24 @@
                 <p class="mb-0 mt-2 opacity-90">Crie sua conta e comece a comparar suas coleções</p>
             </div>
             <div class="signup-body">
-                <div class="step-indicator">
-                    <div class="step active">1</div>
-                    <div class="step-line"></div>
-                    <div class="step">2</div>
-                    <div class="step-line"></div>
-                    <div class="step">3</div>
-                </div>
 
                 <div class="info-box">
                     <h6><i class="bi bi-info-circle me-2"></i>Como funciona?</h6>
                     <p class="mb-0 small">
-                        Após criar sua conta, você poderá conectar suas contas do BGG e Ludopedia 
-                        para comparar suas coleções automaticamente.
+                        Aqui você cria sua conta para o BoardGameGuru e conecta suas contas do BoardGameGeek e da Ludopedia para que possamos fazer nossa mágica.
                     </p>
                 </div>
 
                 <form id="signupForm">
                     <!-- Campos obrigatórios -->
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="name" class="form-label">Nome Completo *</label>
-                            <input type="text" class="form-control" id="name" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="email" class="form-label">E-mail *</label>
-                            <input type="email" class="form-control" id="email" required>
-                        </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nome Completo *</label>
+                        <input type="text" class="form-control" id="name" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">E-mail *</label>
+                        <input type="email" class="form-control" id="email" required>
                     </div>
                     
                     <div class="mb-3">
@@ -250,12 +206,6 @@
                     </a>
                 </div>
                 
-                <div class="text-center mt-3">
-                    <a href="/" class="back-link">
-                        <i class="bi bi-arrow-left me-1"></i>
-                        Voltar ao início
-                    </a>
-                </div>
             </div>
         </div>
     </div>
