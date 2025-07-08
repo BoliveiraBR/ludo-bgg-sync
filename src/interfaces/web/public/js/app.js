@@ -2,7 +2,7 @@
 let loadBtn, loadingIndicator, successMessage, bggList, ludoList, saveBtn;
 let bggTotal, bggBase, bggExp, ludoTotal, ludoBase, ludoExp;
 let maxTotal, maxBase, maxExpansions; // Estatísticas da coleção
-let configModal, configBtn, saveConfigBtn, ludoAuthBtn, bggUserInput, ludoTokenInput, ludoUserDisplay;
+let configModal, configBtn, loginModal, logoutBtn;
 let selectAllMatches, acceptMatchesBtn, matchesList, compareWithAIBtn, aiMatchesList;
 let perfectMatchesCount, onlyBGGCount, onlyLudoCount, previousMatchesCount;
 let manualBggList, manualLudoList, manualBggCount, manualLudoCount, acceptManualMatchBtn;
@@ -42,14 +42,11 @@ document.addEventListener('DOMContentLoaded', () => {
     maxBase = document.getElementById('maxBase');
     maxExpansions = document.getElementById('maxExpansions');
 
-    // Elementos do modal de configuração
+    // Elementos dos modais
     configModal = new bootstrap.Modal(document.getElementById('configModal'));
+    loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
     configBtn = document.getElementById('configBtn');
-    saveConfigBtn = document.getElementById('saveConfigBtn');
-    ludoAuthBtn = document.getElementById('ludoAuthBtn');
-    bggUserInput = document.getElementById('bggUser');
-    ludoTokenInput = document.getElementById('ludoToken');
-    ludoUserDisplay = document.getElementById('ludoUserDisplay');
+    logoutBtn = document.getElementById('logoutBtn');
 
     // Elementos da aba de pareamento
     selectAllMatches = document.getElementById('selectAllMatches');
@@ -80,13 +77,11 @@ document.addEventListener('DOMContentLoaded', () => {
     manualLudoExp = document.getElementById('manualLudoExp');
 
     // Configurar event listeners
-    configBtn.addEventListener('click', () => {
-        loadConfig();
-        configModal.show();
-    });
+    configBtn.addEventListener('click', handleConfigClick);
+    logoutBtn.addEventListener('click', handleLogout);
     
-    saveConfigBtn.addEventListener('click', saveConfig);
-    ludoAuthBtn.addEventListener('click', startLudopediaAuth);
+    // Event listener para o form de login
+    document.getElementById('quickLoginForm').addEventListener('submit', handleQuickLogin);
     loadBtn.addEventListener('click', loadCollectionsFromAPI);
     saveBtn.addEventListener('click', saveCollections);
 
@@ -247,8 +242,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Disparar findMatches quando mudar para a aba de pareamento
     document.getElementById('matching-tab')?.addEventListener('shown.bs.tab', findMatches);
 
-    // Carregar configurações iniciais
-    loadConfig();
 
     // Inicializar estado dos filtros na carga da página
     updateFilterLinksState();
@@ -386,84 +379,6 @@ function renderGameList(games, container) {
     });
 }
 
-// Carregar configurações do servidor
-async function loadConfig() {
-    try {
-        console.log('Carregando configurações...');
-        const response = await window.authManager.authenticatedFetch('/api/config');
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        console.log('Dados recebidos:', data);
-        
-        if (bggUserInput && ludoTokenInput) {
-            bggUserInput.value = data.BGG_USER || '';
-            ludoTokenInput.value = data.LUDO_ACCESS_TOKEN || '';
-            if (data.LUDO_USER && ludoUserDisplay) {
-                ludoUserDisplay.textContent = `Usuário: ${data.LUDO_USER}`;
-            }
-            console.log('Configurações aplicadas aos campos');
-        } else {
-            console.error('Elementos do form não encontrados');
-        }
-    } catch (error) {
-        console.error('Error loading config:', error);
-    }
-}
-
-// Salvar configurações no servidor
-async function saveConfig() {
-    try {
-        const response = await window.authManager.authenticatedFetch('/api/config', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                BGG_USER: bggUserInput.value,
-                LUDO_ACCESS_TOKEN: ludoTokenInput.value,
-                LUDO_USER: ludoUserDisplay.textContent.replace('Usuário: ', '')
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        configModal.hide();
-    } catch (error) {
-        console.error('Error saving config:', error);
-        alert('Erro ao salvar configurações: ' + error.message);
-    }
-}
-
-// Iniciar autenticação Ludopedia
-async function startLudopediaAuth() {
-    try {
-        const response = await fetch('/api/auth/ludopedia');
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const { authUrl } = await response.json();
-        const authWindow = window.open(authUrl, 'LudopediaAuth', 'width=600,height=600');
-
-        // Receber mensagem de sucesso da autenticação
-        window.addEventListener('message', async (event) => {
-            if (event.data.type === 'AUTH_SUCCESS') {
-                authWindow.close();
-                ludoTokenInput.value = event.data.token;
-                if (event.data.user) {
-                    ludoUserDisplay.textContent = `Usuário: ${event.data.user}`;
-                }
-                await saveConfig();
-            }
-        }, { once: true });
-    } catch (error) {
-        console.error('Error starting auth:', error);
-        alert('Erro ao iniciar autenticação: ' + error.message);
-    }
-}
 
 // Função para salvar as coleções
 async function saveCollections() {
@@ -1169,6 +1084,133 @@ async function handleAcceptManualMatch() {
     } catch (error) {
         console.error('Error creating manual match:', error);
         alert('Erro ao criar match manual: ' + error.message);
+    }
+}
+
+// Função para verificar se o usuário está autenticado
+async function checkAuthentication() {
+    try {
+        const response = await fetch('/api/me', {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        return response.ok;
+    } catch (error) {
+        return false;
+    }
+}
+
+// Função para lidar com o clique na roda dentada
+async function handleConfigClick() {
+    const isAuthenticated = await checkAuthentication();
+    
+    if (isAuthenticated) {
+        await loadUserProfile();
+        configModal.show();
+    } else {
+        loginModal.show();
+    }
+}
+
+// Função para carregar os dados do usuário
+async function loadUserProfile() {
+    try {
+        const response = await fetch('/api/me', {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            const userData = data.user;
+            
+            // Preencher os campos do modal
+            document.getElementById('userDisplayName').textContent = userData.name || '-';
+            document.getElementById('userDisplayEmail').textContent = userData.email || '-';
+            document.getElementById('userDisplayBgg').textContent = userData.bgg_username || '-';
+            document.getElementById('userDisplayLudopedia').textContent = userData.ludopedia_username || '-';
+            
+            // Formatar plataforma preferida
+            const platformMap = {
+                'bgg': 'BoardGameGeek',
+                'ludopedia': 'Ludopedia'
+            };
+            document.getElementById('userDisplayPlatform').textContent = platformMap[userData.preferred_platform] || userData.preferred_platform || '-';
+            
+            // Formatar data de criação (só dia/mês/ano)
+            if (userData.created_at) {
+                const date = new Date(userData.created_at);
+                const formattedDate = date.toLocaleDateString('pt-BR');
+                document.getElementById('userDisplayCreated').textContent = formattedDate;
+            } else {
+                document.getElementById('userDisplayCreated').textContent = '-';
+            }
+        }
+    } catch (error) {
+        console.error('Erro ao carregar perfil do usuário:', error);
+    }
+}
+
+// Função para lidar com o login rápido
+async function handleQuickLogin(event) {
+    event.preventDefault();
+    
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    const submitBtn = document.getElementById('quickLoginBtn');
+    
+    try {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Entrando...';
+        
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            // Salvar token
+            localStorage.setItem('token', data.token);
+            
+            // Fechar modal de login
+            loginModal.hide();
+            
+            // Recarregar a página para aplicar o estado autenticado
+            window.location.reload();
+        } else {
+            alert(data.error || 'Erro ao fazer login');
+        }
+    } catch (error) {
+        console.error('Erro no login:', error);
+        alert('Erro ao fazer login. Tente novamente.');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Entrar';
+    }
+}
+
+// Função para fazer logout
+async function handleLogout() {
+    try {
+        await fetch('/api/logout', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+    } catch (error) {
+        console.error('Erro no logout:', error);
+    } finally {
+        // Remover token e recarregar página
+        localStorage.removeItem('token');
+        window.location.href = '/';
     }
 }
 
