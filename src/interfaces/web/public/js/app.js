@@ -239,15 +239,24 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Botão compareWithAIBtn não encontrado!');
     }
 
-    // Disparar findMatches quando mudar para a aba de pareamento
-    document.getElementById('matching-tab')?.addEventListener('shown.bs.tab', findMatches);
+    // Disparar findMatches quando mudar para a aba de pareamento (apenas se autenticado)
+    document.getElementById('matching-tab')?.addEventListener('shown.bs.tab', () => {
+        if (window.authManager && window.authManager.isAuthenticated()) {
+            findMatches();
+        }
+    });
 
 
     // Inicializar estado dos filtros na carga da página
     updateFilterLinksState();
 
-    // Carregar coleções automaticamente via API ao inicializar a página
-    loadCollections();
+    // Carregar coleções automaticamente apenas se o usuário estiver autenticado
+    // Aguardar um pouco para garantir que o authManager foi inicializado
+    setTimeout(() => {
+        if (window.authManager && window.authManager.isAuthenticated()) {
+            loadCollections();
+        }
+    }, 100);
 });
 
 // Função para gerenciar estado dos links de filtro
@@ -463,8 +472,8 @@ async function loadCollections() {
         renderGameList(currentBGGGames, bggList);
         renderGameList(currentLudoGames, ludoList);
 
-        // Procurar matches após carregar as coleções
-        if (currentBGGGames.length > 0 && currentLudoGames.length > 0) {
+        // Procurar matches após carregar as coleções (apenas se autenticado)
+        if (currentBGGGames.length > 0 && currentLudoGames.length > 0 && window.authManager && window.authManager.isAuthenticated()) {
             findMatches();
         }
         

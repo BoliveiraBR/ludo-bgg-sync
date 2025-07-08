@@ -203,9 +203,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             window.authManager.updateUserInterface();
         }
     } else {
-        // Se não está autenticado e está numa página que precisa de auth, redirecionar
-        if (window.location.pathname === '/' && !document.querySelector('.hero-section')) {
-            window.location.href = '/';
-        }
+        console.log('Usuário não autenticado, não executando ações que requerem autenticação');
+        // Nota: A lógica de redirecionamento foi removida para evitar loops
+        // O servidor já cuida de mostrar a página correta (welcome.html vs index.html)
     }
 });
