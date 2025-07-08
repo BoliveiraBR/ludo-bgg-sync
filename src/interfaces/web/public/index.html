@@ -264,6 +264,25 @@
             .hero-content-wrapper {
                 padding: 2rem;
             }
+            .navbar-brand-text {
+                font-size: 1.5rem;
+            }
+            .navbar-tagline {
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Estilos para navbar */
+        .navbar-brand-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        .navbar-tagline {
+            font-size: 1rem;
+            font-style: italic;
+            opacity: 0.8;
+            font-weight: 400;
         }
     </style>
 </head>
@@ -272,7 +291,7 @@
         <div class="container">
             <span class="navbar-brand d-flex align-items-center">
                 <img src="BoardGameGuru.png" alt="BoardGameGuru" style="height: 40px; width: auto; margin-right: 12px;">
-                BoardGameGuru{{TAGLINE}}
+                <span class="navbar-brand-text">BoardGameGuru</span><span class="navbar-tagline">{{TAGLINE}}</span>
             </span>
             <div class="d-flex align-items-center">
                 <!-- Para usuário NÃO autenticado -->
