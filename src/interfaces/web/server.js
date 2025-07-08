@@ -103,29 +103,30 @@ app.get('/', async (req, res) => {
   
   if (tokenData) {
     // Usuário tem token válido, mostrar aplicação principal com tagline
+    const fs = require('fs');
+    let html = fs.readFileSync(path.join(__dirname, 'public', 'index.html'), 'utf8');
+    
     try {
       const dbManager = new DatabaseManager();
       await dbManager.connect();
       const tagline = await dbManager.getRandomTagline();
       await dbManager.disconnect();
       
-      // Ler o arquivo HTML e substituir a tagline
-      const fs = require('fs');
-      let html = fs.readFileSync(path.join(__dirname, 'public', 'index.html'), 'utf8');
-      
       // Substituir placeholder da tagline
       if (tagline) {
+        console.log('✅ Tagline encontrada:', tagline);
         html = html.replace('{{TAGLINE}}', ` – "${tagline}"`);
       } else {
+        console.log('⚠️ Nenhuma tagline encontrada no banco');
         html = html.replace('{{TAGLINE}}', '');
       }
-      
-      res.send(html);
     } catch (error) {
       console.error('❌ Erro ao buscar tagline:', error);
-      // Em caso de erro, servir arquivo normal sem tagline
-      res.sendFile(path.join(__dirname, 'public', 'index.html'));
+      // Em caso de erro, servir arquivo sem tagline (substituir placeholder por string vazia)
+      html = html.replace('{{TAGLINE}}', '');
     }
+    
+    res.send(html);
   } else {
     // Visitante não autenticado, mostrar tela de boas-vindas
     res.sendFile(path.join(__dirname, 'public', 'welcome.html'));
@@ -144,29 +145,30 @@ app.get('/cadastro', (req, res) => {
 
 // Rota para acessar a aplicação principal (quando autenticado)
 app.get('/app', async (req, res) => {
+  const fs = require('fs');
+  let html = fs.readFileSync(path.join(__dirname, 'public', 'index.html'), 'utf8');
+  
   try {
     const dbManager = new DatabaseManager();
     await dbManager.connect();
     const tagline = await dbManager.getRandomTagline();
     await dbManager.disconnect();
     
-    // Ler o arquivo HTML e substituir a tagline
-    const fs = require('fs');
-    let html = fs.readFileSync(path.join(__dirname, 'public', 'index.html'), 'utf8');
-    
     // Substituir placeholder da tagline
     if (tagline) {
+      console.log('✅ Tagline encontrada:', tagline);
       html = html.replace('{{TAGLINE}}', ` – "${tagline}"`);
     } else {
+      console.log('⚠️ Nenhuma tagline encontrada no banco');
       html = html.replace('{{TAGLINE}}', '');
     }
-    
-    res.send(html);
   } catch (error) {
     console.error('❌ Erro ao buscar tagline:', error);
-    // Em caso de erro, servir arquivo normal sem tagline
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    // Em caso de erro, servir arquivo sem tagline (substituir placeholder por string vazia)
+    html = html.replace('{{TAGLINE}}', '');
   }
+  
+  res.send(html);
 });
 
 // Rota de health check
