@@ -1116,23 +1116,36 @@ function updateUserInterface() {
     const userNameSpan = document.querySelector('.user-name');
     
     // Verificar se os elementos existem
-    if (!unauthenticatedDiv || !authenticatedDiv) return;
+    if (!unauthenticatedDiv || !authenticatedDiv) {
+        console.log('🔍 DEBUG: Elementos de navbar não encontrados');
+        return;
+    }
     
-    if (window.authManager && window.authManager.isAuthenticated()) {
-        // Usuário autenticado
-        unauthenticatedDiv.style.display = 'none';
-        authenticatedDiv.style.display = 'flex';
+    const isAuthenticated = window.authManager && window.authManager.isAuthenticated();
+    console.log('🔍 DEBUG: Estado de autenticação:', isAuthenticated);
+    
+    if (isAuthenticated) {
+        // Usuário autenticado - mostrar "Olá, Nome" e esconder "Entrar"
+        console.log('🔍 DEBUG: Mostrando interface para usuário autenticado');
+        unauthenticatedDiv.classList.remove('d-flex');
+        unauthenticatedDiv.classList.add('d-none');
+        authenticatedDiv.classList.remove('d-none');
+        authenticatedDiv.classList.add('d-flex');
         
         // Atualizar nome do usuário
         const user = window.authManager.getCurrentUser();
         if (user && user.name && userNameSpan) {
             const firstName = formatFirstName(user.name);
             userNameSpan.textContent = firstName;
+            console.log('🔍 DEBUG: Nome atualizado para:', firstName);
         }
     } else {
-        // Usuário não autenticado
-        unauthenticatedDiv.style.display = 'flex';
-        authenticatedDiv.style.display = 'none';
+        // Usuário não autenticado - mostrar "Entrar" e esconder "Olá, Nome"
+        console.log('🔍 DEBUG: Mostrando interface para usuário não autenticado');
+        unauthenticatedDiv.classList.remove('d-none');
+        unauthenticatedDiv.classList.add('d-flex');
+        authenticatedDiv.classList.remove('d-flex');
+        authenticatedDiv.classList.add('d-none');
     }
 }
 
