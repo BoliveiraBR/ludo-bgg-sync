@@ -171,6 +171,100 @@
         .manual-game-radio {
             margin-right: 8px;
         }
+        /* Estilos para a aba Início */
+        .hero-content-wrapper {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 3rem;
+            color: white;
+            margin-bottom: 2rem;
+        }
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        .hero-description {
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .feature-description {
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+        .logo-section {
+            margin-bottom: 2rem;
+        }
+        .logo-platforms {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .platform-logo {
+            font-size: 2rem;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        .platform-logo:hover {
+            opacity: 1;
+        }
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            .hero-content-wrapper {
+                padding: 2rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -284,7 +378,12 @@
         <!-- Tab Navigation -->
         <ul class="nav nav-tabs mb-4" id="mainTabs" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="collections-tab" data-bs-toggle="tab" data-bs-target="#collections" type="button" role="tab" aria-controls="collections" aria-selected="true">
+                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
+                    <i class="bi bi-house-fill"></i> Início
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="collections-tab" data-bs-toggle="tab" data-bs-target="#collections" type="button" role="tab" aria-controls="collections" aria-selected="false">
                     <i class="bi bi-collection"></i> Coleção
                 </button>
             </li>
@@ -302,8 +401,82 @@
 
         <!-- Tab Content -->
         <div class="tab-content" id="mainTabsContent">
+            <!-- Home Tab -->
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="hero-content-wrapper">
+                    <div class="hero-content">
+                        <div class="logo-section">
+                            <h1 class="hero-title d-flex align-items-center justify-content-center">
+                                <img src="BoardGameGuru.png" alt="BoardGameGuru" style="height: 60px; width: auto; margin-right: 16px;">
+                                BoardGameGuru
+                            </h1>
+                            <p class="hero-subtitle">
+                                A ferramenta definitiva para comparar suas coleções de jogos
+                            </p>
+                        </div>
+
+                        <div class="hero-description">
+                            <p>
+                                Conecte suas coleções do <strong>BoardGameGeek</strong> e <strong>Ludopedia</strong> 
+                                em um só lugar. Compare, organize e descubra quais jogos você tem em cada plataforma 
+                                com nossa ferramenta inteligente de sincronização.
+                            </p>
+                        </div>
+
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="bi bi-arrow-left-right"></i>
+                                </div>
+                                <h3 class="feature-title">Sincronização Automática</h3>
+                                <p class="feature-description">
+                                    Compare automaticamente suas coleções do BGG e Ludopedia, 
+                                    identificando jogos em comum e diferenças.
+                                </p>
+                            </div>
+
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="bi bi-robot"></i>
+                                </div>
+                                <h3 class="feature-title">Matching Inteligente</h3>
+                                <p class="feature-description">
+                                    Nossa IA identifica jogos com nomes diferentes mas que são 
+                                    o mesmo título nas duas plataformas.
+                                </p>
+                            </div>
+
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="bi bi-bar-chart"></i>
+                                </div>
+                                <h3 class="feature-title">Estatísticas Completas</h3>
+                                <p class="feature-description">
+                                    Visualize estatísticas detalhadas da sua coleção, 
+                                    incluindo jogos base, expansões e muito mais.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="logo-platforms">
+                            <div class="platform-logo" title="BoardGameGeek">
+                                <i class="bi bi-globe"></i>
+                                <small class="d-block">BGG</small>
+                            </div>
+                            <div class="platform-logo">
+                                <i class="bi bi-plus-lg"></i>
+                            </div>
+                            <div class="platform-logo" title="Ludopedia">
+                                <i class="bi bi-puzzle"></i>
+                                <small class="d-block">Ludopedia</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Collections Tab -->
-            <div class="tab-pane fade show active" id="collections" role="tabpanel" aria-labelledby="collections-tab">
+            <div class="tab-pane fade" id="collections" role="tabpanel" aria-labelledby="collections-tab">
                 <!-- Estatísticas da Coleção -->
                 <div class="row mb-4">
                     <div class="col-12">
