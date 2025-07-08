@@ -24,7 +24,13 @@ class BGGApi {
 
     try {
       // Verificar se o usuário existe primeiro
-      await this.validateUser();
+      try {
+        await this.validateUser();
+      } catch (validationError) {
+        console.log(`⚠️ Erro na validação do usuário BGG: ${validationError.message}`);
+        console.log(`⚠️ Tentando buscar coleção diretamente...`);
+        // Continuar mesmo se a validação falhar - às vezes a API de user tem problemas
+      }
       
       const collection = [];
       let totalFetched = 0;
@@ -63,8 +69,19 @@ class BGGApi {
       
       const result = await this.parser.parseStringPromise(response.data);
       
-      if (!result.user || result.user.name !== this.username) {
-        throw new Error(`Usuário BGG '${this.username}' não encontrado`);
+      console.log(`🔍 Resposta da validação BGG:`, JSON.stringify(result, null, 2));
+      
+      if (!result.user) {
+        throw new Error(`Usuário BGG '${this.username}' não encontrado - resposta sem dados de usuário`);
+      }
+      
+      // Comparação case-insensitive e trimmed
+      const returnedName = (result.user.name || '').toString().trim().toLowerCase();
+      const requestedName = this.username.trim().toLowerCase();
+      
+      if (returnedName !== requestedName) {
+        console.log(`⚠️ Nome retornado: '${returnedName}', Nome solicitado: '${requestedName}'`);
+        throw new Error(`Usuário BGG '${this.username}' não encontrado - nome não confere (retornado: '${result.user.name}')`);
       }
       
       console.log(`✅ Usuário BGG validado: ${this.username} (ID: ${result.user.id})`);
@@ -72,7 +89,10 @@ class BGGApi {
       
     } catch (error) {
       if (error.response?.status === 404) {
-        throw new Error(`Usuário BGG '${this.username}' não existe`);
+        throw new Error(`Usuário BGG '${this.username}' não existe (HTTP 404)`);
+      }
+      if (error.response?.status) {
+        throw new Error(`Erro HTTP ${error.response.status} ao validar usuário BGG: ${error.message}`);
       }
       throw new Error(`Erro ao validar usuário BGG: ${error.message}`);
     }
@@ -166,6 +186,8 @@ class BGGApi {
   }
 
   async retryRequest(url, label) {
+    console.log(`🌐 Fazendo requisição BGG: ${url}`);
+    
     for (let attempt = 1; attempt <= this.maxRetries; attempt++) {
       try {
         const response = await axios.get(url, {
@@ -175,6 +197,8 @@ class BGGApi {
           }
         });
         
+        console.log(`📡 BGG respondeu com status ${response.status} para ${label}`);
+        
         // Se receber 202, espera e continua tentando
         if (response.status === 202) {
           console.log(`⏳ BGG está processando a requisição para ${label}. Tentativa ${attempt}/${this.maxRetries}...`);
@@ -182,10 +206,23 @@ class BGGApi {
           continue;
         }
         
+        // Log do início da resposta para debug
+        const responseStart = response.data ? response.data.toString().substring(0, 200) : 'sem dados';
+        console.log(`📄 Início da resposta BGG (${label}): ${responseStart}...`);
+        
         return response;
       } catch (error) {
+        console.log(`❌ Erro na tentativa ${attempt} para ${label}: ${error.message}`);
+        if (error.response) {
+          console.log(`📡 Status da resposta de erro: ${error.response.status}`);
+          if (error.response.data) {
+            const errorData = error.response.data.toString().substring(0, 200);
+            console.log(`📄 Dados do erro: ${errorData}...`);
+          }
+        }
+        
         if (attempt === this.maxRetries) throw error;
-        console.log(`⚠️ Tentativa ${attempt} falhou, tentando novamente...`);
+        console.log(`⚠️ Tentativa ${attempt} falhou, tentando novamente em ${this.retryDelay}ms...`);
         await new Promise(resolve => setTimeout(resolve, this.retryDelay));
       }
     }
