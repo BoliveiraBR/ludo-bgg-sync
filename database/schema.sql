@@ -178,3 +178,19 @@ COMMENT ON COLUMN collection_matches.bgg_version_id IS 'ID da versão do jogo no
 COMMENT ON COLUMN collection_matches.ludopedia_user_name IS 'Nome do usuário na Ludopedia';
 COMMENT ON COLUMN collection_matches.ludopedia_game_id IS 'ID do jogo na Ludopedia';
 COMMENT ON COLUMN collection_matches.match_type IS 'Tipo de match: name (automático por nome), ai (sugerido por IA), manual (feito manualmente)';
+
+-- Tabela para armazenar taglines aleatórias da navbar
+CREATE TABLE IF NOT EXISTS taglines (
+    id SERIAL PRIMARY KEY,
+    text VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    active BOOLEAN DEFAULT TRUE
+);
+
+-- Índice para otimizar consultas de taglines ativas
+CREATE INDEX IF NOT EXISTS idx_taglines_active ON taglines(active);
+
+-- Comentários da tabela de taglines
+COMMENT ON TABLE taglines IS 'Taglines aleatórias exibidas na navbar do BoardGameGuru';
+COMMENT ON COLUMN taglines.text IS 'Texto da tagline a ser exibida';
+COMMENT ON COLUMN taglines.active IS 'Indica se a tagline está ativa para exibição';
