@@ -83,41 +83,40 @@ function getUserFromToken(req) {
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
-// Rota principal - mostra tela inicial para visitantes não autenticados
+// Rota principal - sempre mostra index.html com tagline
 app.get('/', async (req, res) => {
-  // Verificar se usuário está autenticado via JWT
-  const tokenData = getUserFromToken(req);
+  console.log('🔍 Rota principal / foi chamada');
+  // Sempre mostrar aplicação principal com tagline
+  const fs = require('fs');
+  let html = fs.readFileSync(path.join(__dirname, 'public', 'index.html'), 'utf8');
   
-  if (tokenData) {
-    // Usuário tem token válido, mostrar aplicação principal com tagline
-    const fs = require('fs');
-    let html = fs.readFileSync(path.join(__dirname, 'public', 'index.html'), 'utf8');
+  try {
+    const dbManager = new DatabaseManager();
+    await dbManager.connect();
+    const tagline = await dbManager.getRandomTagline();
+    await dbManager.disconnect();
     
-    try {
-      const dbManager = new DatabaseManager();
-      await dbManager.connect();
-      const tagline = await dbManager.getRandomTagline();
-      await dbManager.disconnect();
-      
-      // Substituir placeholder da tagline
-      if (tagline) {
-        console.log('✅ Tagline encontrada:', tagline);
-        html = html.replace('{{TAGLINE}}', ` – "${tagline}"`);
-      } else {
-        console.log('⚠️ Nenhuma tagline encontrada no banco');
-        html = html.replace('{{TAGLINE}}', '');
-      }
-    } catch (error) {
-      console.error('❌ Erro ao buscar tagline:', error);
-      // Em caso de erro, servir arquivo sem tagline (substituir placeholder por string vazia)
+    // Substituir placeholder da tagline
+    if (tagline) {
+      console.log('✅ Tagline encontrada:', tagline);
+      html = html.replace('{{TAGLINE}}', ` – "${tagline}"`);
+    } else {
+      console.log('⚠️ Nenhuma tagline encontrada no banco');
       html = html.replace('{{TAGLINE}}', '');
     }
-    
-    res.send(html);
-  } else {
-    // Visitante não autenticado, mostrar tela de boas-vindas
-    res.sendFile(path.join(__dirname, 'public', 'welcome.html'));
+  } catch (error) {
+    console.error('❌ Erro ao buscar tagline:', error);
+    // Em caso de erro, servir arquivo sem tagline (substituir placeholder por string vazia)
+    html = html.replace('{{TAGLINE}}', '');
   }
+  
+  res.send(html);
+});
+
+// Rota para index.html diretamente - redireciona para a rota principal
+app.get('/index.html', async (req, res) => {
+  // Redirecionar para a rota principal que processa taglines
+  res.redirect('/');
 });
 
 // Rota para página de login
@@ -132,6 +131,7 @@ app.get('/cadastro', (req, res) => {
 
 // Rota para acessar a aplicação principal (quando autenticado)
 app.get('/app', async (req, res) => {
+  console.log('🔍 Rota /app foi chamada');
   const fs = require('fs');
   let html = fs.readFileSync(path.join(__dirname, 'public', 'index.html'), 'utf8');
   
@@ -341,7 +341,9 @@ app.get('/test-database-setup', async (req, res) => {
 
 // Servir arquivos estáticos com headers específicos
 // IMPORTANTE: Colocado após as rotas dinâmicas para não interferir na substituição de taglines
+// EXCLUIR index.html do static para forçar uso das rotas dinâmicas
 app.use(express.static(path.join(__dirname, 'public'), {
+  index: false, // Não servir index.html automaticamente
   setHeaders: (res, path, stat) => {
     if (path.endsWith('.png')) {
       res.set('Content-Type', 'image/png');
