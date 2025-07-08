@@ -247,6 +247,30 @@ class DatabaseManager {
             throw error;
         }
     }
+
+    /**
+     * Busca uma tagline aleatória do banco de dados
+     */
+    async getRandomTagline() {
+        try {
+            if (!this.client) {
+                await this.connect();
+            }
+
+            const query = `
+                SELECT text FROM taglines 
+                WHERE active = TRUE 
+                ORDER BY RANDOM() 
+                LIMIT 1
+            `;
+
+            const result = await this.client.query(query);
+            return result.rows.length > 0 ? result.rows[0].text : null;
+        } catch (error) {
+            console.error('❌ Erro ao buscar tagline aleatória:', error);
+            return null; // Retorna null em caso de erro para não quebrar a página
+        }
+    }
 }
 
 module.exports = DatabaseManager;
