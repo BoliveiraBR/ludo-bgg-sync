@@ -1,7 +1,6 @@
 # 📋 ToDo List
 
 ## TODO Urgente
-- [ ] Revisar todas as rotas para garantir que elas precisam de acesso autenticado
 - [ ] Corrigir excesso de conexões com o banco: implementar um padrão singleton para garantir reutilização da instância de conexão
 
 ## Próximos Passos

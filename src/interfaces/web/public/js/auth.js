@@ -158,20 +158,15 @@ class AuthManager {
     updateUserInterface() {
         if (!this.isAuthenticated()) return;
 
-        // Mostrar nome do usuário na navbar
-        const userElements = document.querySelectorAll('.user-name');
-        userElements.forEach(el => {
-            el.textContent = this.user.name;
-        });
-
-        // Mostrar email do usuário
+        // Não atualizar .user-name aqui pois o app.js tem sua própria lógica de formatação
+        // Apenas atualizar email se necessário
         const emailElements = document.querySelectorAll('.user-email');
         emailElements.forEach(el => {
             el.textContent = this.user.email;
         });
 
-        // Adicionar botão de logout se não existir
-        this.addLogoutButton();
+        // Adicionar botão de logout se não existir (legacy, pode ser removido futuramente)
+        // this.addLogoutButton();
     }
 
     // Adiciona botão de logout à navbar
@@ -202,11 +197,9 @@ window.authManager = new AuthManager();
 // Verificar autenticação na inicialização
 document.addEventListener('DOMContentLoaded', async () => {
     if (window.authManager.isAuthenticated()) {
-        // Validar token e atualizar interface
+        // Validar token - a interface será atualizada pelo app.js
         const isValid = await window.authManager.validateToken();
-        if (isValid) {
-            window.authManager.updateUserInterface();
-        }
+        // Não chamar updateUserInterface aqui pois o app.js tem sua própria lógica
     } else {
         console.log('Usuário não autenticado, não executando ações que requerem autenticação');
         // Nota: A lógica de redirecionamento foi removida para evitar loops

@@ -2,7 +2,7 @@
 let loadBtn, loadingIndicator, successMessage, bggList, ludoList, saveBtn;
 let bggTotal, bggBase, bggExp, ludoTotal, ludoBase, ludoExp;
 let maxTotal, maxBase, maxExpansions; // Estatísticas da coleção
-let configModal, configBtn, loginModal, logoutBtn;
+let configModal, configBtn, loginModal, logoutBtn, loginLink, userNameLink;
 let selectAllMatches, acceptMatchesBtn, matchesList, compareWithAIBtn, aiMatchesList;
 let perfectMatchesCount, onlyBGGCount, onlyLudoCount, previousMatchesCount;
 let manualBggList, manualLudoList, manualBggCount, manualLudoCount, acceptManualMatchBtn;
@@ -42,11 +42,13 @@ document.addEventListener('DOMContentLoaded', () => {
     maxBase = document.getElementById('maxBase');
     maxExpansions = document.getElementById('maxExpansions');
 
-    // Elementos dos modais
+    // Elementos dos modais e navbar
     configModal = new bootstrap.Modal(document.getElementById('configModal'));
     loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
     configBtn = document.getElementById('configBtn');
     logoutBtn = document.getElementById('logoutBtn');
+    loginLink = document.getElementById('loginLink');
+    userNameLink = document.getElementById('userNameLink');
 
     // Elementos da aba de pareamento
     selectAllMatches = document.getElementById('selectAllMatches');
@@ -79,6 +81,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Configurar event listeners
     configBtn.addEventListener('click', handleConfigClick);
     logoutBtn.addEventListener('click', handleLogout);
+    loginLink.addEventListener('click', handleConfigClick);
+    userNameLink.addEventListener('click', handleConfigClick);
     
     // Event listener para o form de login
     document.getElementById('quickLoginForm').addEventListener('submit', handleQuickLogin);
@@ -250,9 +254,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inicializar estado dos filtros na carga da página
     updateFilterLinksState();
 
-    // Carregar coleções automaticamente apenas se o usuário estiver autenticado
+    // Inicializar interface do usuário e carregar coleções se autenticado
     // Aguardar um pouco para garantir que o authManager foi inicializado
     setTimeout(() => {
+        updateUserInterface();
         if (window.authManager && window.authManager.isAuthenticated()) {
             loadCollections();
         }
@@ -1096,6 +1101,43 @@ async function handleAcceptManualMatch() {
     }
 }
 
+// Função para formatar nome (apenas primeiro nome, primeira letra maiúscula)
+function formatFirstName(fullName) {
+    if (!fullName) return 'Usuário';
+    
+    const firstName = fullName.trim().split(' ')[0];
+    if (!firstName) return 'Usuário';
+    
+    return firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
+}
+
+// Função para atualizar interface do usuário baseada no estado de autenticação
+function updateUserInterface() {
+    const unauthenticatedDiv = document.getElementById('unauthenticatedUser');
+    const authenticatedDiv = document.getElementById('authenticatedUser');
+    const userNameSpan = document.querySelector('.user-name');
+    
+    // Verificar se os elementos existem
+    if (!unauthenticatedDiv || !authenticatedDiv) return;
+    
+    if (window.authManager && window.authManager.isAuthenticated()) {
+        // Usuário autenticado
+        unauthenticatedDiv.style.display = 'none';
+        authenticatedDiv.style.display = 'flex';
+        
+        // Atualizar nome do usuário
+        const user = window.authManager.getCurrentUser();
+        if (user && user.name && userNameSpan) {
+            const firstName = formatFirstName(user.name);
+            userNameSpan.textContent = firstName;
+        }
+    } else {
+        // Usuário não autenticado
+        unauthenticatedDiv.style.display = 'flex';
+        authenticatedDiv.style.display = 'none';
+    }
+}
+
 // Função para verificar se o usuário está autenticado
 async function checkAuthentication() {
     try {
@@ -1201,8 +1243,11 @@ async function handleQuickLogin(event) {
             // Atualizar authManager
             if (window.authManager) {
                 window.authManager.setAuth(data.token, data.user);
-                window.authManager.updateUserInterface();
+                // Não chamar updateUserInterface do authManager pois temos nossa própria lógica
             }
+            
+            // Atualizar interface do usuário
+            updateUserInterface();
             
             // Fechar modal de login
             loginModal.hide();
