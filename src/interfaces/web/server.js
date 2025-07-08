@@ -82,19 +82,6 @@ function getUserFromToken(req) {
 // Aumentar limite do body parser
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
-// Servir arquivos estáticos com headers específicos
-app.use(express.static(path.join(__dirname, 'public'), {
-  setHeaders: (res, path, stat) => {
-    if (path.endsWith('.png')) {
-      res.set('Content-Type', 'image/png');
-      res.set('Cache-Control', 'public, max-age=31536000');
-    }
-    if (path.endsWith('favicon.png')) {
-      res.set('Content-Type', 'image/png');
-      res.set('Cache-Control', 'public, max-age=31536000');
-    }
-  }
-}));
 
 // Rota principal - mostra tela inicial para visitantes não autenticados
 app.get('/', async (req, res) => {
@@ -351,6 +338,21 @@ app.get('/test-database-setup', async (req, res) => {
     });
   }
 });
+
+// Servir arquivos estáticos com headers específicos
+// IMPORTANTE: Colocado após as rotas dinâmicas para não interferir na substituição de taglines
+app.use(express.static(path.join(__dirname, 'public'), {
+  setHeaders: (res, path, stat) => {
+    if (path.endsWith('.png')) {
+      res.set('Content-Type', 'image/png');
+      res.set('Cache-Control', 'public, max-age=31536000');
+    }
+    if (path.endsWith('favicon.png')) {
+      res.set('Content-Type', 'image/png');
+      res.set('Cache-Control', 'public, max-age=31536000');
+    }
+  }
+}));
 
 // API para sincronização
 app.post('/api/sync', authenticateToken, async (req, res) => {
