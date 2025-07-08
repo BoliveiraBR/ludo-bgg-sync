@@ -1626,7 +1626,7 @@ app.post('/api/save-manual-match', authenticateToken, async (req, res) => {
       
       const bggUser = userData.bgg_username;
       if (!userData.ludopedia_username) {
-        throw new Error('Usuário Ludopedia não configurado. Configure a autenticação da Ludopedia primeiro.');
+        throw new Error('Usuário Ludopedia não configurado. Configure a autenticação da Ludopedia primeira.');
       }
       const ludoUser = userData.ludopedia_username;
       
@@ -1640,6 +1640,8 @@ app.post('/api/save-manual-match', authenticateToken, async (req, res) => {
         matchType: 'manual'
       }];
       
+      console.log(`🔍 DEBUG: Dados do match preparado:`, JSON.stringify(dbMatches, null, 2));
+      
       // Salvar no banco de dados
       const matchManager = new MatchManager();
       await matchManager.connect();
@@ -1648,8 +1650,10 @@ app.post('/api/save-manual-match', authenticateToken, async (req, res) => {
       
       if (savedCount > 0) {
         console.log(`✅ Match manual salvo: ${match.bggName || match.bggId} ↔ ${match.ludoName || match.ludoId}`);
+        console.log(`🔍 DEBUG: ${savedCount} matches salvos no banco`);
         res.json({ success: true });
       } else {
+        console.log(`❌ DEBUG: Nenhum match foi salvo. savedCount: ${savedCount}`);
         res.status(409).json({ error: 'Match já existe ou erro ao salvar' });
       }
     } finally {
