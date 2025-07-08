@@ -1099,9 +1099,18 @@ async function handleAcceptManualMatch() {
 // Função para verificar se o usuário está autenticado
 async function checkAuthentication() {
     try {
+        // Usar authManager se disponível
+        if (window.authManager) {
+            return window.authManager.isAuthenticated();
+        }
+        
+        // Fallback manual
+        const token = localStorage.getItem('authToken');
+        if (!token) return false;
+        
         const response = await fetch('/api/me', {
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${token}`
             }
         });
         return response.ok;
@@ -1127,7 +1136,7 @@ async function loadUserProfile() {
     try {
         const response = await fetch('/api/me', {
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
             }
         });
         
@@ -1185,14 +1194,21 @@ async function handleQuickLogin(event) {
         const data = await response.json();
         
         if (response.ok) {
-            // Salvar token
-            localStorage.setItem('token', data.token);
+            // Salvar token e dados do usuário (mesmo formato da página de login)
+            localStorage.setItem('authToken', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user));
+            
+            // Atualizar authManager
+            if (window.authManager) {
+                window.authManager.setAuth(data.token, data.user);
+                window.authManager.updateUserInterface();
+            }
             
             // Fechar modal de login
             loginModal.hide();
             
-            // Recarregar a página para aplicar o estado autenticado
-            window.location.reload();
+            // Carregar coleções automaticamente
+            loadCollections();
         } else {
             alert(data.error || 'Erro ao fazer login');
         }
@@ -1208,17 +1224,30 @@ async function handleQuickLogin(event) {
 // Função para fazer logout
 async function handleLogout() {
     try {
-        await fetch('/api/logout', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
-        });
+        // Usar authManager para logout se disponível
+        if (window.authManager) {
+            await window.authManager.logout();
+        } else {
+            // Fallback manual
+            await fetch('/api/logout', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
+            });
+            
+            // Limpar dados locais
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+            
+            // Redirecionar para home
+            window.location.href = '/';
+        }
     } catch (error) {
         console.error('Erro no logout:', error);
-    } finally {
-        // Remover token e recarregar página
-        localStorage.removeItem('token');
+        // Mesmo com erro, limpar dados locais e redirecionar
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('user');
         window.location.href = '/';
     }
 }

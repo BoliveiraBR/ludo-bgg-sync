@@ -2,6 +2,11 @@
 
 class AuthManager {
     constructor() {
+        // Limpar tokens antigos com nome incorreto
+        if (localStorage.getItem('token')) {
+            localStorage.removeItem('token');
+        }
+        
         this.token = localStorage.getItem('authToken');
         this.user = null;
         
