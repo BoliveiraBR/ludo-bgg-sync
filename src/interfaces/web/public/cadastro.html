@@ -222,6 +222,54 @@
     <script>
         let ludopediaToken = null;
         let ludopediaUser = null;
+        let authCheckInterval = null;
+
+        // Verificar se há tokens salvos (para quando usuário volta de uma nova aba)
+        function checkForSavedTokens() {
+            try {
+                const authDataStr = sessionStorage.getItem('ludopedia_temp_auth');
+                if (!authDataStr) return false;
+                
+                const authData = JSON.parse(authDataStr);
+                
+                // Verificar se não expirou
+                if (Date.now() > authData.expires) {
+                    sessionStorage.removeItem('ludopedia_temp_auth');
+                    return false;
+                }
+                
+                // Verificar se tem dados válidos
+                if (authData.token && authData.user) {
+                    // Limpar dados temporários
+                    sessionStorage.removeItem('ludopedia_temp_auth');
+                    
+                    // Usar os tokens
+                    ludopediaToken = authData.token;
+                    ludopediaUser = authData.user;
+                
+                    // Atualizar interface
+                    document.getElementById('ludoTokenDisplay').value = 'Token obtido com sucesso!';
+                    document.getElementById('ludoUserDisplay').textContent = ludopediaUser ? `Usuário: ${ludopediaUser}` : '';
+                    
+                    // Habilitar campos pós-OAuth
+                    enablePostOAuthFields();
+                    
+                    // Parar verificação
+                    if (authCheckInterval) {
+                        clearInterval(authCheckInterval);
+                        authCheckInterval = null;
+                    }
+                    
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                console.error('Erro ao verificar tokens salvos:', error);
+                // Limpar dados corrompidos
+                sessionStorage.removeItem('ludopedia_temp_auth');
+                return false;
+            }
+        }
 
         // Iniciar autenticação Ludopedia (mesmo código do app.js)
         async function startLudopediaAuth() {
@@ -233,7 +281,7 @@
                 const { authUrl } = await response.json();
                 const authWindow = window.open(authUrl, 'LudopediaAuth', 'width=600,height=600');
 
-                // Receber mensagem de sucesso da autenticação
+                // Receber mensagem de sucesso da autenticação (para popup)
                 window.addEventListener('message', async (event) => {
                     if (event.data.type === 'AUTH_SUCCESS') {
                         authWindow.close();
@@ -246,8 +294,17 @@
                         
                         // Habilitar campos pós-OAuth
                         enablePostOAuthFields();
+                        
+                        // Parar verificação se estiver rodando
+                        if (authCheckInterval) {
+                            clearInterval(authCheckInterval);
+                            authCheckInterval = null;
+                        }
                     }
                 }, { once: true });
+                
+                // Iniciar verificação periódica para nova aba (mobile/fallback)
+                authCheckInterval = setInterval(checkForSavedTokens, 1000);
             } catch (error) {
                 console.error('Error starting auth:', error);
                 alert('Erro ao iniciar autenticação: ' + error.message);
@@ -281,6 +338,11 @@
             const isValid = name && email && password && acceptTerms && ludopediaToken;
             document.getElementById('submitBtn').disabled = !isValid;
         }
+
+        // Verificar tokens salvos ao carregar a página
+        document.addEventListener('DOMContentLoaded', function() {
+            checkForSavedTokens();
+        });
 
         // Event listeners
         document.getElementById('ludoAuthBtn').addEventListener('click', startLudopediaAuth);

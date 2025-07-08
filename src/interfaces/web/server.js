@@ -874,7 +874,16 @@ app.get('/callback', async (req, res) => {
           }, 1000);
 
           function closeWindow() {
-            // Notifica a janela principal sobre o sucesso
+            // Salvar tokens temporários com expiração (5 minutos) para mobile/nova aba
+            const authData = {
+              token: '${tokenResponse.data.access_token}',
+              user: '${ludoUsername || ''}',
+              timestamp: Date.now(),
+              expires: Date.now() + (5 * 60 * 1000) // 5 minutos
+            };
+            sessionStorage.setItem('ludopedia_temp_auth', JSON.stringify(authData));
+            
+            // Notifica a janela principal sobre o sucesso (para popup)
             if (window.opener) {
               window.opener.postMessage({ 
                 type: 'AUTH_SUCCESS', 
@@ -892,7 +901,9 @@ app.get('/callback', async (req, res) => {
                 document.body.innerHTML = \`
                   <div class="success-card">
                     <h3>✅ Autenticação Concluída</h3>
-                    <p>Por favor, feche esta aba manualmente e retorne à aplicação.</p>
+                    <p>Conectado com sucesso à Ludopedia!</p>
+                    <p><strong>Feche esta aba e retorne à página de cadastro.</strong></p>
+                    <p><small>Seus dados serão carregados automaticamente quando você voltar.</small></p>
                   </div>
                 \`;
               }
