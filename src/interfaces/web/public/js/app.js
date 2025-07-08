@@ -2,7 +2,7 @@
 let loadBtn, loadingIndicator, successMessage, bggList, ludoList, saveBtn;
 let bggTotal, bggBase, bggExp, ludoTotal, ludoBase, ludoExp;
 let maxTotal, maxBase, maxExpansions; // Estatísticas da coleção
-let configModal, configBtn, loginModal, logoutBtn, loginLink, userNameLink;
+let configModal, configBtn, loginModal, logoutBtn, loginLink;
 let selectAllMatches, acceptMatchesBtn, matchesList, compareWithAIBtn, aiMatchesList;
 let perfectMatchesCount, onlyBGGCount, onlyLudoCount, previousMatchesCount;
 let manualBggList, manualLudoList, manualBggCount, manualLudoCount, acceptManualMatchBtn;
@@ -48,7 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
     configBtn = document.getElementById('configBtn');
     logoutBtn = document.getElementById('logoutBtn');
     loginLink = document.getElementById('loginLink');
-    userNameLink = document.getElementById('userNameLink');
 
     // Elementos da aba de pareamento
     selectAllMatches = document.getElementById('selectAllMatches');
@@ -82,7 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
     configBtn.addEventListener('click', handleConfigClick);
     logoutBtn.addEventListener('click', handleLogout);
     loginLink.addEventListener('click', handleConfigClick);
-    userNameLink.addEventListener('click', handleConfigClick);
     
     // Event listener para o form de login
     document.getElementById('quickLoginForm').addEventListener('submit', handleQuickLogin);
