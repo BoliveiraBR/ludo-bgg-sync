@@ -527,6 +527,18 @@ async function loadCollectionsFromAPI() {
 
         const data = await response.json();
         
+        // Capturar estatísticas atuais ANTES de atualizar a UI
+        const currentBggStats = {
+            total: parseInt(bggTotal?.textContent || '0'),
+            base: parseInt(bggBase?.textContent || '0'),
+            expansions: parseInt(bggExp?.textContent || '0')
+        };
+        const currentLudoStats = {
+            total: parseInt(ludoTotal?.textContent || '0'),
+            base: parseInt(ludoBase?.textContent || '0'),
+            expansions: parseInt(ludoExp?.textContent || '0')
+        };
+        
         // Store the collections
         currentBGGGames = data.bggCollection;
         currentLudoGames = data.ludoCollection;
@@ -563,7 +575,7 @@ async function loadCollectionsFromAPI() {
         }
 
         // Mostrar resumo dos dados carregados
-        showLoadSummary(data.bggCollection, data.ludoCollection);
+        showLoadSummary(data.bggCollection, data.ludoCollection, currentBggStats, currentLudoStats);
         
     } catch (error) {
         console.error('Error:', error);
@@ -575,7 +587,7 @@ async function loadCollectionsFromAPI() {
 }
 
 // Mostrar resumo dos dados carregados na aba de atualização
-function showLoadSummary(bggCollection, ludoCollection) {
+function showLoadSummary(bggCollection, ludoCollection, currentBggStats, currentLudoStats) {
     if (!loadSummary || !changeLegend) return;
 
     console.log('🔍 showLoadSummary chamado:', { 
@@ -591,30 +603,8 @@ function showLoadSummary(bggCollection, ludoCollection) {
         bgg: loadedBggStats,
         ludo: loadedLudoStats
     });
-    
-    // Calcular estatísticas atuais (das coleções já salvas)
-    console.log('🔍 Elementos HTML encontrados:', {
-        bggTotal: bggTotal?.textContent,
-        bggBase: bggBase?.textContent,
-        bggExp: bggExp?.textContent,
-        ludoTotal: ludoTotal?.textContent,
-        ludoBase: ludoBase?.textContent,
-        ludoExp: ludoExp?.textContent
-    });
-    
-    const currentBggStats = {
-        total: parseInt(bggTotal?.textContent || '0'),
-        base: parseInt(bggBase?.textContent || '0'),
-        expansions: parseInt(bggExp?.textContent || '0')
-    };
-    
-    const currentLudoStats = {
-        total: parseInt(ludoTotal?.textContent || '0'),
-        base: parseInt(ludoBase?.textContent || '0'),
-        expansions: parseInt(ludoExp?.textContent || '0')
-    };
 
-    console.log('📊 Estatísticas atuais:', {
+    console.log('📊 Estatísticas atuais (capturadas antes da atualização):', {
         bgg: currentBggStats,
         ludo: currentLudoStats
     });
