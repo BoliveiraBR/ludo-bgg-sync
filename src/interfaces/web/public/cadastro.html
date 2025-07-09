@@ -150,14 +150,6 @@
                             </button>
                         </div>
                         <small class="text-muted">Conecte-se à Ludopedia para habilitar os próximos campos</small>
-                        <div class="mt-2">
-                            <small class="text-muted">
-                                Se o botão não abrir o pop-up, 
-                                <a href="/auth/ludopedia/direct" target="_blank" class="text-decoration-none" id="directAuthLink">
-                                    clique aqui para abrir em outra aba
-                                </a>
-                            </small>
-                        </div>
                     </div>
 
                     <!-- Campos que são habilitados após OAuth -->
@@ -335,72 +327,21 @@
         }
 
 
-        // Iniciar autenticação Ludopedia
-        async function startLudopediaAuth() {
-            try {
-                const response = await fetch('/api/auth/ludopedia');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const { authUrl } = await response.json();
-                
-                const authWindow = window.open(authUrl, 'LudopediaAuth', 'width=600,height=600');
-                
-                if (!authWindow) {
-                    // Se popup foi bloqueado, mostrar mensagem para usuário
-                    alert('❌ Popup bloqueado!\n\n1. Permita popups para este site\n2. Ou use o link "clique aqui para abrir em outra aba" abaixo do botão');
-                    return;
-                } else {
-                    // Receber mensagem de sucesso da autenticação (para popup)
-                    const messageHandler = async (event) => {
-                        if (event.data.type === 'AUTH_SUCCESS') {
-                            authWindow.close();
-                            ludopediaToken = event.data.token;
-                            ludopediaUser = event.data.user;
-                            
-                            // Atualizar interface
-                            document.getElementById('ludoTokenDisplay').value = 'Token obtido com sucesso!';
-                            document.getElementById('ludoUserDisplay').textContent = ludopediaUser ? `Usuário: ${ludopediaUser}` : '';
-                            
-                            // Habilitar campos pós-OAuth
-                            enablePostOAuthFields();
-                            
-                            // Parar verificação se estiver rodando
-                            if (authCheckInterval) {
-                                clearInterval(authCheckInterval);
-                                authCheckInterval = null;
-                            }
-                        }
-                    };
-                    
-                    window.addEventListener('message', messageHandler, { once: true });
-                    
-                    // Cleanup se janela for fechada manualmente
-                    const checkWindow = setInterval(() => {
-                        if (authWindow && authWindow.closed) {
-                            clearInterval(checkWindow);
-                            window.removeEventListener('message', messageHandler);
-                            // Continuar verificação por localStorage por mais 30 segundos
-                            setTimeout(() => {
-                                if (authCheckInterval) {
-                                    clearInterval(authCheckInterval);
-                                    authCheckInterval = null;
-                                }
-                            }, 30000);
-                        }
-                    }, 1000);
-                }
-                
-                // Iniciar verificação periódica para nova aba (mobile/fallback)
-                if (authCheckInterval) {
-                    clearInterval(authCheckInterval);
-                }
-                authCheckInterval = setInterval(checkForSavedTokens, 3000);
-                
-            } catch (error) {
-                console.error('Error starting auth:', error);
-                alert('Erro ao iniciar autenticação: ' + error.message);
+        // Iniciar autenticação Ludopedia (abre nova aba)
+        function startLudopediaAuth() {
+            console.log('🔗 Botão clicado, abrindo nova aba...');
+            
+            // Abrir nova aba diretamente para o endpoint de redirect
+            window.open('/auth/ludopedia/direct', '_blank');
+            
+            // Iniciar verificação periódica para detectar token
+            if (authCheckInterval) {
+                clearInterval(authCheckInterval);
             }
+            authCheckInterval = setInterval(() => {
+                console.log('🔄 Verificando tokens...');
+                checkForSavedTokens();
+            }, 3000);
         }
 
         function enablePostOAuthFields() {
@@ -452,27 +393,6 @@
         });
 
 
-        // Escutar mensagens de qualquer janela (popup ou nova aba)
-        window.addEventListener('message', function(event) {
-            if (event.data.type === 'AUTH_SUCCESS') {
-                // Usar os tokens
-                ludopediaToken = event.data.token;
-                ludopediaUser = event.data.user;
-                
-                // Atualizar interface
-                document.getElementById('ludoTokenDisplay').value = 'Token obtido com sucesso!';
-                document.getElementById('ludoUserDisplay').textContent = ludopediaUser ? `Usuário: ${ludopediaUser}` : '';
-                
-                // Habilitar campos pós-OAuth
-                enablePostOAuthFields();
-                
-                // Parar verificação se estiver rodando
-                if (authCheckInterval) {
-                    clearInterval(authCheckInterval);
-                    authCheckInterval = null;
-                }
-            }
-        });
 
         // Função para limpar tokens expirados (segurança)
         function cleanupExpiredTokens() {
@@ -498,19 +418,6 @@
 
         // Event listeners
         document.getElementById('ludoAuthBtn').addEventListener('click', startLudopediaAuth);
-        
-        // Event listener para link direto
-        document.getElementById('directAuthLink').addEventListener('click', function() {
-            console.log('🔗 Link direto clicado, iniciando polling...');
-            // Iniciar verificação periódica quando link direto é clicado
-            if (authCheckInterval) {
-                clearInterval(authCheckInterval);
-            }
-            authCheckInterval = setInterval(() => {
-                console.log('🔄 Verificando tokens...');
-                checkForSavedTokens();
-            }, 3000);
-        });
 
         // Verificar validade do formulário quando campos obrigatórios mudarem
         ['name', 'email', 'password', 'acceptTerms'].forEach(id => {
