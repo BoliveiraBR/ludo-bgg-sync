@@ -288,15 +288,18 @@
                 }
                 
                 const authData = JSON.parse(authDataStr);
+                console.log('🔍 Token encontrado:', authData);
                 
                 // Verificar se não expirou
                 if (Date.now() > authData.expires) {
+                    console.log('⚠️ Token expirado');
                     localStorage.removeItem('ludopedia_temp_auth');
                     return false;
                 }
                 
                 // Verificar se tem dados válidos
                 if (authData.token && authData.user) {
+                    console.log('✅ Processando token válido');
                     // Limpar dados temporários IMEDIATAMENTE por segurança
                     localStorage.removeItem('ludopedia_temp_auth');
                     
@@ -321,6 +324,7 @@
                 }
                 return false;
             } catch (error) {
+                console.error('❌ Erro ao verificar tokens:', error);
                 // Limpar dados corrompidos
                 localStorage.removeItem('ludopedia_temp_auth');
                 return false;
@@ -339,7 +343,11 @@
                 // Abrir apenas em nova aba
                 window.open(authUrl, '_blank');
                 
-                // Iniciar verificação periódica para nova aba
+                // Iniciar verificação periódica para nova aba (limpar intervalo existente primeiro)
+                if (authCheckInterval) {
+                    clearInterval(authCheckInterval);
+                }
+                console.log('⏰ Iniciando verificação periódica (link manual)');
                 authCheckInterval = setInterval(checkForSavedTokens, 3000);
                 
             } catch (error) {
@@ -404,6 +412,10 @@
                 }
                 
                 // Iniciar verificação periódica para nova aba (mobile/fallback)
+                if (authCheckInterval) {
+                    clearInterval(authCheckInterval);
+                }
+                console.log('⏰ Iniciando verificação periódica (botão)');
                 authCheckInterval = setInterval(checkForSavedTokens, 3000);
                 
             } catch (error) {
