@@ -20,6 +20,9 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d'; // 7 dias
 
 const app = express();
 
+// Cache temporário para tokens OAuth (usar Redis em produção)
+const tokenCache = new Map();
+
 // Middleware de autenticação JWT
 async function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];
@@ -672,9 +675,15 @@ app.get('/api/config', authenticateToken, async (req, res) => {
 // Rota para iniciar autenticação Ludopedia (JavaScript)
 app.get('/api/auth/ludopedia', (req, res) => {
   try {
+    const { state } = req.query;
+    
+    if (!state) {
+      return res.status(400).json({ error: 'State parameter is required' });
+    }
+    
     const clientId = process.env.LUDO_CLIENT_ID;
     const redirectUri = process.env.LUDO_REDIRECT_URI;
-    const authUrl = `https://ludopedia.com.br/oauth?client_id=${clientId}&redirect_uri=${redirectUri}`;
+    const authUrl = `https://ludopedia.com.br/oauth?client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`;
     
     res.json({ authUrl });
   } catch (error) {
@@ -686,14 +695,56 @@ app.get('/api/auth/ludopedia', (req, res) => {
 // Rota para link direto de autenticação Ludopedia (HTML)
 app.get('/auth/ludopedia/direct', (req, res) => {
   try {
+    const { state } = req.query;
+    
+    if (!state) {
+      return res.status(400).send('State parameter is required');
+    }
+    
     const clientId = process.env.LUDO_CLIENT_ID;
     const redirectUri = process.env.LUDO_REDIRECT_URI;
-    const authUrl = `https://ludopedia.com.br/oauth?client_id=${clientId}&redirect_uri=${redirectUri}`;
+    const authUrl = `https://ludopedia.com.br/oauth?client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`;
     
     res.redirect(authUrl);
   } catch (error) {
     console.error('Error starting auth:', error);
     res.status(500).send('Erro na autenticação: ' + error.message);
+  }
+});
+
+// Rota para polling do resultado da autenticação
+app.get('/auth/result', (req, res) => {
+  try {
+    const { state } = req.query;
+    
+    if (!state) {
+      return res.status(400).json({ error: 'State parameter is required' });
+    }
+    
+    const authData = tokenCache.get(state);
+    
+    if (!authData) {
+      return res.status(202).json({ status: 'pending' });
+    }
+    
+    // Verificar se o token expirou (5 minutos)
+    if (Date.now() - authData.timestamp > 5 * 60 * 1000) {
+      tokenCache.delete(state);
+      return res.status(404).json({ error: 'Token expired' });
+    }
+    
+    // Remover do cache após uso
+    tokenCache.delete(state);
+    
+    return res.json({
+      status: 'success',
+      token: authData.token,
+      user: authData.user
+    });
+    
+  } catch (error) {
+    console.error('Error in auth result:', error);
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -752,7 +803,7 @@ app.post('/api/config', authenticateToken, async (req, res) => {
 // Rota de callback do OAuth
 app.get('/callback', async (req, res) => {
   try {
-    const { code, error: oauthError } = req.query;
+    const { code, error: oauthError, state } = req.query;
     
     if (oauthError) {
       console.error('Erro OAuth:', oauthError);
@@ -782,38 +833,28 @@ app.get('/callback', async (req, res) => {
       throw error;
     });
 
-    // Para o callback OAuth, vamos usar usuário padrão por agora
-    // TODO: Melhorar isso para associar com usuário logado via estado da sessão
-    const userId = 1;
-    
-    const userManager = new UserManager();
-    await userManager.connect();
-    
+    // Buscar o usuário da Ludopedia
+    let ludoUsername = null;
     try {
-      // Salvar token OAuth da Ludopedia
-      await userManager.saveOAuthToken(
-        userId,
-        'ludopedia',
-        tokenResponse.data.access_token
-      );
-      
-      // Buscar o usuário da Ludopedia
-      let ludoUsername = null;
-      try {
-        const userResponse = await axios.get('https://ludopedia.com.br/api/v1/me', {
-          headers: {
-            Authorization: `Bearer ${tokenResponse.data.access_token}`
-          }
-        });
-        ludoUsername = userResponse.data.usuario;
-        
-        // Atualizar username da Ludopedia no perfil do usuário
-        await userManager.updateUser(userId, {
-          ludopedia_username: ludoUsername
-        });
-      } catch (error) {
-        console.error('Erro ao buscar usuário da Ludopedia:', error);
-      }
+      const userResponse = await axios.get('https://ludopedia.com.br/api/v1/me', {
+        headers: {
+          Authorization: `Bearer ${tokenResponse.data.access_token}`
+        }
+      });
+      ludoUsername = userResponse.data.usuario;
+    } catch (error) {
+      console.error('Erro ao buscar usuário da Ludopedia:', error);
+    }
+    
+    // Salvar token no cache usando state como chave
+    if (state) {
+      tokenCache.set(state, {
+        token: tokenResponse.data.access_token,
+        user: ludoUsername,
+        timestamp: Date.now()
+      });
+      console.log(`✅ Token salvo no cache com state: ${state}`);
+    }
 
     // Página de sucesso com mensagem clara
     res.send(`
@@ -870,12 +911,12 @@ app.get('/callback', async (req, res) => {
             Voltar para o BoardGameGuru
           </button>
           <div class="countdown">
-            Esta janela fechará automaticamente em <span id="countdown">10</span> segundos.
+            Esta janela fechará automaticamente em <span id="countdown">3</span> segundos.
           </div>
         </div>
 
         <script>
-          let seconds = 10;
+          let seconds = 3;
           const countdownEl = document.getElementById('countdown');
           
           const timer = setInterval(() => {
@@ -883,71 +924,17 @@ app.get('/callback', async (req, res) => {
             countdownEl.textContent = seconds;
             if (seconds <= 0) {
               clearInterval(timer);
-              closeWindow();
+              window.close();
             }
           }, 1000);
 
           function closeWindow() {
-            console.log('🚪 closeWindow() chamado - tentando fechar janela...');
-            
-            // Tentar fechar a janela
             window.close();
-            
-            // Se não conseguiu fechar, mostrar feedback após um pequeno delay
-            setTimeout(() => {
-              if (!window.closed) {
-                console.log('ℹ️ Janela não pôde ser fechada automaticamente');
-                // Atualizar o texto do botão para ser mais claro
-                const button = document.querySelector('button');
-                if (button) {
-                  button.innerHTML = '<i class="me-2">❌</i>Fechar Esta Aba Manualmente';
-                  button.style.backgroundColor = '#dc3545';
-                }
-                
-                // Atualizar a mensagem do countdown também
-                const countdownDiv = document.querySelector('.countdown');
-                if (countdownDiv) {
-                  countdownDiv.innerHTML = '<small class="text-muted">Por favor, feche esta aba manualmente.</small>';
-                }
-              }
-            }, 500);
           }
-          
-          // Salvar token no localStorage assim que a página carregar (sem fechar)
-          window.onload = function() {
-            // Apenas salvar o token, não fechar ainda
-            const authData = {
-              token: '${tokenResponse.data.access_token}',
-              user: '${ludoUsername || ''}',
-              timestamp: Date.now(),
-              expires: Date.now() + (5 * 60 * 1000) // 5 minutos
-            };
-            
-            try {
-              localStorage.setItem('ludopedia_temp_auth', JSON.stringify(authData));
-              console.log('💾 Token salvo no localStorage');
-            } catch (error) {
-              console.error('❌ Erro ao salvar no localStorage:', error);
-            }
-            
-            // Enviar postMessage para popup (se aplicável)
-            if (window.opener) {
-              console.log('📱 Enviando postMessage para popup');
-              window.opener.postMessage({ 
-                type: 'AUTH_SUCCESS', 
-                token: '${tokenResponse.data.access_token}',
-                user: '${ludoUsername || ''}'
-              }, '*');
-            }
-          };
         </script>
       </body>
       </html>
     `);
-    
-    } finally {
-      await userManager.disconnect();
-    }
   } catch (error) {
     console.error('Error in OAuth callback:', error);
     let errorMessage = 'Erro na autenticação';
@@ -1007,12 +994,12 @@ app.get('/callback', async (req, res) => {
             <i class="me-2">🔙</i>Fechar Janela
           </button>
           <div class="countdown">
-            Esta janela fechará automaticamente em <span id="countdown">10</span> segundos.
+            Esta janela fechará automaticamente em <span id="countdown">5</span> segundos.
           </div>
         </div>
 
         <script>
-          let seconds = 10;
+          let seconds = 5;
           const countdownEl = document.getElementById('countdown');
           
           const timer = setInterval(() => {

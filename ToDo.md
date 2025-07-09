@@ -6,6 +6,8 @@
 ## Próximos Passos
 
 ### Alta Prioridade
+- [ ]Permitir edição (ou inclusão) de bgg_username e alteração de site preferido na tela de configuração
+- [ ] Permitir deleção de matches feitos anteriormente pelo pareamento
 - [ ] Colocar novo ícone na aba do Safari para MacOS e iOS
 - [ ] Colocar mensagens de "Como funciona" na aba de pareamento
 - [ ] Implementar sistema de log estruturado
