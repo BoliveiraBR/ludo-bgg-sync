@@ -912,14 +912,27 @@ app.get('/callback', async (req, res) => {
                 token: '${tokenResponse.data.access_token}',
                 user: '${ludoUsername || ''}'
               }, '*');
-              
-              // Fechar popup imediatamente
-              window.close();
             } else {
-              console.log('🆕 Detectado como NOVA ABA - mantendo página de sucesso');
-              // Para nova aba: não redireciona, mantém página de sucesso
-              // O localStorage vai comunicar com a aba original via polling
+              console.log('🆕 Detectado como NOVA ABA - localStorage já salvo');
+              // Para nova aba: localStorage já foi salvo, vai comunicar via storage event
             }
+            
+            // Sempre tentar fechar a janela (funciona para popup e nova aba)
+            console.log('🚪 Tentando fechar janela...');
+            window.close();
+            
+            // Se não conseguiu fechar (algumas abas não permitem), mostrar feedback
+            setTimeout(() => {
+              if (!window.closed) {
+                console.log('ℹ️ Janela não pôde ser fechada automaticamente');
+                // Atualizar o texto do botão para ser mais claro
+                const button = document.querySelector('button');
+                if (button) {
+                  button.innerHTML = '<i class="me-2">❌</i>Fechar Esta Aba';
+                  button.style.backgroundColor = '#dc3545';
+                }
+              }
+            }, 500);
           }
           
           // Executar closeWindow automaticamente quando a página carregar
