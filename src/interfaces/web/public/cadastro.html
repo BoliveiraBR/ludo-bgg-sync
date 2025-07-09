@@ -434,8 +434,47 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Limpar tokens expirados imediatamente por segurança
             cleanupExpiredTokens();
+            
+            // Verificar se há dados de autenticação na URL (para nova aba)
+            checkURLParams();
+            
+            // Verificar localStorage (backup)
             checkForSavedTokens();
         });
+        
+        // Função para verificar parâmetros da URL
+        function checkURLParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const authSuccess = urlParams.get('auth_success');
+            const token = urlParams.get('token');
+            const user = urlParams.get('user');
+            
+            console.log('🔍 Verificando URL params:', { authSuccess, token: token ? 'presente' : 'ausente', user });
+            
+            if (authSuccess === '1' && token) {
+                console.log('✅ Autenticação via URL detectada!');
+                
+                // Usar os tokens da URL
+                ludopediaToken = token;
+                ludopediaUser = user || '';
+                
+                // Atualizar interface
+                document.getElementById('ludoTokenDisplay').value = 'Token obtido com sucesso!';
+                document.getElementById('ludoUserDisplay').textContent = ludopediaUser ? `Usuário: ${ludopediaUser}` : '';
+                
+                // Habilitar campos pós-OAuth
+                enablePostOAuthFields();
+                
+                // Limpar URL (remover parâmetros de auth por segurança)
+                const newUrl = window.location.pathname;
+                window.history.replaceState({}, document.title, newUrl);
+                
+                console.log('🧹 URL limpa, autenticação concluída');
+                return true;
+            }
+            
+            return false;
+        }
 
 
         // Escutar mensagens de qualquer janela (popup ou nova aba)
