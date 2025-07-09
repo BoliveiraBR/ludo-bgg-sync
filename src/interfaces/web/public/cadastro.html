@@ -283,20 +283,25 @@
         function checkForSavedTokens() {
             try {
                 const authDataStr = localStorage.getItem('ludopedia_temp_auth');
+                console.log('🔍 checkForSavedTokens - authDataStr:', authDataStr);
+                
                 if (!authDataStr) {
                     return false;
                 }
                 
                 const authData = JSON.parse(authDataStr);
+                console.log('🔍 checkForSavedTokens - authData:', authData);
                 
                 // Verificar se não expirou
                 if (Date.now() > authData.expires) {
+                    console.log('⏰ Token expirado, removendo...');
                     localStorage.removeItem('ludopedia_temp_auth');
                     return false;
                 }
                 
                 // Verificar se tem dados válidos
                 if (authData.token && authData.user) {
+                    console.log('✅ Token válido encontrado, processando...');
                     // Limpar dados temporários IMEDIATAMENTE por segurança
                     localStorage.removeItem('ludopedia_temp_auth');
                     
@@ -319,8 +324,10 @@
                     
                     return true;
                 }
+                console.log('❌ Token ou usuário inválido');
                 return false;
             } catch (error) {
+                console.error('❌ Erro em checkForSavedTokens:', error);
                 // Limpar dados corrompidos
                 localStorage.removeItem('ludopedia_temp_auth');
                 return false;
@@ -480,11 +487,15 @@
         
         // Event listener para link direto
         document.getElementById('directAuthLink').addEventListener('click', function() {
+            console.log('🔗 Link direto clicado, iniciando polling...');
             // Iniciar verificação periódica quando link direto é clicado
             if (authCheckInterval) {
                 clearInterval(authCheckInterval);
             }
-            authCheckInterval = setInterval(checkForSavedTokens, 3000);
+            authCheckInterval = setInterval(() => {
+                console.log('🔄 Verificando tokens...');
+                checkForSavedTokens();
+            }, 3000);
         });
 
         // Verificar validade do formulário quando campos obrigatórios mudarem
