@@ -1,5 +1,5 @@
 // Declaração de variáveis globais
-let loadBtn, loadingIndicator, successMessage, bggList, ludoList, saveBtn;
+let loadBtn, loadingIndicator, successMessage, bggList, ludoList;
 let bggTotal, bggBase, bggExp, ludoTotal, ludoBase, ludoExp;
 let maxTotal, maxBase, maxExpansions; // Estatísticas da coleção
 let loadSummary, changeLegend; // Elementos da aba de atualização
@@ -24,7 +24,6 @@ let currentManualLudoGames = [];
 document.addEventListener('DOMContentLoaded', () => {
     // Elementos da UI
     loadBtn = document.getElementById('loadBtn');
-    saveBtn = document.getElementById('saveBtn');
     loadingIndicator = document.getElementById('loadingIndicator');
     successMessage = document.getElementById('successMessage');
     bggList = document.getElementById('bggList');
@@ -90,7 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event listener para o form de login
     document.getElementById('quickLoginForm').addEventListener('submit', handleQuickLogin);
     loadBtn.addEventListener('click', loadCollectionsFromAPI);
-    saveBtn.addEventListener('click', saveCollections);
 
     // Event listeners para filtros e pareamento
     document.querySelectorAll('.filter-link').forEach(link => {
@@ -406,7 +404,6 @@ async function saveCollections() {
 
     try {
         setLoading(true);
-        saveBtn.disabled = true;
 
         const response = await window.authManager.authenticatedFetch('/api/save-collections', {
             method: 'POST',
@@ -430,7 +427,6 @@ async function saveCollections() {
     } finally {
         setLoading(false);
         if (currentBGGGames.length || currentLudoGames.length) {
-            saveBtn.disabled = false;
         }
     }
 }
@@ -439,7 +435,6 @@ async function saveCollections() {
 async function loadCollections() {
     try {
         setLoading(true);
-        saveBtn.disabled = true;
         
         // Carregar do banco usando GET (sem body)
         const response = await window.authManager.authenticatedFetch('/api/collections');
@@ -460,7 +455,6 @@ async function loadCollections() {
         currentLudoGames = data.ludoCollection || [];
         
         // Habilitar botão de salvar se há coleções carregadas
-        saveBtn.disabled = !(currentBGGGames.length || currentLudoGames.length);
         
         // Atualizar UI
         updateStats(currentBGGGames, 'bgg');
@@ -497,7 +491,6 @@ async function loadCollections() {
         console.error('❌ Error:', error);
         // Não mostrar alert para erros automáticos, apenas log
         console.warn('⚠️ Erro ao carregar coleções automaticamente:', error.message);
-        saveBtn.disabled = true;
     } finally {
         setLoading(false);
     }
@@ -507,7 +500,6 @@ async function loadCollections() {
 async function loadCollectionsFromAPI() {
     try {
         setLoading(true);
-        saveBtn.disabled = true;
         
         // Ocultar seções de resumo ao iniciar carregamento
         if (loadSummary) loadSummary.style.display = 'none';
@@ -544,7 +536,6 @@ async function loadCollectionsFromAPI() {
         currentLudoGames = data.ludoCollection;
         
         // Habilitar botão de salvar se há coleções carregadas
-        saveBtn.disabled = !(currentBGGGames.length || currentLudoGames.length);
         
         // Atualizar UI
         updateStats(data.bggCollection, 'bgg');
@@ -576,11 +567,13 @@ async function loadCollectionsFromAPI() {
 
         // Mostrar resumo dos dados carregados
         showLoadSummary(data.bggCollection, data.ludoCollection, currentBggStats, currentLudoStats);
+
+        // Salvar automaticamente as coleções carregadas
+        await saveCollections();
         
     } catch (error) {
         console.error('Error:', error);
         alert('Erro ao carregar coleções via API: ' + error.message);
-        saveBtn.disabled = true;
     } finally {
         setLoading(false);
     }
@@ -590,24 +583,9 @@ async function loadCollectionsFromAPI() {
 function showLoadSummary(bggCollection, ludoCollection, currentBggStats, currentLudoStats) {
     if (!loadSummary || !changeLegend) return;
 
-    console.log('🔍 showLoadSummary chamado:', { 
-        bggCollection: bggCollection.length, 
-        ludoCollection: ludoCollection.length 
-    });
-
     // Calcular estatísticas dos dados carregados
     const loadedBggStats = calculateStats(bggCollection);
     const loadedLudoStats = calculateStats(ludoCollection);
-    
-    console.log('📊 Estatísticas carregadas:', {
-        bgg: loadedBggStats,
-        ludo: loadedLudoStats
-    });
-
-    console.log('📊 Estatísticas atuais (capturadas antes da atualização):', {
-        bgg: currentBggStats,
-        ludo: currentLudoStats
-    });
 
     // Atualizar elementos BGG
     updateLoadedStat('loadedBggTotal', loadedBggStats.total, currentBggStats.total);
