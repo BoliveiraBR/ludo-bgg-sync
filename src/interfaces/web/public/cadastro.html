@@ -139,16 +139,11 @@
                     <!-- Conexão com Ludopedia -->
                     <div class="mb-4">
                         <label class="form-label">Conectar com Ludopedia</label>
-                        <div class="d-flex gap-2">
-                            <div class="flex-grow-1">
-                                <small id="ludoUserDisplay" class="text-muted"></small>
-                            </div>
-                            <button type="button" class="btn btn-primary" id="ludoAuthBtn">
-                                <i class="bi bi-box-arrow-in-right"></i>
-                                Conectar Ludopedia
-                            </button>
-                        </div>
-                        <small class="text-muted">Conecte-se à Ludopedia para habilitar os próximos campos</small>
+                        <button type="button" class="btn btn-primary w-100" id="ludoAuthBtn">
+                            <i class="bi bi-box-arrow-in-right"></i>
+                            Conectar Ludopedia
+                        </button>
+                        <small class="text-muted" id="ludoStatusMessage">Conecte-se à Ludopedia para habilitar os próximos campos</small>
                     </div>
 
                     <!-- Campos que são habilitados após OAuth -->
@@ -300,8 +295,8 @@
                     ludopediaToken = authData.token;
                     ludopediaUser = authData.user;
                 
-                    // Atualizar interface com checkzinho verde
-                    document.getElementById('ludoUserDisplay').innerHTML = ludopediaUser ? `<span style="color: green;">✅</span> Usuário: <strong>${ludopediaUser}</strong>` : '';
+                    // Atualizar mensagem de status com checkzinho verde
+                    document.getElementById('ludoStatusMessage').innerHTML = ludopediaUser ? `<span style="color: green;">✅</span> Usuário: <strong>${ludopediaUser}</strong>` : '';
                     
                     // Habilitar campos pós-OAuth
                     enablePostOAuthFields();
