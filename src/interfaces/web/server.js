@@ -860,14 +860,14 @@ app.get('/callback', async (req, res) => {
       </head>
       <body>
         <div class="success-card">
-          <div class="success-icon">✅</div>
-          <h2 class="text-success mb-3">Autenticação Realizada com Sucesso!</h2>
-          <p class="mb-2">Sua conta da Ludopedia foi conectada com sucesso.</p>
-          ${ludoUsername ? `<p class="text-muted">Usuário: <strong>${ludoUsername}</strong></p>` : ''}
-          <hr>
-          <p class="mb-3">Você pode voltar para a aplicação principal.</p>
+          <div class="success-icon">
+            <img src="/BoardGameGuru.png" alt="BoardGameGuru" style="width: 64px; height: 64px;">
+          </div>
+          <h2 class="text-success mb-3">Conexão com a Ludopedia concluída!</h2>
+          <p class="mb-3">Agora você já pode retornar para o BoardGameGuru!</p>
+          ${ludoUsername ? `<p class="text-muted mb-3">Usuário: <strong>${ludoUsername}</strong></p>` : ''}
           <button class="btn btn-primary" onclick="closeWindow()">
-            <i class="me-2">🔙</i>Voltar para BG Guru
+            Voltar para o BoardGameGuru
           </button>
           <div class="countdown">
             Esta janela fechará automaticamente em <span id="countdown">10</span> segundos.
