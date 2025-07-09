@@ -883,7 +883,9 @@ app.get('/callback', async (req, res) => {
             };
             
             try {
+              console.log('💾 Salvando no localStorage:', authData);
               localStorage.setItem('ludopedia_temp_auth', JSON.stringify(authData));
+              console.log('✅ Token salvo com sucesso no localStorage');
             } catch (error) {
               console.error('❌ Erro ao salvar no localStorage:', error);
             }
@@ -914,6 +916,11 @@ app.get('/callback', async (req, res) => {
               }
             }, 1000);
           }
+          
+          // Executar closeWindow automaticamente quando a página carregar
+          window.onload = function() {
+            closeWindow();
+          };
         </script>
       </body>
       </html>
