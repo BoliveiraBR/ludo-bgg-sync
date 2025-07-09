@@ -874,7 +874,6 @@ app.get('/callback', async (req, res) => {
           }, 1000);
 
           function closeWindow() {
-            console.log('🚀 closeWindow() chamada');
             // Salvar tokens temporários com expiração (5 minutos) para mobile/nova aba
             const authData = {
               token: '${tokenResponse.data.access_token}',
@@ -882,46 +881,42 @@ app.get('/callback', async (req, res) => {
               timestamp: Date.now(),
               expires: Date.now() + (5 * 60 * 1000) // 5 minutos
             };
-            console.log('📋 authData criado:', authData);
             
             try {
-              console.log('💾 Salvando no localStorage:', authData);
               localStorage.setItem('ludopedia_temp_auth', JSON.stringify(authData));
-              console.log('✅ Token salvo com sucesso no localStorage');
             } catch (error) {
               console.error('❌ Erro ao salvar no localStorage:', error);
             }
             
             // Notifica a janela principal sobre o sucesso (para popup E nova aba)
             if (window.opener) {
-              console.log('📤 Enviando postMessage para janela principal');
               window.opener.postMessage({ 
                 type: 'AUTH_SUCCESS', 
                 token: '${tokenResponse.data.access_token}',
                 user: '${ludoUsername || ''}'
               }, '*');
-            } else {
-              console.log('⚠️ Sem window.opener - tentando comunicação via localStorage');
             }
             
-            // Não fechar a janela automaticamente para debug
-            console.log('🎯 Janela não fechada para debug');
+            // Tenta fechar a janela
+            window.close();
             
-            // Mostrar mensagem de sucesso
-            document.body.innerHTML = \`
-              <div class="success-card">
-                <h3>✅ Autenticação Concluída</h3>
-                <p>Conectado com sucesso à Ludopedia!</p>
-                <p><strong>Verifique o console desta aba e depois feche manualmente.</strong></p>
-                <p><small>Volte para a página de cadastro para ver se o token foi detectado.</small></p>
-                <button onclick="window.close()" class="btn btn-primary mt-3">Fechar esta aba</button>
-              </div>
-            \`;
+            // Se não conseguir fechar (alguns navegadores bloqueiam), mostra mensagem
+            setTimeout(() => {
+              if (!window.closed) {
+                document.body.innerHTML = \`
+                  <div class="success-card">
+                    <h3>✅ Autenticação Concluída</h3>
+                    <p>Conectado com sucesso à Ludopedia!</p>
+                    <p><strong>Feche esta aba e retorne à página de cadastro.</strong></p>
+                    <p><small>Seus dados serão carregados automaticamente quando você voltar.</small></p>
+                  </div>
+                \`;
+              }
+            }, 1000);
           }
           
           // Executar closeWindow automaticamente quando a página carregar
           window.onload = function() {
-            console.log('🔄 Página de callback carregada');
             closeWindow();
           };
           
