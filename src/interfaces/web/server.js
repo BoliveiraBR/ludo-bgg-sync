@@ -892,13 +892,16 @@ app.get('/callback', async (req, res) => {
               console.error('❌ Erro ao salvar no localStorage:', error);
             }
             
-            // Notifica a janela principal sobre o sucesso (para popup)
+            // Notifica a janela principal sobre o sucesso (para popup E nova aba)
             if (window.opener) {
+              console.log('📤 Enviando postMessage para janela principal');
               window.opener.postMessage({ 
                 type: 'AUTH_SUCCESS', 
                 token: '${tokenResponse.data.access_token}',
                 user: '${ludoUsername || ''}'
               }, '*');
+            } else {
+              console.log('⚠️ Sem window.opener - tentando comunicação via localStorage');
             }
             
             // Não fechar a janela automaticamente para debug

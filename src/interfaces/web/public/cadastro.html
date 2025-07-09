@@ -473,6 +473,31 @@
             }
         });
 
+        // Escutar mensagens de qualquer janela (popup ou nova aba)
+        window.addEventListener('message', function(event) {
+            console.log('📨 Mensagem recebida de qualquer janela:', event.data);
+            if (event.data.type === 'AUTH_SUCCESS') {
+                console.log('✅ Autenticação bem-sucedida via postMessage!');
+                
+                // Usar os tokens
+                ludopediaToken = event.data.token;
+                ludopediaUser = event.data.user;
+                
+                // Atualizar interface
+                document.getElementById('ludoTokenDisplay').value = 'Token obtido com sucesso!';
+                document.getElementById('ludoUserDisplay').textContent = ludopediaUser ? `Usuário: ${ludopediaUser}` : '';
+                
+                // Habilitar campos pós-OAuth
+                enablePostOAuthFields();
+                
+                // Parar verificação se estiver rodando
+                if (authCheckInterval) {
+                    clearInterval(authCheckInterval);
+                    authCheckInterval = null;
+                }
+            }
+        });
+
         // Função para limpar tokens expirados (segurança)
         function cleanupExpiredTokens() {
             try {
