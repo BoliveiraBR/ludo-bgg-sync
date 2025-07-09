@@ -347,8 +347,9 @@
                 const authWindow = window.open(authUrl, 'LudopediaAuth', 'width=600,height=600');
                 
                 if (!authWindow) {
-                    // Fallback: abrir em nova aba
-                    window.open(authUrl, '_blank');
+                    // Se popup foi bloqueado, mostrar mensagem para usuário
+                    alert('❌ Popup bloqueado!\n\nPor favor:\n1. Permita popups para este site\n2. Ou use o link "clique aqui para abrir em outra aba" abaixo do botão');
+                    return;
                 } else {
                     // Receber mensagem de sucesso da autenticação (para popup)
                     const messageHandler = async (event) => {

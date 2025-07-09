@@ -920,20 +920,6 @@ app.get('/callback', async (req, res) => {
               // Para nova aba: não redireciona, mantém página de sucesso
               // O localStorage vai comunicar com a aba original via polling
             }
-            
-            // Se não conseguir fechar (alguns navegadores bloqueiam), mostra mensagem
-            setTimeout(() => {
-              if (!window.closed) {
-                document.body.innerHTML = \`
-                  <div class="success-card">
-                    <h3>✅ Autenticação Concluída</h3>
-                    <p>Conectado com sucesso à Ludopedia!</p>
-                    <p><strong>Feche esta aba e retorne à página de cadastro.</strong></p>
-                    <p><small>Seus dados serão carregados automaticamente quando você voltar.</small></p>
-                  </div>
-                \`;
-              }
-            }, 1000);
           }
           
           // Executar closeWindow automaticamente quando a página carregar

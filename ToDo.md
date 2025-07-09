@@ -6,7 +6,6 @@
 ## Próximos Passos
 
 ### Alta Prioridade
-- [ ] Consertar OAuth em fluxo Mobile
 - [ ] Colocar novo ícone na aba do Safari para MacOS e iOS
 - [ ] Colocar mensagens de "Como funciona" na aba de pareamento
 - [ ] Implementar sistema de log estruturado
