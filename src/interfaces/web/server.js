@@ -676,7 +676,13 @@ app.get('/api/auth/ludopedia', (req, res) => {
     const redirectUri = process.env.LUDO_REDIRECT_URI;
     const authUrl = `https://ludopedia.com.br/oauth?client_id=${clientId}&redirect_uri=${redirectUri}`;
     
-    res.json({ authUrl });
+    // Se requisição vem de JavaScript (tem Accept: application/json), retorna JSON
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      res.json({ authUrl });
+    } else {
+      // Se é link direto HTML, faz redirect
+      res.redirect(authUrl);
+    }
   } catch (error) {
     console.error('Error starting auth:', error);
     res.status(500).json({ error: error.message });
