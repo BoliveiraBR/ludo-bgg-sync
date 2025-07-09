@@ -901,22 +901,19 @@ app.get('/callback', async (req, res) => {
               }, '*');
             }
             
-            // Tenta fechar a janela
-            window.close();
+            // Não fechar a janela automaticamente para debug
+            console.log('🎯 Janela não fechada para debug');
             
-            // Se não conseguir fechar (alguns navegadores bloqueiam), mostra mensagem
-            setTimeout(() => {
-              if (!window.closed) {
-                document.body.innerHTML = \`
-                  <div class="success-card">
-                    <h3>✅ Autenticação Concluída</h3>
-                    <p>Conectado com sucesso à Ludopedia!</p>
-                    <p><strong>Feche esta aba e retorne à página de cadastro.</strong></p>
-                    <p><small>Seus dados serão carregados automaticamente quando você voltar.</small></p>
-                  </div>
-                \`;
-              }
-            }, 1000);
+            // Mostrar mensagem de sucesso
+            document.body.innerHTML = \`
+              <div class="success-card">
+                <h3>✅ Autenticação Concluída</h3>
+                <p>Conectado com sucesso à Ludopedia!</p>
+                <p><strong>Verifique o console desta aba e depois feche manualmente.</strong></p>
+                <p><small>Volte para a página de cadastro para ver se o token foi detectado.</small></p>
+                <button onclick="window.close()" class="btn btn-primary mt-3">Fechar esta aba</button>
+              </div>
+            \`;
           }
           
           // Executar closeWindow automaticamente quando a página carregar
