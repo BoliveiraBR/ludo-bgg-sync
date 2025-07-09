@@ -888,7 +888,34 @@ app.get('/callback', async (req, res) => {
           }, 1000);
 
           function closeWindow() {
-            // Salvar tokens no localStorage para comunicação cross-tab
+            console.log('🚪 closeWindow() chamado - tentando fechar janela...');
+            
+            // Tentar fechar a janela
+            window.close();
+            
+            // Se não conseguiu fechar, mostrar feedback após um pequeno delay
+            setTimeout(() => {
+              if (!window.closed) {
+                console.log('ℹ️ Janela não pôde ser fechada automaticamente');
+                // Atualizar o texto do botão para ser mais claro
+                const button = document.querySelector('button');
+                if (button) {
+                  button.innerHTML = '<i class="me-2">❌</i>Fechar Esta Aba Manualmente';
+                  button.style.backgroundColor = '#dc3545';
+                }
+                
+                // Atualizar a mensagem do countdown também
+                const countdownDiv = document.querySelector('.countdown');
+                if (countdownDiv) {
+                  countdownDiv.innerHTML = '<small class="text-muted">Por favor, feche esta aba manualmente.</small>';
+                }
+              }
+            }, 500);
+          }
+          
+          // Salvar token no localStorage assim que a página carregar (sem fechar)
+          window.onload = function() {
+            // Apenas salvar o token, não fechar ainda
             const authData = {
               token: '${tokenResponse.data.access_token}',
               user: '${ludoUsername || ''}',
@@ -903,45 +930,16 @@ app.get('/callback', async (req, res) => {
               console.error('❌ Erro ao salvar no localStorage:', error);
             }
             
-            // Verificar se é popup (tem window.opener) ou nova aba
+            // Enviar postMessage para popup (se aplicável)
             if (window.opener) {
-              console.log('📱 Detectado como POPUP - enviando postMessage e fechando');
-              // Para popup: envia postMessage e fecha
+              console.log('📱 Enviando postMessage para popup');
               window.opener.postMessage({ 
                 type: 'AUTH_SUCCESS', 
                 token: '${tokenResponse.data.access_token}',
                 user: '${ludoUsername || ''}'
               }, '*');
-            } else {
-              console.log('🆕 Detectado como NOVA ABA - localStorage já salvo');
-              // Para nova aba: localStorage já foi salvo, vai comunicar via storage event
             }
-            
-            // Sempre tentar fechar a janela (funciona para popup e nova aba)
-            console.log('🚪 Tentando fechar janela...');
-            window.close();
-            
-            // Se não conseguiu fechar (algumas abas não permitem), mostrar feedback
-            setTimeout(() => {
-              if (!window.closed) {
-                console.log('ℹ️ Janela não pôde ser fechada automaticamente');
-                // Atualizar o texto do botão para ser mais claro
-                const button = document.querySelector('button');
-                if (button) {
-                  button.innerHTML = '<i class="me-2">❌</i>Fechar Esta Aba';
-                  button.style.backgroundColor = '#dc3545';
-                }
-              }
-            }, 500);
-          }
-          
-          // Executar closeWindow automaticamente quando a página carregar
-          window.onload = function() {
-            closeWindow();
           };
-          
-          // Executar também imediatamente por segurança
-          closeWindow();
         </script>
       </body>
       </html>
