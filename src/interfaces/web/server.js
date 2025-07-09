@@ -881,7 +881,14 @@ app.get('/callback', async (req, res) => {
               timestamp: Date.now(),
               expires: Date.now() + (5 * 60 * 1000) // 5 minutos
             };
-            sessionStorage.setItem('ludopedia_temp_auth', JSON.stringify(authData));
+            
+            try {
+              console.log('🔍 Salvando authData no sessionStorage:', authData);
+              sessionStorage.setItem('ludopedia_temp_auth', JSON.stringify(authData));
+              console.log('✅ AuthData salvo no sessionStorage');
+            } catch (error) {
+              console.error('❌ Erro ao salvar no sessionStorage:', error);
+            }
             
             // Notifica a janela principal sobre o sucesso (para popup)
             if (window.opener) {
