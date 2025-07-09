@@ -281,9 +281,11 @@
 
         // Verificar se há tokens salvos (para quando usuário volta de uma nova aba)
         function checkForSavedTokens() {
+            console.log('🔄 Verificando tokens...', new Date().toLocaleTimeString());
             try {
                 const authDataStr = localStorage.getItem('ludopedia_temp_auth');
                 if (!authDataStr) {
+                    console.log('❌ Nenhum token encontrado');
                     return false;
                 }
                 
@@ -348,6 +350,7 @@
                     clearInterval(authCheckInterval);
                 }
                 console.log('⏰ Iniciando verificação periódica (link manual)');
+                console.log('🔍 Estado atual: ludopediaToken =', ludopediaToken);
                 authCheckInterval = setInterval(checkForSavedTokens, 3000);
                 
             } catch (error) {
@@ -477,6 +480,7 @@
         // Verificar tokens periodicamente (para detectar quando são salvos)
         setInterval(function() {
             if (!ludopediaToken) {
+                console.log('🔄 Verificação automática executada');
                 checkForSavedTokens();
             }
         }, 5000);
