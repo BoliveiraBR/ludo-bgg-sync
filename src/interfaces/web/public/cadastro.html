@@ -153,7 +153,7 @@
                         <div class="mt-2">
                             <small class="text-muted">
                                 Se o botão não abrir o pop-up, 
-                                <a href="/api/auth/ludopedia" target="_blank" class="text-decoration-none">
+                                <a href="/auth/ludopedia/direct" target="_blank" class="text-decoration-none" id="directAuthLink">
                                     clique aqui para abrir em outra aba
                                 </a>
                             </small>
@@ -477,6 +477,15 @@
 
         // Event listeners
         document.getElementById('ludoAuthBtn').addEventListener('click', startLudopediaAuth);
+        
+        // Event listener para link direto
+        document.getElementById('directAuthLink').addEventListener('click', function() {
+            // Iniciar verificação periódica quando link direto é clicado
+            if (authCheckInterval) {
+                clearInterval(authCheckInterval);
+            }
+            authCheckInterval = setInterval(checkForSavedTokens, 3000);
+        });
 
         // Verificar validade do formulário quando campos obrigatórios mudarem
         ['name', 'email', 'password', 'acceptTerms'].forEach(id => {

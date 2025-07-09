@@ -669,23 +669,31 @@ app.get('/api/config', authenticateToken, async (req, res) => {
   }
 });
 
-// Rota para iniciar autenticação Ludopedia
+// Rota para iniciar autenticação Ludopedia (JavaScript)
 app.get('/api/auth/ludopedia', (req, res) => {
   try {
     const clientId = process.env.LUDO_CLIENT_ID;
     const redirectUri = process.env.LUDO_REDIRECT_URI;
     const authUrl = `https://ludopedia.com.br/oauth?client_id=${clientId}&redirect_uri=${redirectUri}`;
     
-    // Se requisição vem de JavaScript (tem Accept: application/json), retorna JSON
-    if (req.headers.accept && req.headers.accept.includes('application/json')) {
-      res.json({ authUrl });
-    } else {
-      // Se é link direto HTML, faz redirect
-      res.redirect(authUrl);
-    }
+    res.json({ authUrl });
   } catch (error) {
     console.error('Error starting auth:', error);
     res.status(500).json({ error: error.message });
+  }
+});
+
+// Rota para link direto de autenticação Ludopedia (HTML)
+app.get('/auth/ludopedia/direct', (req, res) => {
+  try {
+    const clientId = process.env.LUDO_CLIENT_ID;
+    const redirectUri = process.env.LUDO_REDIRECT_URI;
+    const authUrl = `https://ludopedia.com.br/oauth?client_id=${clientId}&redirect_uri=${redirectUri}`;
+    
+    res.redirect(authUrl);
+  } catch (error) {
+    console.error('Error starting auth:', error);
+    res.status(500).send('Erro na autenticação: ' + error.message);
   }
 });
 
