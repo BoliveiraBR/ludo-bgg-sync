@@ -95,6 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('editPlatformBtn').addEventListener('click', showPlatformPreferenceInput);
     document.getElementById('saveConfigBtn').addEventListener('click', saveConfigChanges);
     
+    // Resetar modal quando fechar
+    document.getElementById('configModal').addEventListener('hidden.bs.modal', resetConfigModal);
+    
     // Event listeners para filtros e pareamento
     document.querySelectorAll('.filter-link').forEach(link => {
         link.addEventListener('click', (e) => {
@@ -1337,7 +1340,12 @@ function resetConfigModal() {
     // Ocultar inputs de edição
     document.getElementById('bggUsernameInput').style.display = 'none';
     document.getElementById('platformPreferenceInput').style.display = 'none';
-    document.getElementById('saveConfigBtn').style.display = 'none';
+    
+    // Resetar e ocultar botão salvar
+    const saveBtn = document.getElementById('saveConfigBtn');
+    saveBtn.style.display = 'none';
+    saveBtn.disabled = false;
+    saveBtn.innerHTML = '<i class="bi bi-check-lg"></i> Salvar Alterações';
     
     // Mostrar displays
     document.getElementById('userDisplayBgg').style.display = 'block';
