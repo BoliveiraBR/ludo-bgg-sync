@@ -6,6 +6,7 @@
 ## Próximos Passos
 
 ### Alta Prioridade
+- [ ] Colocar mensagens de "Como funciona" na aba de pareamento
 - [ ] Implementar sistema de log estruturado
 - [ ] Adicionar testes unitários para componentes principais
 

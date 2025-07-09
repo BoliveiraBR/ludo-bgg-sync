@@ -1,5 +1,5 @@
 // Declaração de variáveis globais
-let loadBtn, loadingIndicator, successMessage, bggList, ludoList;
+let loadBtn, loadingIndicator, bggList, ludoList;
 let bggTotal, bggBase, bggExp, ludoTotal, ludoBase, ludoExp;
 let maxTotal, maxBase, maxExpansions; // Estatísticas da coleção
 let loadSummary, changeLegend; // Elementos da aba de atualização
@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Elementos da UI
     loadBtn = document.getElementById('loadBtn');
     loadingIndicator = document.getElementById('loadingIndicator');
-    successMessage = document.getElementById('successMessage');
     bggList = document.getElementById('bggList');
     ludoList = document.getElementById('ludoList');
 
@@ -337,9 +336,6 @@ function setLoading(loading) {
     loadingIndicator.style.display = loading ? 'block' : 'none';
     
     // Hide success message when loading starts
-    if (loading && successMessage) {
-        successMessage.style.display = 'none';
-    }
 }
 
 function updateStats(collection, type) {
@@ -480,9 +476,6 @@ async function loadCollections() {
         }
         
         // Show success message after successful load apenas se carregou dados
-        if (successMessage && (currentBGGGames.length > 0 || currentLudoGames.length > 0)) {
-            successMessage.style.display = 'block';
-        }
         
         // Log sobre a fonte dos dados
         console.log(`📊 Coleções carregadas (${data.source}): BGG=${currentBGGGames.length}, Ludopedia=${currentLudoGames.length}`);
@@ -560,10 +553,6 @@ async function loadCollectionsFromAPI() {
             findMatches();
         }
         
-        // Show success message after successful load
-        if (successMessage) {
-            successMessage.style.display = 'block';
-        }
 
         // Mostrar resumo dos dados carregados
         showLoadSummary(data.bggCollection, data.ludoCollection, currentBggStats, currentLudoStats);
@@ -629,11 +618,11 @@ function updateLoadedStat(elementId, loadedValue, currentValue) {
         console.log(`📊 Diferença para ${elementId}: ${difference}`);
         
         if (difference > 0) {
-            changeElement.innerHTML = `<span class="badge bg-success">+${difference}</span>`;
+            changeElement.innerHTML = `<span class="badge bg-success badge-large">+${difference}</span>`;
         } else if (difference < 0) {
-            changeElement.innerHTML = `<span class="badge bg-danger">${difference}</span>`;
+            changeElement.innerHTML = `<span class="badge bg-danger badge-large">${difference}</span>`;
         } else {
-            changeElement.innerHTML = `<span class="badge bg-secondary">=</span>`;
+            changeElement.innerHTML = `<span class="badge bg-secondary badge-large">=</span>`;
         }
     }
 }
