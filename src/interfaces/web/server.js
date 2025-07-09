@@ -874,6 +874,7 @@ app.get('/callback', async (req, res) => {
           }, 1000);
 
           function closeWindow() {
+            console.log('🚀 closeWindow() chamada');
             // Salvar tokens temporários com expiração (5 minutos) para mobile/nova aba
             const authData = {
               token: '${tokenResponse.data.access_token}',
@@ -881,6 +882,7 @@ app.get('/callback', async (req, res) => {
               timestamp: Date.now(),
               expires: Date.now() + (5 * 60 * 1000) // 5 minutos
             };
+            console.log('📋 authData criado:', authData);
             
             try {
               console.log('💾 Salvando no localStorage:', authData);
@@ -919,8 +921,12 @@ app.get('/callback', async (req, res) => {
           
           // Executar closeWindow automaticamente quando a página carregar
           window.onload = function() {
+            console.log('🔄 Página de callback carregada');
             closeWindow();
           };
+          
+          // Executar também imediatamente por segurança
+          closeWindow();
         </script>
       </body>
       </html>
