@@ -453,12 +453,6 @@
             checkForSavedTokens();
         });
 
-        // Escutar mudanças no localStorage (quando outra aba salva token)
-        window.addEventListener('storage', function(event) {
-            if (event.key === 'ludopedia_temp_auth' && event.newValue) {
-                checkForSavedTokens();
-            }
-        });
 
         // Escutar mensagens de qualquer janela (popup ou nova aba)
         window.addEventListener('message', function(event) {
