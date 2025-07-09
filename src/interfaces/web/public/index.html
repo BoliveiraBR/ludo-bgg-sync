@@ -902,7 +902,13 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Carregar Coleções</h5>
+                                <h5 class="card-title">
+                                    <i class="bi bi-cloud-download me-2"></i>
+                                    Atualizar Coleções
+                                </h5>
+                                <p class="text-muted mb-3">
+                                    Carregue as coleções mais recentes do BGG e Ludopedia e veja as diferenças antes de salvar.
+                                </p>
                                 <div class="d-flex gap-2">
                                     <button class="btn btn-primary" id="loadBtn">
                                         <i class="bi bi-cloud-download"></i>
@@ -910,7 +916,7 @@
                                     </button>
                                     <button class="btn btn-success" id="saveBtn" disabled>
                                         <i class="bi bi-save"></i>
-                                        Salvar
+                                        Salvar Alterações
                                     </button>
                                 </div>
                                 <div id="loadingIndicator" class="mt-2" style="display: none;">
@@ -922,6 +928,126 @@
                                 <div id="successMessage" class="mt-2 alert alert-success" style="display: none;">
                                     <i class="bi bi-check-circle-fill me-2"></i>
                                     Coleções carregadas com sucesso!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resumo dos Jogos Carregados -->
+                <div class="row mb-4" id="loadSummary" style="display: none;">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title text-center mb-4">
+                                    <i class="bi bi-bar-chart-fill text-primary me-2"></i>
+                                    Resumo dos Jogos Carregados
+                                </h5>
+                                
+                                <!-- BGG Summary -->
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <h6 class="text-primary mb-3">
+                                            <i class="bi bi-dice-6-fill me-2"></i>
+                                            BoardGameGeek
+                                        </h6>
+                                        <div class="row g-3">
+                                            <div class="col-md-4">
+                                                <div class="stat-card bg-primary bg-gradient text-white rounded-3 p-3 text-center h-100">
+                                                    <div class="stat-number fs-4 fw-bold" id="loadedBggTotal">0</div>
+                                                    <div class="stat-label small">Total Carregado</div>
+                                                    <div class="stat-change small mt-1" id="loadedBggTotalChange"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="stat-card rounded-3 p-3 text-center h-100" style="background-color: #e7f5ff; color: #1971c2;">
+                                                    <div class="stat-number fs-4 fw-bold" id="loadedBggBase">0</div>
+                                                    <div class="stat-label small">Jogos Base</div>
+                                                    <div class="stat-change small mt-1" id="loadedBggBaseChange"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="stat-card rounded-3 p-3 text-center h-100" style="background-color: #fff3bf; color: #e67700;">
+                                                    <div class="stat-number fs-4 fw-bold" id="loadedBggExp">0</div>
+                                                    <div class="stat-label small">Expansões</div>
+                                                    <div class="stat-change small mt-1" id="loadedBggExpChange"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Ludopedia Summary -->
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h6 class="text-info mb-3">
+                                            <i class="bi bi-puzzle-fill me-2"></i>
+                                            Ludopedia
+                                        </h6>
+                                        <div class="row g-3">
+                                            <div class="col-md-4">
+                                                <div class="stat-card bg-info bg-gradient text-white rounded-3 p-3 text-center h-100">
+                                                    <div class="stat-number fs-4 fw-bold" id="loadedLudoTotal">0</div>
+                                                    <div class="stat-label small">Total Carregado</div>
+                                                    <div class="stat-change small mt-1" id="loadedLudoTotalChange"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="stat-card rounded-3 p-3 text-center h-100" style="background-color: #e7f5ff; color: #1971c2;">
+                                                    <div class="stat-number fs-4 fw-bold" id="loadedLudoBase">0</div>
+                                                    <div class="stat-label small">Jogos Base</div>
+                                                    <div class="stat-change small mt-1" id="loadedLudoBaseChange"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="stat-card rounded-3 p-3 text-center h-100" style="background-color: #fff3bf; color: #e67700;">
+                                                    <div class="stat-number fs-4 fw-bold" id="loadedLudoExp">0</div>
+                                                    <div class="stat-label small">Expansões</div>
+                                                    <div class="stat-change small mt-1" id="loadedLudoExpChange"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Legenda das Alterações -->
+                <div class="row" id="changeLegend" style="display: none;">
+                    <div class="col-12">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6 class="card-title">
+                                    <i class="bi bi-info-circle me-2"></i>
+                                    Legenda das Alterações
+                                </h6>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge bg-success me-2">+</span>
+                                            <small>Jogos adicionados</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge bg-danger me-2">-</span>
+                                            <small>Jogos removidos</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge bg-secondary me-2">=</span>
+                                            <small>Sem alterações</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <small class="text-muted">
+                                        <i class="bi bi-lightbulb me-1"></i>
+                                        As alterações mostram a diferença entre sua coleção atual e os dados carregados das APIs.
+                                    </small>
                                 </div>
                             </div>
                         </div>
