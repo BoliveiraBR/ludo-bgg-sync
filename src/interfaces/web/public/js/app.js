@@ -593,6 +593,15 @@ function showLoadSummary(bggCollection, ludoCollection) {
     });
     
     // Calcular estatísticas atuais (das coleções já salvas)
+    console.log('🔍 Elementos HTML encontrados:', {
+        bggTotal: bggTotal?.textContent,
+        bggBase: bggBase?.textContent,
+        bggExp: bggExp?.textContent,
+        ludoTotal: ludoTotal?.textContent,
+        ludoBase: ludoBase?.textContent,
+        ludoExp: ludoExp?.textContent
+    });
+    
     const currentBggStats = {
         total: parseInt(bggTotal?.textContent || '0'),
         base: parseInt(bggBase?.textContent || '0'),
