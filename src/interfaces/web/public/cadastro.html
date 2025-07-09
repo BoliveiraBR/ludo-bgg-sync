@@ -141,7 +141,6 @@
                         <label class="form-label">Conectar com Ludopedia</label>
                         <div class="d-flex gap-2">
                             <div class="flex-grow-1">
-                                <input type="text" class="form-control" id="ludoTokenDisplay" disabled placeholder="Token será exibido após autenticação">
                                 <small id="ludoUserDisplay" class="text-muted"></small>
                             </div>
                             <button type="button" class="btn btn-primary" id="ludoAuthBtn">
@@ -301,9 +300,8 @@
                     ludopediaToken = authData.token;
                     ludopediaUser = authData.user;
                 
-                    // Atualizar interface
-                    document.getElementById('ludoTokenDisplay').value = 'Token obtido com sucesso!';
-                    document.getElementById('ludoUserDisplay').textContent = ludopediaUser ? `Usuário: ${ludopediaUser}` : '';
+                    // Atualizar interface com checkzinho verde
+                    document.getElementById('ludoUserDisplay').innerHTML = ludopediaUser ? `<span style="color: green;">✅</span> Usuário: <strong>${ludopediaUser}</strong>` : '';
                     
                     // Habilitar campos pós-OAuth
                     enablePostOAuthFields();
