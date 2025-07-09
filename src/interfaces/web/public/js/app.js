@@ -578,9 +578,19 @@ async function loadCollectionsFromAPI() {
 function showLoadSummary(bggCollection, ludoCollection) {
     if (!loadSummary || !changeLegend) return;
 
+    console.log('🔍 showLoadSummary chamado:', { 
+        bggCollection: bggCollection.length, 
+        ludoCollection: ludoCollection.length 
+    });
+
     // Calcular estatísticas dos dados carregados
     const loadedBggStats = calculateStats(bggCollection);
     const loadedLudoStats = calculateStats(ludoCollection);
+    
+    console.log('📊 Estatísticas carregadas:', {
+        bgg: loadedBggStats,
+        ludo: loadedLudoStats
+    });
     
     // Calcular estatísticas atuais (das coleções já salvas)
     const currentBggStats = {
@@ -594,6 +604,11 @@ function showLoadSummary(bggCollection, ludoCollection) {
         base: parseInt(ludoBase?.textContent || '0'),
         expansions: parseInt(ludoExp?.textContent || '0')
     };
+
+    console.log('📊 Estatísticas atuais:', {
+        bgg: currentBggStats,
+        ludo: currentLudoStats
+    });
 
     // Atualizar elementos BGG
     updateLoadedStat('loadedBggTotal', loadedBggStats.total, currentBggStats.total);
@@ -626,12 +641,16 @@ function updateLoadedStat(elementId, loadedValue, currentValue) {
     const element = document.getElementById(elementId);
     const changeElement = document.getElementById(elementId + 'Change');
     
+    console.log(`🔄 updateLoadedStat: ${elementId} = ${loadedValue} (atual: ${currentValue})`);
+    
     if (element) {
         element.textContent = loadedValue;
     }
     
     if (changeElement) {
         const difference = loadedValue - currentValue;
+        console.log(`📊 Diferença para ${elementId}: ${difference}`);
+        
         if (difference > 0) {
             changeElement.innerHTML = `<span class="badge bg-success">+${difference}</span>`;
         } else if (difference < 0) {
