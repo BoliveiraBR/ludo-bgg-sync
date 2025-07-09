@@ -152,7 +152,7 @@
                         <small class="text-muted">Conecte-se à Ludopedia para habilitar os próximos campos</small>
                         <div class="mt-2">
                             <small class="text-muted">
-                                Se a autenticação não iniciar automaticamente, 
+                                Se o botão não abrir o pop-up, 
                                 <a href="https://ludopedia.com.br/oauth?client_id=5a7afdb4d43fb921&redirect_uri=https://www.boardgameguru.com.br/callback" target="_blank" class="text-decoration-none">
                                     clique aqui para abrir em outra aba
                                 </a>
@@ -192,7 +192,7 @@
                     <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" id="acceptTerms" required>
                         <label class="form-check-label" for="acceptTerms">
-                            Eu aceito os termos de uso e política de privacidade
+                            Eu aceito os termos de uso e <a href="#" data-bs-toggle="modal" data-bs-target="#privacyPolicyModal" class="text-decoration-none">política de privacidade</a>
                         </label>
                     </div>
 
@@ -218,6 +218,61 @@
         </div>
     </div>
 
+    <!-- Modal de Política de Privacidade -->
+    <div class="modal fade" id="privacyPolicyModal" tabindex="-1" aria-labelledby="privacyPolicyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="privacyPolicyModalLabel">Política de Privacidade</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <h3 class="text-primary fw-bold">Política de Privacidade – BoardGameGuru</h3>
+                        <p class="text-muted mb-0">Última atualização: 09/07/2025</p>
+                    </div>
+                    
+                    <p class="mb-4">Sua privacidade é importante para nós. Esta política explica como coletamos, usamos e protegemos seus dados ao utilizar o BoardGameGuru.</p>
+                    
+                    <h5 class="text-primary mb-3">Quais dados coletamos</h5>
+                    <ul class="mb-4">
+                        <li><strong>Dados da sua conta:</strong> nome, e-mail e senha (armazenada de forma segura).</li>
+                        <li><strong>Informações públicas das suas coleções</strong> nas plataformas BoardGameGeek e Ludopedia, obtidas com seu consentimento via autenticação OAuth, quando disponível.</li>
+                        <li><strong>Estatísticas de uso e preferências</strong> dentro do site, para personalizar sua experiência.</li>
+                    </ul>
+                    
+                    <h5 class="text-primary mb-3">Como usamos seus dados</h5>
+                    <ul class="mb-4">
+                        <li>Para mostrar análises, estatísticas e recomendações sobre sua coleção de jogos.</li>
+                        <li>Para sincronizar seus dados entre as plataformas BGG e Ludopedia.</li>
+                        <li>Para melhorar a experiência no site e propor novos recursos relevantes.</li>
+                    </ul>
+                    
+                    <h5 class="text-primary mb-3">Segurança dos seus dados</h5>
+                    <ul class="mb-4">
+                        <li>Utilizamos práticas de segurança adequadas para proteger seus dados.</li>
+                        <li>Nunca vendemos ou compartilhamos suas informações com terceiros sem seu consentimento.</li>
+                    </ul>
+                    
+                    <h5 class="text-primary mb-3">Seus direitos</h5>
+                    <ul class="mb-4">
+                        <li>Solicitar a exclusão da sua conta e dos seus dados a qualquer momento.</li>
+                        <li>Revogar o acesso à sua conta do BGG ou Ludopedia quando quiser.</li>
+                    </ul>
+                    
+                    <p class="mb-4">Se tiver dúvidas sobre esta política, entre em contato com a gente pelo e-mail: <span class="text-primary">contato@boardgameguru.com.br</span></p>
+                    
+                    <div class="alert alert-primary text-center" role="alert">
+                        <strong>Ao criar uma conta no BoardGameGuru, você concorda com esta Política de Privacidade.</strong>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let ludopediaToken = null;
@@ -227,29 +282,21 @@
         // Verificar se há tokens salvos (para quando usuário volta de uma nova aba)
         function checkForSavedTokens() {
             try {
-                console.log('🔍 Verificando tokens salvos...');
                 const authDataStr = localStorage.getItem('ludopedia_temp_auth');
-                console.log('📦 AuthData no localStorage:', authDataStr);
                 if (!authDataStr) {
-                    console.log('❌ Nenhum authData encontrado');
                     return false;
                 }
                 
                 const authData = JSON.parse(authDataStr);
-                console.log('📋 AuthData parsed:', authData);
                 
                 // Verificar se não expirou
-                const agora = Date.now();
-                console.log('⏰ Agora:', agora, 'Expira em:', authData.expires);
-                if (agora > authData.expires) {
-                    console.log('⚠️ Token expirado');
+                if (Date.now() > authData.expires) {
                     localStorage.removeItem('ludopedia_temp_auth');
                     return false;
                 }
                 
                 // Verificar se tem dados válidos
                 if (authData.token && authData.user) {
-                    console.log('✅ Token válido encontrado!');
                     // Limpar dados temporários IMEDIATAMENTE por segurança
                     localStorage.removeItem('ludopedia_temp_auth');
                     
@@ -274,38 +321,30 @@
                 }
                 return false;
             } catch (error) {
-                console.error('Erro ao verificar tokens salvos:', error);
                 // Limpar dados corrompidos
                 localStorage.removeItem('ludopedia_temp_auth');
                 return false;
             }
         }
 
-        // Iniciar autenticação Ludopedia (mesmo código do app.js)
+        // Iniciar autenticação Ludopedia
         async function startLudopediaAuth() {
             try {
-                console.log('🚀 Iniciando autenticação Ludopedia...');
                 const response = await fetch('/api/auth/ludopedia');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const { authUrl } = await response.json();
-                console.log('🔗 URL de autenticação obtida:', authUrl);
                 
                 const authWindow = window.open(authUrl, 'LudopediaAuth', 'width=600,height=600');
                 
                 if (!authWindow) {
-                    console.log('🚫 Popup bloqueado - usando fallback para nova aba');
                     // Fallback: abrir em nova aba
                     window.open(authUrl, '_blank');
                 } else {
-                    console.log('🪟 Janela de autenticação aberta como popup');
-                    
                     // Receber mensagem de sucesso da autenticação (para popup)
                     const messageHandler = async (event) => {
-                        console.log('📨 Mensagem recebida:', event.data);
                         if (event.data.type === 'AUTH_SUCCESS') {
-                            console.log('✅ Autenticação via popup bem-sucedida!');
                             authWindow.close();
                             ludopediaToken = event.data.token;
                             ludopediaUser = event.data.user;
@@ -330,15 +369,13 @@
                     // Cleanup se janela for fechada manualmente
                     const checkWindow = setInterval(() => {
                         if (authWindow && authWindow.closed) {
-                            console.log('🪟 Janela de autenticação foi fechada');
                             clearInterval(checkWindow);
                             window.removeEventListener('message', messageHandler);
-                            // Continuar verificação por sessionStorage por mais 30 segundos
+                            // Continuar verificação por localStorage por mais 30 segundos
                             setTimeout(() => {
                                 if (authCheckInterval) {
                                     clearInterval(authCheckInterval);
                                     authCheckInterval = null;
-                                    console.log('⏰ Verificação periódica finalizada');
                                 }
                             }, 30000);
                         }
@@ -346,7 +383,6 @@
                 }
                 
                 // Iniciar verificação periódica para nova aba (mobile/fallback)
-                console.log('⏰ Iniciando verificação periódica para tokens...');
                 authCheckInterval = setInterval(checkForSavedTokens, 3000);
                 
             } catch (error) {
@@ -385,7 +421,6 @@
 
         // Verificar tokens salvos ao carregar a página
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('📄 Página de cadastro carregada, verificando tokens...');
             // Limpar tokens expirados imediatamente por segurança
             cleanupExpiredTokens();
             checkForSavedTokens();
@@ -398,12 +433,10 @@
                 if (authDataStr) {
                     const authData = JSON.parse(authDataStr);
                     if (Date.now() > authData.expires) {
-                        console.log('🧹 Limpando token expirado');
                         localStorage.removeItem('ludopedia_temp_auth');
                     }
                 }
             } catch (error) {
-                console.log('🧹 Limpando token corrompido');
                 localStorage.removeItem('ludopedia_temp_auth');
             }
         }
