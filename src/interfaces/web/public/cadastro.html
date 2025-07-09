@@ -138,7 +138,10 @@
 
                     <!-- Conexão com Ludopedia -->
                     <div class="mb-4">
-                        <label class="form-label">Conectar com Ludopedia</label>
+                        <label class="form-label">
+                            <i class="bi bi-puzzle-fill me-1"></i>
+                            Usuário Ludopedia
+                        </label>
                         <button type="button" class="btn btn-primary w-100" id="ludoAuthBtn">
                             <i class="bi bi-box-arrow-in-right"></i>
                             Conectar Ludopedia
@@ -150,11 +153,10 @@
                     <div id="postOAuthFields" style="opacity: 0.5; pointer-events: none;">
                         <div class="mb-3">
                             <label for="bggUsername" class="form-label">
-                                <i class="bi bi-globe me-1"></i>
+                                <i class="bi bi-dice-6-fill me-1"></i>
                                 Usuário BGG
                             </label>
-                            <input type="text" class="form-control" id="bggUsername" placeholder="Seu username no BoardGameGeek" disabled>
-                            <small class="text-muted">Informe seu username do BoardGameGeek</small>
+                            <input type="text" class="form-control" id="bggUsername" placeholder="Seu usuário no BoardGameGeek" disabled>
                         </div>
 
                         <div class="mb-3">
@@ -162,12 +164,12 @@
                             <div class="btn-group w-100" role="group">
                                 <input type="radio" class="btn-check" name="preferredPlatform" id="prefBGG" value="bgg" disabled>
                                 <label class="btn btn-outline-primary" for="prefBGG">
-                                    <i class="bi bi-globe me-1"></i>
+                                    <i class="bi bi-dice-6-fill me-1"></i>
                                     BGG
                                 </label>
                                 <input type="radio" class="btn-check" name="preferredPlatform" id="prefLudopedia" value="ludopedia" checked disabled>
                                 <label class="btn btn-outline-primary" for="prefLudopedia">
-                                    <i class="bi bi-puzzle me-1"></i>
+                                    <i class="bi bi-puzzle-fill me-1"></i>
                                     Ludopedia
                                 </label>
                             </div>
