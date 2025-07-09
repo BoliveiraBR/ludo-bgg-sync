@@ -419,6 +419,11 @@
                 </button>
             </li>
             <li class="nav-item" role="presentation">
+                <button class="nav-link" id="insights-tab" data-bs-toggle="tab" data-bs-target="#insights" type="button" role="tab" aria-controls="insights" aria-selected="false">
+                    <i class="bi bi-lightbulb"></i> Insights
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
                 <button class="nav-link" id="matching-tab" data-bs-toggle="tab" data-bs-target="#matching" type="button" role="tab" aria-controls="matching" aria-selected="false">
                     <i class="bi bi-arrow-left-right"></i> Pareamento
                 </button>
@@ -486,7 +491,7 @@
                                 </p>
                             </div>
 
-                            <div class="feature-card" onclick="switchToTab('matching')">
+                            <div class="feature-card" onclick="switchToTab('insights')">
                                 <div class="feature-icon">
                                     <i class="bi bi-lightbulb"></i>
                                 </div>
@@ -599,6 +604,59 @@
                                 </div>
                                 <div id="ludoList" class="game-list">
                                     <!-- Lista de jogos da Ludopedia será inserida aqui -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Insights Tab -->
+            <div class="tab-pane fade" id="insights" role="tabpanel" aria-labelledby="insights-tab">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 col-lg-6">
+                        <div class="card shadow-sm">
+                            <div class="card-body text-center py-5">
+                                <div class="mb-4">
+                                    <i class="bi bi-tools" style="font-size: 4rem; color: #6c757d;"></i>
+                                </div>
+                                <h3 class="card-title text-primary mb-3">
+                                    <i class="bi bi-lightbulb me-2"></i>
+                                    Insights Personalizados
+                                </h3>
+                                <h5 class="text-muted mb-4">Em Construção</h5>
+                                <p class="text-muted mb-4">
+                                    Esta seção está sendo desenvolvida e em breve trará insights personalizados sobre sua coleção, incluindo:
+                                </p>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12">
+                                        <div class="d-flex align-items-center text-start">
+                                            <i class="bi bi-check-circle text-success me-2"></i>
+                                            <span>Sugestões de jogos ideais para diferentes ocasiões</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="d-flex align-items-center text-start">
+                                            <i class="bi bi-check-circle text-success me-2"></i>
+                                            <span>Análise de lacunas na sua coleção</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="d-flex align-items-center text-start">
+                                            <i class="bi bi-check-circle text-success me-2"></i>
+                                            <span>Recomendações baseadas no seu perfil de jogador</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="d-flex align-items-center text-start">
+                                            <i class="bi bi-check-circle text-success me-2"></i>
+                                            <span>Estatísticas avançadas e tendências</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="alert alert-info">
+                                    <i class="bi bi-info-circle me-2"></i>
+                                    Fique ligado nas próximas atualizações!
                                 </div>
                             </div>
                         </div>
