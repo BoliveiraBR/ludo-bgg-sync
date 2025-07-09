@@ -2,6 +2,7 @@
 let loadBtn, loadingIndicator, successMessage, bggList, ludoList, saveBtn;
 let bggTotal, bggBase, bggExp, ludoTotal, ludoBase, ludoExp;
 let maxTotal, maxBase, maxExpansions; // Estatísticas da coleção
+let loadSummary, changeLegend; // Elementos da aba de atualização
 let configModal, configBtn, loginModal, logoutBtn, loginLink;
 let selectAllMatches, acceptMatchesBtn, matchesList, compareWithAIBtn, aiMatchesList;
 let perfectMatchesCount, onlyBGGCount, onlyLudoCount, previousMatchesCount;
@@ -41,6 +42,10 @@ document.addEventListener('DOMContentLoaded', () => {
     maxTotal = document.getElementById('maxTotal');
     maxBase = document.getElementById('maxBase');
     maxExpansions = document.getElementById('maxExpansions');
+
+    // Elementos da aba de atualização
+    loadSummary = document.getElementById('loadSummary');
+    changeLegend = document.getElementById('changeLegend');
 
     // Elementos dos modais e navbar
     configModal = new bootstrap.Modal(document.getElementById('configModal'));
@@ -504,6 +509,10 @@ async function loadCollectionsFromAPI() {
         setLoading(true);
         saveBtn.disabled = true;
         
+        // Ocultar seções de resumo ao iniciar carregamento
+        if (loadSummary) loadSummary.style.display = 'none';
+        if (changeLegend) changeLegend.style.display = 'none';
+        
         const response = await window.authManager.authenticatedFetch('/api/collections', {
             method: 'POST',
             headers: {
@@ -552,6 +561,9 @@ async function loadCollectionsFromAPI() {
         if (successMessage) {
             successMessage.style.display = 'block';
         }
+
+        // Mostrar resumo dos dados carregados
+        showLoadSummary(data.bggCollection, data.ludoCollection);
         
     } catch (error) {
         console.error('Error:', error);
@@ -559,6 +571,74 @@ async function loadCollectionsFromAPI() {
         saveBtn.disabled = true;
     } finally {
         setLoading(false);
+    }
+}
+
+// Mostrar resumo dos dados carregados na aba de atualização
+function showLoadSummary(bggCollection, ludoCollection) {
+    if (!loadSummary || !changeLegend) return;
+
+    // Calcular estatísticas dos dados carregados
+    const loadedBggStats = calculateStats(bggCollection);
+    const loadedLudoStats = calculateStats(ludoCollection);
+    
+    // Calcular estatísticas atuais (das coleções já salvas)
+    const currentBggStats = {
+        total: parseInt(bggTotal?.textContent || '0'),
+        base: parseInt(bggBase?.textContent || '0'),
+        expansions: parseInt(bggExp?.textContent || '0')
+    };
+    
+    const currentLudoStats = {
+        total: parseInt(ludoTotal?.textContent || '0'),
+        base: parseInt(ludoBase?.textContent || '0'),
+        expansions: parseInt(ludoExp?.textContent || '0')
+    };
+
+    // Atualizar elementos BGG
+    updateLoadedStat('loadedBggTotal', loadedBggStats.total, currentBggStats.total);
+    updateLoadedStat('loadedBggBase', loadedBggStats.base, currentBggStats.base);
+    updateLoadedStat('loadedBggExp', loadedBggStats.expansions, currentBggStats.expansions);
+
+    // Atualizar elementos Ludopedia
+    updateLoadedStat('loadedLudoTotal', loadedLudoStats.total, currentLudoStats.total);
+    updateLoadedStat('loadedLudoBase', loadedLudoStats.base, currentLudoStats.base);
+    updateLoadedStat('loadedLudoExp', loadedLudoStats.expansions, currentLudoStats.expansions);
+
+    // Mostrar seções
+    loadSummary.style.display = 'block';
+    changeLegend.style.display = 'block';
+}
+
+// Função auxiliar para calcular estatísticas
+function calculateStats(collection) {
+    const base = collection.filter(game => !game.isExpansion).length;
+    const expansions = collection.filter(game => game.isExpansion).length;
+    return {
+        total: collection.length,
+        base: base,
+        expansions: expansions
+    };
+}
+
+// Função auxiliar para atualizar estatística carregada com diferença
+function updateLoadedStat(elementId, loadedValue, currentValue) {
+    const element = document.getElementById(elementId);
+    const changeElement = document.getElementById(elementId + 'Change');
+    
+    if (element) {
+        element.textContent = loadedValue;
+    }
+    
+    if (changeElement) {
+        const difference = loadedValue - currentValue;
+        if (difference > 0) {
+            changeElement.innerHTML = `<span class="badge bg-success">+${difference}</span>`;
+        } else if (difference < 0) {
+            changeElement.innerHTML = `<span class="badge bg-danger">${difference}</span>`;
+        } else {
+            changeElement.innerHTML = `<span class="badge bg-secondary">=</span>`;
+        }
     }
 }
 
