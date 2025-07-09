@@ -800,6 +800,85 @@ app.post('/api/config', authenticateToken, async (req, res) => {
   }
 });
 
+// Rota para atualizar configurações do usuário
+app.put('/api/config', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { bgg_username, preferred_platform } = req.body;
+    
+    const userManager = new UserManager();
+    await userManager.connect();
+    
+    try {
+      // Verificar se usuário existe
+      const userData = await userManager.getUserById(userId);
+      
+      if (!userData) {
+        return res.status(404).json({ error: 'Usuário não encontrado' });
+      }
+      
+      const updateData = {};
+      
+      // Validar BGG username se fornecido
+      if (bgg_username !== undefined) {
+        // Só permitir inclusão se não tiver username atual
+        if (userData.bgg_username) {
+          return res.status(400).json({ 
+            error: 'BGG username já está definido e não pode ser alterado' 
+          });
+        }
+        
+        // Validar se não está vazio
+        if (!bgg_username || bgg_username.trim() === '') {
+          return res.status(400).json({ 
+            error: 'BGG username não pode estar vazio' 
+          });
+        }
+        
+        // Validar tamanho
+        if (bgg_username.length > 50) {
+          return res.status(400).json({ 
+            error: 'BGG username deve ter no máximo 50 caracteres' 
+          });
+        }
+        
+        // Verificar se já existe outro usuário com o mesmo BGG username
+        const existingUser = await userManager.getUserByBggUsername(bgg_username);
+        if (existingUser && existingUser.id !== userId) {
+          return res.status(409).json({ 
+            error: 'Este username do BGG já está sendo usado por outro usuário' 
+          });
+        }
+        
+        updateData.bgg_username = bgg_username.trim();
+      }
+      
+      // Validar plataforma preferida se fornecida
+      if (preferred_platform !== undefined) {
+        if (!['bgg', 'ludopedia'].includes(preferred_platform)) {
+          return res.status(400).json({ 
+            error: 'Plataforma preferida deve ser "bgg" ou "ludopedia"' 
+          });
+        }
+        
+        updateData.preferred_platform = preferred_platform;
+      }
+      
+      // Atualizar dados se há mudanças
+      if (Object.keys(updateData).length > 0) {
+        await userManager.updateUser(userId, updateData);
+      }
+      
+      res.json({ success: true });
+    } finally {
+      await userManager.disconnect();
+    }
+  } catch (error) {
+    console.error('Error updating user config:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Rota de callback do OAuth
 app.get('/callback', async (req, res) => {
   try {

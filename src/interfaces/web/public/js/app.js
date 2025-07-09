@@ -89,6 +89,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('quickLoginForm').addEventListener('submit', handleQuickLogin);
     loadBtn.addEventListener('click', loadCollectionsFromAPI);
 
+    // Event listeners para configuração
+    document.getElementById('addBggBtn').addEventListener('click', showBggUsernameInput);
+    document.getElementById('cancelBggBtn').addEventListener('click', resetConfigModal);
+    document.getElementById('editPlatformBtn').addEventListener('click', showPlatformPreferenceInput);
+    document.getElementById('saveConfigBtn').addEventListener('click', saveConfigChanges);
+    
     // Event listeners para filtros e pareamento
     document.querySelectorAll('.filter-link').forEach(link => {
         link.addEventListener('click', (e) => {
@@ -1283,10 +1289,202 @@ async function loadUserProfile() {
             } else {
                 document.getElementById('userDisplayCreated').textContent = '-';
             }
+            
+            // Configurar visibilidade dos controles de edição
+            setupConfigEditControls(userData);
         }
     } catch (error) {
         console.error('Erro ao carregar perfil do usuário:', error);
     }
+}
+
+// Variável para armazenar dados do usuário atual
+let currentUserData = null;
+
+// Função para configurar controles de edição
+function setupConfigEditControls(userData) {
+    currentUserData = userData;
+    
+    // BGG Username - mostrar botão "Adicionar" apenas se não tiver username
+    const addBggBtn = document.getElementById('addBggBtn');
+    const bggUsernameInput = document.getElementById('bggUsernameInput');
+    
+    if (!userData.bgg_username) {
+        addBggBtn.style.display = 'block';
+    } else {
+        addBggBtn.style.display = 'none';
+    }
+    
+    // Platform preference - sempre permitir edição
+    const editPlatformBtn = document.getElementById('editPlatformBtn');
+    const platformPreferenceInput = document.getElementById('platformPreferenceInput');
+    
+    editPlatformBtn.style.display = 'block';
+    
+    // Configurar valor atual da plataforma
+    if (userData.preferred_platform === 'bgg') {
+        document.getElementById('prefConfigBGG').checked = true;
+    } else {
+        document.getElementById('prefConfigLudopedia').checked = true;
+    }
+    
+    // Reset do modal
+    resetConfigModal();
+}
+
+// Função para resetar o modal para o estado inicial
+function resetConfigModal() {
+    // Ocultar inputs de edição
+    document.getElementById('bggUsernameInput').style.display = 'none';
+    document.getElementById('platformPreferenceInput').style.display = 'none';
+    document.getElementById('saveConfigBtn').style.display = 'none';
+    
+    // Mostrar displays
+    document.getElementById('userDisplayBgg').style.display = 'block';
+    document.getElementById('userDisplayPlatform').style.display = 'block';
+    document.getElementById('editPlatformBtn').style.display = 'block';
+    
+    // Limpar input
+    document.getElementById('bggUsername').value = '';
+}
+
+// Função para mostrar input de BGG username
+function showBggUsernameInput() {
+    document.getElementById('userDisplayBgg').style.display = 'none';
+    document.getElementById('addBggBtn').style.display = 'none';
+    document.getElementById('bggUsernameInput').style.display = 'block';
+    document.getElementById('saveConfigBtn').style.display = 'block';
+    
+    // Focar no input
+    document.getElementById('bggUsername').focus();
+}
+
+// Função para mostrar input de plataforma preferida
+function showPlatformPreferenceInput() {
+    document.getElementById('userDisplayPlatform').style.display = 'none';
+    document.getElementById('editPlatformBtn').style.display = 'none';
+    document.getElementById('platformPreferenceInput').style.display = 'block';
+    document.getElementById('saveConfigBtn').style.display = 'block';
+}
+
+// Função para salvar as alterações
+async function saveConfigChanges() {
+    try {
+        const changes = {};
+        let hasChanges = false;
+        
+        // Verificar se há mudança no BGG username
+        const bggUsernameInput = document.getElementById('bggUsernameInput');
+        if (bggUsernameInput.style.display !== 'none') {
+            const bggUsername = document.getElementById('bggUsername').value.trim();
+            if (bggUsername && bggUsername !== currentUserData.bgg_username) {
+                changes.bgg_username = bggUsername;
+                hasChanges = true;
+            }
+        }
+        
+        // Verificar se há mudança na plataforma preferida
+        const platformInput = document.getElementById('platformPreferenceInput');
+        if (platformInput.style.display !== 'none') {
+            const selectedPlatform = document.querySelector('input[name="preferredPlatform"]:checked');
+            if (selectedPlatform && selectedPlatform.value !== currentUserData.preferred_platform) {
+                changes.preferred_platform = selectedPlatform.value;
+                hasChanges = true;
+            }
+        }
+        
+        if (!hasChanges) {
+            resetConfigModal();
+            return;
+        }
+        
+        // Desabilitar botão durante o salvamento
+        const saveBtn = document.getElementById('saveConfigBtn');
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Salvando...';
+        
+        // Enviar alterações para o servidor
+        const response = await fetch('/api/config', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            },
+            body: JSON.stringify(changes)
+        });
+        
+        if (response.ok) {
+            // Recarregar dados do usuário
+            await loadUserProfile();
+            
+            // Mostrar mensagem de sucesso
+            showSuccessMessage('Configurações salvas com sucesso!');
+        } else {
+            const error = await response.json();
+            throw new Error(error.error || 'Erro ao salvar configurações');
+        }
+        
+    } catch (error) {
+        console.error('Erro ao salvar configurações:', error);
+        showErrorMessage(error.message || 'Erro ao salvar configurações');
+        
+        // Reabilitar botão
+        const saveBtn = document.getElementById('saveConfigBtn');
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<i class="bi bi-check-lg"></i> Salvar Alterações';
+    }
+}
+
+// Função para mostrar mensagem de sucesso
+function showSuccessMessage(message) {
+    // Criar toast temporário
+    const toast = document.createElement('div');
+    toast.className = 'toast-container position-fixed top-0 end-0 p-3';
+    toast.innerHTML = `
+        <div class="toast show" role="alert">
+            <div class="toast-header">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                <strong class="me-auto">Sucesso</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">
+                ${message}
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    // Remover após 5 segundos
+    setTimeout(() => {
+        toast.remove();
+    }, 5000);
+}
+
+// Função para mostrar mensagem de erro
+function showErrorMessage(message) {
+    // Criar toast temporário
+    const toast = document.createElement('div');
+    toast.className = 'toast-container position-fixed top-0 end-0 p-3';
+    toast.innerHTML = `
+        <div class="toast show" role="alert">
+            <div class="toast-header">
+                <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
+                <strong class="me-auto">Erro</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">
+                ${message}
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    // Remover após 5 segundos
+    setTimeout(() => {
+        toast.remove();
+    }, 5000);
 }
 
 // Função para lidar com o login rápido

@@ -349,36 +349,75 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="row g-3">
-                        <div class="col-12">
-                            <label class="form-label fw-bold">Nome</label>
-                            <p class="form-control-plaintext" id="userDisplayName">-</p>
+                    <form id="configForm">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label fw-bold">Nome</label>
+                                <p class="form-control-plaintext" id="userDisplayName">-</p>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-bold">E-mail</label>
+                                <p class="form-control-plaintext" id="userDisplayEmail">-</p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">
+                                    <i class="bi bi-dice-6-fill me-1"></i>
+                                    Usuário BGG
+                                </label>
+                                <div id="bggUsernameContainer">
+                                    <p class="form-control-plaintext" id="userDisplayBgg">-</p>
+                                    <div class="input-group" id="bggUsernameInput" style="display: none;">
+                                        <input type="text" class="form-control" id="bggUsername" placeholder="Seu usuário no BoardGameGeek" maxlength="50">
+                                        <button class="btn btn-outline-secondary" type="button" id="cancelBggBtn">
+                                            <i class="bi bi-x"></i>
+                                        </button>
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-primary mt-1" type="button" id="addBggBtn" style="display: none;">
+                                        <i class="bi bi-plus"></i> Adicionar Usuário BGG
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">
+                                    <i class="bi bi-puzzle-fill me-1"></i>
+                                    Usuário Ludopedia
+                                </label>
+                                <p class="form-control-plaintext" id="userDisplayLudopedia">-</p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Plataforma Preferida</label>
+                                <div id="platformPreferenceContainer">
+                                    <p class="form-control-plaintext" id="userDisplayPlatform">-</p>
+                                    <div class="btn-group w-100" role="group" id="platformPreferenceInput" style="display: none;">
+                                        <input type="radio" class="btn-check" name="preferredPlatform" id="prefConfigBGG" value="bgg">
+                                        <label class="btn btn-outline-primary" for="prefConfigBGG">
+                                            <i class="bi bi-dice-6-fill me-1"></i>
+                                            BGG
+                                        </label>
+                                        <input type="radio" class="btn-check" name="preferredPlatform" id="prefConfigLudopedia" value="ludopedia">
+                                        <label class="btn btn-outline-primary" for="prefConfigLudopedia">
+                                            <i class="bi bi-puzzle-fill me-1"></i>
+                                            Ludopedia
+                                        </label>
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-primary mt-1" type="button" id="editPlatformBtn">
+                                        <i class="bi bi-pencil"></i> Alterar Plataforma
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Membro desde</label>
+                                <p class="form-control-plaintext" id="userDisplayCreated">-</p>
+                            </div>
                         </div>
-                        <div class="col-12">
-                            <label class="form-label fw-bold">E-mail</label>
-                            <p class="form-control-plaintext" id="userDisplayEmail">-</p>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Usuário BGG</label>
-                            <p class="form-control-plaintext" id="userDisplayBgg">-</p>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Usuário Ludopedia</label>
-                            <p class="form-control-plaintext" id="userDisplayLudopedia">-</p>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Plataforma Preferida</label>
-                            <p class="form-control-plaintext" id="userDisplayPlatform">-</p>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Membro desde</label>
-                            <p class="form-control-plaintext" id="userDisplayCreated">-</p>
-                        </div>
-                    </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-danger" id="logoutBtn">
                         <i class="bi bi-box-arrow-right"></i> Sair
+                    </button>
+                    <button type="button" class="btn btn-success" id="saveConfigBtn" style="display: none;">
+                        <i class="bi bi-check-lg"></i> Salvar Alterações
                     </button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                 </div>
