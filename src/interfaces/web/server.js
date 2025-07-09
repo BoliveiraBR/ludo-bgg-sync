@@ -888,40 +888,37 @@ app.get('/callback', async (req, res) => {
           }, 1000);
 
           function closeWindow() {
+            // Salvar tokens no localStorage para comunicação cross-tab
+            const authData = {
+              token: '${tokenResponse.data.access_token}',
+              user: '${ludoUsername || ''}',
+              timestamp: Date.now(),
+              expires: Date.now() + (5 * 60 * 1000) // 5 minutos
+            };
+            
+            try {
+              localStorage.setItem('ludopedia_temp_auth', JSON.stringify(authData));
+              console.log('💾 Token salvo no localStorage');
+            } catch (error) {
+              console.error('❌ Erro ao salvar no localStorage:', error);
+            }
+            
             // Verificar se é popup (tem window.opener) ou nova aba
             if (window.opener) {
-              console.log('📱 Detectado como POPUP - usando postMessage');
-              // Para popup: usa postMessage
+              console.log('📱 Detectado como POPUP - enviando postMessage e fechando');
+              // Para popup: envia postMessage e fecha
               window.opener.postMessage({ 
                 type: 'AUTH_SUCCESS', 
                 token: '${tokenResponse.data.access_token}',
                 user: '${ludoUsername || ''}'
               }, '*');
               
-              // Salvar também no localStorage como backup
-              try {
-                const authData = {
-                  token: '${tokenResponse.data.access_token}',
-                  user: '${ludoUsername || ''}',
-                  timestamp: Date.now(),
-                  expires: Date.now() + (5 * 60 * 1000)
-                };
-                localStorage.setItem('ludopedia_temp_auth', JSON.stringify(authData));
-              } catch (error) {
-                console.error('❌ Erro ao salvar backup no localStorage:', error);
-              }
-              
-              // Tenta fechar o popup
+              // Fechar popup imediatamente
               window.close();
             } else {
-              console.log('🆕 Detectado como NOVA ABA - redirecionando com dados');
-              // Para nova aba: redireciona para cadastro com dados na URL
-              const token = '${tokenResponse.data.access_token}';
-              const user = '${ludoUsername || ''}';
-              const redirectUrl = \`/cadastro?auth_success=1&token=\${encodeURIComponent(token)}&user=\${encodeURIComponent(user)}\`;
-              
-              console.log('🔄 Redirecionando para:', redirectUrl);
-              window.location.href = redirectUrl;
+              console.log('🆕 Detectado como NOVA ABA - mantendo página de sucesso');
+              // Para nova aba: não redireciona, mantém página de sucesso
+              // O localStorage vai comunicar com a aba original via polling
             }
             
             // Se não conseguir fechar (alguns navegadores bloqueiam), mostra mensagem
