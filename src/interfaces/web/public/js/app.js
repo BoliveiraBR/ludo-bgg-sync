@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Event listeners para configuração
     document.getElementById('addBggBtn').addEventListener('click', showBggUsernameInput);
-    document.getElementById('cancelBggBtn').addEventListener('click', resetConfigModal);
+    document.getElementById('cancelBggBtn').addEventListener('click', cancelBggUsernameEdit);
     document.getElementById('editPlatformBtn').addEventListener('click', showPlatformPreferenceInput);
     document.getElementById('saveConfigBtn').addEventListener('click', saveConfigChanges);
     
@@ -1352,6 +1352,11 @@ function resetConfigModal() {
     document.getElementById('userDisplayPlatform').style.display = 'block';
     document.getElementById('editPlatformBtn').style.display = 'block';
     
+    // Mostrar botão "Adicionar BGG" se não há username BGG
+    if (currentUserData && !currentUserData.bgg_username) {
+        document.getElementById('addBggBtn').style.display = 'block';
+    }
+    
     // Limpar input
     document.getElementById('bggUsername').value = '';
 }
@@ -1365,6 +1370,29 @@ function showBggUsernameInput() {
     
     // Focar no input
     document.getElementById('bggUsername').focus();
+}
+
+// Função para cancelar edição do BGG username
+function cancelBggUsernameEdit() {
+    // Ocultar input de edição
+    document.getElementById('bggUsernameInput').style.display = 'none';
+    
+    // Mostrar display original
+    document.getElementById('userDisplayBgg').style.display = 'block';
+    
+    // Mostrar botão "Adicionar" novamente se não há username
+    if (currentUserData && !currentUserData.bgg_username) {
+        document.getElementById('addBggBtn').style.display = 'block';
+    }
+    
+    // Limpar input
+    document.getElementById('bggUsername').value = '';
+    
+    // Verificar se deve ocultar botão salvar
+    const platformInput = document.getElementById('platformPreferenceInput');
+    if (platformInput.style.display === 'none') {
+        document.getElementById('saveConfigBtn').style.display = 'none';
+    }
 }
 
 // Função para mostrar input de plataforma preferida
@@ -1424,9 +1452,6 @@ async function saveConfigChanges() {
         if (response.ok) {
             // Recarregar dados do usuário
             await loadUserProfile();
-            
-            // Mostrar mensagem de sucesso
-            showSuccessMessage('Configurações salvas com sucesso!');
         } else {
             const error = await response.json();
             throw new Error(error.error || 'Erro ao salvar configurações');
@@ -1443,31 +1468,6 @@ async function saveConfigChanges() {
     }
 }
 
-// Função para mostrar mensagem de sucesso
-function showSuccessMessage(message) {
-    // Criar toast temporário
-    const toast = document.createElement('div');
-    toast.className = 'toast-container position-fixed top-0 end-0 p-3';
-    toast.innerHTML = `
-        <div class="toast show" role="alert">
-            <div class="toast-header">
-                <i class="bi bi-check-circle-fill text-success me-2"></i>
-                <strong class="me-auto">Sucesso</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
-            </div>
-            <div class="toast-body">
-                ${message}
-            </div>
-        </div>
-    `;
-    
-    document.body.appendChild(toast);
-    
-    // Remover após 5 segundos
-    setTimeout(() => {
-        toast.remove();
-    }, 5000);
-}
 
 // Função para mostrar mensagem de erro
 function showErrorMessage(message) {
