@@ -283,6 +283,9 @@
         function checkForSavedTokens() {
             console.log('🔄 Verificando tokens...', new Date().toLocaleTimeString());
             try {
+                // Debug: mostrar todas as chaves do localStorage
+                console.log('🔍 Todas as chaves do localStorage:', Object.keys(localStorage));
+                
                 const authDataStr = localStorage.getItem('ludopedia_temp_auth');
                 if (!authDataStr) {
                     console.log('❌ Nenhum token encontrado');
@@ -460,6 +463,14 @@
             // Limpar tokens expirados imediatamente por segurança
             cleanupExpiredTokens();
             checkForSavedTokens();
+        });
+
+        // Escutar mudanças no localStorage (quando outra aba salva token)
+        window.addEventListener('storage', function(event) {
+            if (event.key === 'ludopedia_temp_auth' && event.newValue) {
+                console.log('🔔 Token detectado via storage event!');
+                checkForSavedTokens();
+            }
         });
 
         // Função para limpar tokens expirados (segurança)
