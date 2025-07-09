@@ -228,8 +228,8 @@
         function checkForSavedTokens() {
             try {
                 console.log('🔍 Verificando tokens salvos...');
-                const authDataStr = sessionStorage.getItem('ludopedia_temp_auth');
-                console.log('📦 AuthData no sessionStorage:', authDataStr);
+                const authDataStr = localStorage.getItem('ludopedia_temp_auth');
+                console.log('📦 AuthData no localStorage:', authDataStr);
                 if (!authDataStr) {
                     console.log('❌ Nenhum authData encontrado');
                     return false;
@@ -243,15 +243,15 @@
                 console.log('⏰ Agora:', agora, 'Expira em:', authData.expires);
                 if (agora > authData.expires) {
                     console.log('⚠️ Token expirado');
-                    sessionStorage.removeItem('ludopedia_temp_auth');
+                    localStorage.removeItem('ludopedia_temp_auth');
                     return false;
                 }
                 
                 // Verificar se tem dados válidos
                 if (authData.token && authData.user) {
                     console.log('✅ Token válido encontrado!');
-                    // Limpar dados temporários
-                    sessionStorage.removeItem('ludopedia_temp_auth');
+                    // Limpar dados temporários IMEDIATAMENTE por segurança
+                    localStorage.removeItem('ludopedia_temp_auth');
                     
                     // Usar os tokens
                     ludopediaToken = authData.token;
@@ -276,7 +276,7 @@
             } catch (error) {
                 console.error('Erro ao verificar tokens salvos:', error);
                 // Limpar dados corrompidos
-                sessionStorage.removeItem('ludopedia_temp_auth');
+                localStorage.removeItem('ludopedia_temp_auth');
                 return false;
             }
         }
@@ -386,8 +386,27 @@
         // Verificar tokens salvos ao carregar a página
         document.addEventListener('DOMContentLoaded', function() {
             console.log('📄 Página de cadastro carregada, verificando tokens...');
+            // Limpar tokens expirados imediatamente por segurança
+            cleanupExpiredTokens();
             checkForSavedTokens();
         });
+
+        // Função para limpar tokens expirados (segurança)
+        function cleanupExpiredTokens() {
+            try {
+                const authDataStr = localStorage.getItem('ludopedia_temp_auth');
+                if (authDataStr) {
+                    const authData = JSON.parse(authDataStr);
+                    if (Date.now() > authData.expires) {
+                        console.log('🧹 Limpando token expirado');
+                        localStorage.removeItem('ludopedia_temp_auth');
+                    }
+                }
+            } catch (error) {
+                console.log('🧹 Limpando token corrompido');
+                localStorage.removeItem('ludopedia_temp_auth');
+            }
+        }
 
         // Verificar tokens periodicamente (para detectar quando são salvos)
         setInterval(function() {

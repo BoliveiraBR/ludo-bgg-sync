@@ -883,11 +883,11 @@ app.get('/callback', async (req, res) => {
             };
             
             try {
-              console.log('🔍 Salvando authData no sessionStorage:', authData);
-              sessionStorage.setItem('ludopedia_temp_auth', JSON.stringify(authData));
-              console.log('✅ AuthData salvo no sessionStorage');
+              console.log('🔍 Salvando authData no localStorage (temporário):', authData);
+              localStorage.setItem('ludopedia_temp_auth', JSON.stringify(authData));
+              console.log('✅ AuthData salvo no localStorage');
             } catch (error) {
-              console.error('❌ Erro ao salvar no sessionStorage:', error);
+              console.error('❌ Erro ao salvar no localStorage:', error);
             }
             
             // Notifica a janela principal sobre o sucesso (para popup)
