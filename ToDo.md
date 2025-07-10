@@ -1,6 +1,22 @@
 # 📋 ToDo List
 
+Próximo Prompt:
+A mensagem de erro na edição/inclusão de itens no modal de configuração não deve ser em uma       │
+│   janela separada. Mostre o erro logo acima dos botões, antes do HR no próprio modal, de uma        │
+│   maneira discreta, com letras pequenas, apenas deixando claro que qual foi o erro.\                │
+│   \                                                                                                 │
+│   A caixa de texto para adição do bgg_username está grande e os placeholder e caracteres também     │
+│   estão em um padrão maior do que o próprio modal. Acerte isso.\                                    │
+│   \                                                                                                 │
+│   Antes de fazer a adição do bgg_username, confirme se ele existe no BGG, consultando a API do      │
+│   mesmo jeito que voce faz na tela de cadastro
+
+
+
 ## TODO Urgente
+- [ ] Confirmar e-mail por PIN
+- [ ] Resetar senha
+- [ ] Confirmar senha no cadastro
 - [ ] Corrigir excesso de conexões com o banco: implementar um padrão singleton para garantir reutilização da instância de conexão
 
 ## Próximos Passos
