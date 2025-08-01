@@ -1437,6 +1437,25 @@ async function saveConfigChanges() {
             return;
         }
         
+        // Validar BGG username se foi alterado
+        if (changes.bgg_username) {
+            const saveBtn = document.getElementById('saveConfigBtn');
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Validando...';
+            
+            try {
+                const isValid = await validateBGGUsername(changes.bgg_username);
+                if (!isValid) {
+                    throw new Error(`Usuário BGG '${changes.bgg_username}' não existe no BoardGameGeek. Verifique se o nome está correto.`);
+                }
+            } catch (validationError) {
+                showConfigErrorMessage(validationError.message);
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '<i class="bi bi-check-lg"></i> Salvar Alterações';
+                return;
+            }
+        }
+        
         // Desabilitar botão durante o salvamento
         const saveBtn = document.getElementById('saveConfigBtn');
         saveBtn.disabled = true;
@@ -1471,6 +1490,27 @@ async function saveConfigChanges() {
     }
 }
 
+
+// Função para validar BGG username usando API pública
+async function validateBGGUsername(username) {
+    try {
+        const response = await fetch(`https://boardgamegeek.com/xmlapi2/user?name=${encodeURIComponent(username.trim())}`, {
+            method: 'GET',
+            mode: 'cors'
+        });
+        
+        if (response.status === 200) {
+            const xmlText = await response.text();
+            // Verificar se o XML contém dados do usuário válidos
+            return xmlText.includes('<user ') && xmlText.includes(`name="${username.trim()}"`);
+        }
+        
+        return false;
+    } catch (error) {
+        console.error('Erro ao validar BGG username:', error);
+        return false;
+    }
+}
 
 // Função para mostrar mensagem de erro no modal de configuração
 function showConfigErrorMessage(message) {

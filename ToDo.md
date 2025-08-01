@@ -4,6 +4,7 @@ Próximo Prompt:
 
 
 ## TODO Urgente
+- [ ] Colocar em algum lugar discreto a versão da aplicação deployada (pode ser uma API para isso)
 - [ ] Confirmar e-mail por PIN
 - [ ] Resetar senha
 - [ ] Confirmar senha no cadastro

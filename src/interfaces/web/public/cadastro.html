@@ -394,6 +394,27 @@
             }
         }, 10000);
 
+        // Função para validar BGG username usando API pública
+        async function validateBGGUsername(username) {
+            try {
+                const response = await fetch(`https://boardgamegeek.com/xmlapi2/user?name=${encodeURIComponent(username.trim())}`, {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                
+                if (response.status === 200) {
+                    const xmlText = await response.text();
+                    // Verificar se o XML contém dados do usuário válidos
+                    return xmlText.includes('<user ') && xmlText.includes(`name="${username.trim()}"`);
+                }
+                
+                return false;
+            } catch (error) {
+                console.error('Erro ao validar BGG username:', error);
+                return false;
+            }
+        }
+
         // Event listeners
         document.getElementById('ludoAuthBtn').addEventListener('click', startLudopediaAuth);
 
@@ -427,8 +448,18 @@
                 // Desabilitar botão durante o envio
                 const submitBtn = document.getElementById('submitBtn');
                 submitBtn.disabled = true;
-                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Cadastrando...';
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Validando...';
                 
+                // Validar BGG username se fornecido
+                if (formData.bggUsername && formData.bggUsername.trim()) {
+                    const isValidBGG = await validateBGGUsername(formData.bggUsername.trim());
+                    if (!isValidBGG) {
+                        alert(`❌ Usuário BGG '${formData.bggUsername.trim()}' não existe no BoardGameGeek. Verifique se o nome está correto.`);
+                        return;
+                    }
+                }
+                
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Cadastrando...';
                 console.log('Enviando dados do cadastro:', formData);
                 
                 const response = await fetch('/api/signup', {
