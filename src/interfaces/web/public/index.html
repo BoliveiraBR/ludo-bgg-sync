@@ -368,7 +368,7 @@
                                     <p class="form-control-plaintext" id="userDisplayBgg">-</p>
                                     <div id="bggUsernameInput" style="display: none;">
                                         <div class="input-group">
-                                            <input type="text" class="form-control form-control-lg" id="bggUsername" placeholder="Seu usuário no BoardGameGeek" maxlength="50">
+                                            <input type="text" class="form-control" id="bggUsername" placeholder="Usuário BGG" maxlength="50">
                                             <button class="btn btn-outline-secondary" type="button" id="cancelBggBtn">
                                                 <i class="bi bi-x"></i>
                                             </button>
@@ -414,6 +414,14 @@
                         </div>
                     </form>
                 </div>
+                <!-- Área para mensagens de erro -->
+                <div id="configErrorMessage" class="mx-3 mb-3" style="display: none;">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <small id="configErrorText"></small>
+                    </div>
+                </div>
+                <hr class="mx-3 mb-3">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-danger" id="logoutBtn">
                         <i class="bi bi-box-arrow-right"></i> Sair

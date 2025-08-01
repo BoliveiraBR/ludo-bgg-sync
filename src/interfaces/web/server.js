@@ -850,6 +850,16 @@ app.put('/api/config', authenticateToken, async (req, res) => {
           });
         }
         
+        // Validar se o username existe no BGG
+        try {
+          const bggApi = new BGGApi(bgg_username.trim());
+          await bggApi.validateUser();
+        } catch (validationError) {
+          return res.status(400).json({ 
+            error: `Usuário BGG '${bgg_username.trim()}' não existe no BoardGameGeek. Verifique se o nome está correto.`
+          });
+        }
+        
         updateData.bgg_username = bgg_username.trim();
       }
       

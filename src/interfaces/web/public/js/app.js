@@ -1337,6 +1337,9 @@ function setupConfigEditControls(userData) {
 
 // Função para resetar o modal para o estado inicial
 function resetConfigModal() {
+    // Ocultar mensagem de erro
+    hideConfigErrorMessage();
+    
     // Ocultar inputs de edição
     document.getElementById('bggUsernameInput').style.display = 'none';
     document.getElementById('platformPreferenceInput').style.display = 'none';
@@ -1459,7 +1462,7 @@ async function saveConfigChanges() {
         
     } catch (error) {
         console.error('Erro ao salvar configurações:', error);
-        showErrorMessage(error.message || 'Erro ao salvar configurações');
+        showConfigErrorMessage(error.message || 'Erro ao salvar configurações');
         
         // Reabilitar botão
         const saveBtn = document.getElementById('saveConfigBtn');
@@ -1469,7 +1472,31 @@ async function saveConfigChanges() {
 }
 
 
-// Função para mostrar mensagem de erro
+// Função para mostrar mensagem de erro no modal de configuração
+function showConfigErrorMessage(message) {
+    const errorContainer = document.getElementById('configErrorMessage');
+    const errorText = document.getElementById('configErrorText');
+    
+    if (errorContainer && errorText) {
+        errorText.textContent = message;
+        errorContainer.style.display = 'block';
+        
+        // Auto-esconder após 5 segundos
+        setTimeout(() => {
+            hideConfigErrorMessage();
+        }, 5000);
+    }
+}
+
+// Função para esconder mensagem de erro no modal de configuração
+function hideConfigErrorMessage() {
+    const errorContainer = document.getElementById('configErrorMessage');
+    if (errorContainer) {
+        errorContainer.style.display = 'none';
+    }
+}
+
+// Função para mostrar mensagem de erro (toast para casos gerais)
 function showErrorMessage(message) {
     // Criar toast temporário
     const toast = document.createElement('div');
