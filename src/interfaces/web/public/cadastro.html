@@ -404,8 +404,18 @@
                 
                 if (response.status === 200) {
                     const xmlText = await response.text();
-                    // Verificar se o XML contém dados do usuário válidos
-                    return xmlText.includes('<user ') && xmlText.includes(`name="${username.trim()}"`);
+                    // Verificar se o XML contém dados do usuário válidos (case-insensitive)
+                    const hasUserTag = xmlText.includes('<user ');
+                    if (!hasUserTag) return false;
+                    
+                    // Extrair o nome real do usuário do XML para comparação case-insensitive
+                    const nameMatch = xmlText.match(/name="([^"]+)"/);
+                    if (nameMatch) {
+                        const actualUsername = nameMatch[1];
+                        return actualUsername.toLowerCase() === username.trim().toLowerCase();
+                    }
+                    
+                    return false;
                 }
                 
                 return false;

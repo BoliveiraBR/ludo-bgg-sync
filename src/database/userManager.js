@@ -117,7 +117,7 @@ class UserManager {
             SELECT id, email, name, bgg_username, ludopedia_username, 
                    preferred_platform, created_at, active
             FROM users 
-            WHERE bgg_username = $1 AND active = TRUE
+            WHERE LOWER(bgg_username) = LOWER($1) AND active = TRUE
         `;
 
         try {
@@ -139,7 +139,7 @@ class UserManager {
             SELECT id, email, name, bgg_username, ludopedia_username, 
                    preferred_platform, created_at, active
             FROM users 
-            WHERE ludopedia_username = $1 AND active = TRUE
+            WHERE LOWER(ludopedia_username) = LOWER($1) AND active = TRUE
         `;
 
         try {
