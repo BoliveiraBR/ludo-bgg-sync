@@ -98,6 +98,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Resetar modal quando fechar
     document.getElementById('configModal').addEventListener('hidden.bs.modal', resetConfigModal);
     
+    // Event listeners para insights
+    document.getElementById('refreshShameListBtn').addEventListener('click', loadShameList);
+    
     // Event listeners para filtros e pareamento
     document.querySelectorAll('.filter-link').forEach(link => {
         link.addEventListener('click', (e) => {
@@ -1299,6 +1302,102 @@ async function loadUserProfile() {
     } catch (error) {
         console.error('Erro ao carregar perfil do usuário:', error);
     }
+}
+
+// Função para carregar Lista da Vergonha BGG
+async function loadShameList() {
+    // Esconder todos os estados
+    document.getElementById('shameListLoading').style.display = 'block';
+    document.getElementById('shameListError').classList.add('d-none');
+    document.getElementById('shameListNoBgg').classList.add('d-none');
+    document.getElementById('shameListSuccess').classList.add('d-none');
+    
+    try {
+        const response = await fetch('/api/insights/shame-list', {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            }
+        });
+        
+        const data = await response.json();
+        
+        // Esconder loading
+        document.getElementById('shameListLoading').style.display = 'none';
+        
+        if (!response.ok) {
+            if (data.needsBggSetup) {
+                // Mostrar tela de configuração BGG
+                document.getElementById('shameListNoBgg').classList.remove('d-none');
+            } else {
+                // Mostrar erro
+                document.getElementById('shameListErrorMessage').textContent = data.error || 'Erro ao carregar dados';
+                document.getElementById('shameListError').classList.remove('d-none');
+            }
+            return;
+        }
+        
+        // Mostrar dados de sucesso
+        document.getElementById('shameListSuccess').classList.remove('d-none');
+        document.getElementById('shameListUsername').textContent = data.bggUsername;
+        
+        // Atualizar contador
+        const countElement = document.getElementById('shameListCount');
+        if (data.totalGames === 0) {
+            countElement.innerHTML = '<i class="bi bi-emoji-smile me-1"></i>Nenhum jogo não jogado!';
+            countElement.className = 'badge bg-success fs-6';
+            document.getElementById('shameListEmpty').classList.remove('d-none');
+        } else {
+            countElement.innerHTML = `<i class="bi bi-trophy me-1"></i>${data.totalGames} jogo${data.totalGames > 1 ? 's' : ''} não jogado${data.totalGames > 1 ? 's' : ''}`;
+            countElement.className = 'badge bg-warning text-dark fs-6';
+            
+            // Renderizar jogos
+            renderShameListGames(data.games);
+        }
+        
+    } catch (error) {
+        console.error('Erro ao carregar lista da vergonha:', error);
+        document.getElementById('shameListLoading').style.display = 'none';
+        document.getElementById('shameListErrorMessage').textContent = 'Erro de conexão. Tente novamente.';
+        document.getElementById('shameListError').classList.remove('d-none');
+    }
+}
+
+// Função para renderizar os jogos da lista da vergonha
+function renderShameListGames(games) {
+    const container = document.getElementById('shameListGames');
+    container.innerHTML = '';
+    
+    games.forEach(game => {
+        const gameElement = document.createElement('div');
+        gameElement.className = 'col-md-6 col-lg-4';
+        
+        // Fallback para thumbnail vazio
+        const thumbnailUrl = game.thumbnail || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="%23dee2e6"><rect width="60" height="60" fill="%23dee2e6"/><text x="50%" y="50%" fill="%236c757d" text-anchor="middle" dy=".3em" font-size="12">IMG</text></svg>';
+        
+        gameElement.innerHTML = `
+            <div class="card h-100 shame-game-card">
+                <div class="card-body d-flex align-items-center">
+                    <div class="flex-shrink-0 me-3">
+                        <img src="${thumbnailUrl}" alt="${game.name}" class="shame-game-thumbnail" 
+                             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22 fill=%22%23dee2e6%22><rect width=%2260%22 height=%2260%22 fill=%22%23dee2e6%22/><text x=%2250%%22 y=%2250%%22 fill=%22%236c757d%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2212%22>IMG</text></svg>'">
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="card-title mb-1">${game.name}</h6>
+                        <div class="text-muted small">
+                            <div><i class="bi bi-calendar3 me-1"></i>${game.year || 'N/A'}</div>
+                            <div class="mt-1">
+                                <span class="badge bg-warning text-dark">
+                                    <i class="bi bi-controller me-1"></i>0 partidas
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        container.appendChild(gameElement);
+    });
 }
 
 // Variável para armazenar dados do usuário atual

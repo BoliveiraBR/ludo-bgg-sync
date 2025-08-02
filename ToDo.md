@@ -4,9 +4,9 @@ Próximo Prompt:
 
 
 ## TODO Urgente
+- [ ] Confirmar e-mail por PIN (Vide ChatGPT: Plano de envio de PIN por e-mail no Board Game Guru)
 - [ ] Colocar em algum lugar discreto a versão da aplicação deployada (pode ser uma API para isso)
-- [ ] Confirmar e-mail por PIN
-- [ ] Resetar senha
+3- [ ] Resetar senha
 - [ ] Confirmar senha no cadastro
 - [ ] Corrigir excesso de conexões com o banco: implementar um padrão singleton para garantir reutilização da instância de conexão
 

@@ -889,6 +889,66 @@ app.put('/api/config', authenticateToken, async (req, res) => {
   }
 });
 
+// Rota para relatório "Lista da Vergonha BGG"
+app.get('/api/insights/shame-list', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    
+    const userManager = new UserManager();
+    await userManager.connect();
+    
+    try {
+      // Verificar se usuário existe e tem BGG username
+      const userData = await userManager.getUserById(userId);
+      
+      if (!userData) {
+        return res.status(404).json({ error: 'Usuário não encontrado' });
+      }
+      
+      if (!userData.bgg_username) {
+        return res.status(400).json({ 
+          error: 'BGG username não configurado',
+          needsBggSetup: true
+        });
+      }
+      
+      // Buscar jogos não jogados da coleção BGG
+      const dbManager = new DatabaseManager();
+      await dbManager.connect();
+      
+      try {
+        const query = `
+          SELECT game_id, name, year, thumbnail, num_plays
+          FROM bgg_collection 
+          WHERE user_name = $1 
+            AND num_plays = 0 
+            AND is_expansion = false
+          ORDER BY game_id ASC
+        `;
+        
+        const result = await dbManager.client.query(query, [userData.bgg_username]);
+        const shameList = result.rows;
+        
+        res.json({
+          success: true,
+          bggUsername: userData.bgg_username,
+          totalGames: shameList.length,
+          games: shameList
+        });
+        
+      } finally {
+        await dbManager.disconnect();
+      }
+      
+    } finally {
+      await userManager.disconnect();
+    }
+  } catch (error) {
+    console.error('Erro ao buscar lista da vergonha BGG:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
 // Rota de callback do OAuth
 app.get('/callback', async (req, res) => {
   try {
