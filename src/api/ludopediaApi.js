@@ -182,7 +182,8 @@ class LudopediaApi {
           // Campos adicionais da Ludopedia
           ludopediaId: String(jogo.id_jogo || ''),
           thumbnail: String(jogo.thumbnail || ''),
-          image: String(jogo.imagem || jogo.image || '')
+          image: String(jogo.imagem || jogo.image || ''),
+          fl_jogou: this.parseFlJogou(jogo.fl_jogou)
         };
       } catch (error) {
         console.warn(`⚠️ Erro ao processar jogo da Ludopedia:`, error.message, jogo);
@@ -212,6 +213,17 @@ class LudopediaApi {
     if (!cost) return null;
     const parsed = parseFloat(cost);
     return isNaN(parsed) ? null : parsed;
+  }
+
+  parseFlJogou(flJogou) {
+    if (typeof flJogou === 'boolean') return flJogou ? 1 : 0;
+    if (typeof flJogou === 'string') {
+      return flJogou === '1' || flJogou.toLowerCase() === 'true' ? 1 : 0;
+    }
+    if (typeof flJogou === 'number') {
+      return flJogou === 1 ? 1 : 0;
+    }
+    return 0; // Default para não jogado
   }
 
   // Método para testar a conexão com a API
