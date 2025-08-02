@@ -93,8 +93,8 @@ class DatabaseManager {
                 const query = `
                     INSERT INTO ludopedia_collection (
                         user_name, game_id, name, type, is_expansion, year, 
-                        rating, favorite, comment, link, thumbnail, image
-                    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+                        rating, favorite, comment, link, thumbnail, image, fl_jogou
+                    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
                     ON CONFLICT (user_name, game_id) DO NOTHING
                 `;
 
@@ -110,7 +110,8 @@ class DatabaseManager {
                     game.comment || null,
                     game.link || null,
                     game.thumbnail || null,
-                    game.image || null
+                    game.image || null,
+                    game.fl_jogou || 0
                 ];
 
                 try {
@@ -209,7 +210,7 @@ class DatabaseManager {
 
             const query = `
                 SELECT game_id as id, name, type, is_expansion as "isExpansion", 
-                       year, rating, favorite, comment, link, thumbnail, image
+                       year, rating, favorite, comment, link, thumbnail, image, fl_jogou
                 FROM ludopedia_collection 
                 WHERE user_name = $1 
                 ORDER BY name;

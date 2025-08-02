@@ -77,6 +77,7 @@ CREATE TABLE IF NOT EXISTS ludopedia_collection (
     link VARCHAR(500),
     thumbnail VARCHAR(500),
     image VARCHAR(500),
+    fl_jogou INTEGER DEFAULT 0 NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
