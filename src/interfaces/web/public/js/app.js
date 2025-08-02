@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('configModal').addEventListener('hidden.bs.modal', resetConfigModal);
     
     // Event listeners para insights
-    document.getElementById('refreshShameListBtn').addEventListener('click', loadShameList);
+    document.getElementById('refreshShameListBtn').addEventListener('click', toggleShameList);
     
     // Event listeners para filtros e pareamento
     document.querySelectorAll('.filter-link').forEach(link => {
@@ -1304,10 +1304,36 @@ async function loadUserProfile() {
     }
 }
 
+// Função para alternar entre mostrar e esconder a lista
+function toggleShameList() {
+    const btn = document.getElementById('refreshShameListBtn');
+    const btnIcon = btn.querySelector('i');
+    const btnText = btn.childNodes[btn.childNodes.length - 1];
+    
+    // Verificar estado atual do botão
+    if (btnText.textContent.trim() === 'Mostrar') {
+        loadShameList();
+    } else {
+        hideShameList();
+    }
+}
+
+// Função para esconder a lista e voltar ao estado inicial
+function hideShameList() {
+    // Esconder todos os estados
+    document.getElementById('shameListLoading').classList.add('d-none');
+    document.getElementById('shameListError').classList.add('d-none');
+    document.getElementById('shameListNoBgg').classList.add('d-none');
+    document.getElementById('shameListSuccess').classList.add('d-none');
+    
+    // Voltar botão ao estado inicial
+    const btn = document.getElementById('refreshShameListBtn');
+    btn.innerHTML = '<i class="bi bi-eye me-1"></i>Mostrar';
+}
+
 // Função para carregar Lista da Vergonha BGG
 async function loadShameList() {
     // Esconder todos os estados
-    document.getElementById('shameListInitial').classList.add('d-none');
     document.getElementById('shameListLoading').classList.remove('d-none');
     document.getElementById('shameListError').classList.add('d-none');
     document.getElementById('shameListNoBgg').classList.add('d-none');
@@ -1326,6 +1352,10 @@ async function loadShameList() {
         document.getElementById('shameListLoading').classList.add('d-none');
         
         if (!response.ok) {
+            // Voltar botão para "Mostrar" em caso de erro
+            const btn = document.getElementById('refreshShameListBtn');
+            btn.innerHTML = '<i class="bi bi-eye me-1"></i>Mostrar';
+            
             if (data.needsBggSetup) {
                 // Mostrar tela de configuração BGG
                 document.getElementById('shameListNoBgg').classList.remove('d-none');
@@ -1340,6 +1370,10 @@ async function loadShameList() {
         // Mostrar dados de sucesso
         document.getElementById('shameListSuccess').classList.remove('d-none');
         document.getElementById('shameListUsername').textContent = data.bggUsername;
+        
+        // Mudar botão para "Esconder"
+        const btn = document.getElementById('refreshShameListBtn');
+        btn.innerHTML = '<i class="bi bi-eye-slash me-1"></i>Esconder';
         
         // Atualizar contador
         const countElement = document.getElementById('shameListCount');
@@ -1360,6 +1394,10 @@ async function loadShameList() {
         document.getElementById('shameListLoading').classList.add('d-none');
         document.getElementById('shameListErrorMessage').textContent = 'Erro de conexão. Tente novamente.';
         document.getElementById('shameListError').classList.remove('d-none');
+        
+        // Voltar botão para "Mostrar" em caso de erro
+        const btn = document.getElementById('refreshShameListBtn');
+        btn.innerHTML = '<i class="bi bi-eye me-1"></i>Mostrar';
     }
 }
 
