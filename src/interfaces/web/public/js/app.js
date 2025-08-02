@@ -1414,20 +1414,25 @@ function renderShameListGames(games) {
         const thumbnailUrl = game.thumbnail || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="%23dee2e6"><rect width="60" height="60" fill="%23dee2e6"/><text x="50%" y="50%" fill="%236c757d" text-anchor="middle" dy=".3em" font-size="12">IMG</text></svg>';
         
         gameElement.innerHTML = `
-            <div class="card h-100 shame-game-card">
-                <div class="card-body d-flex align-items-center">
-                    <div class="flex-shrink-0 me-3">
-                        <img src="${thumbnailUrl}" alt="${game.name}" class="shame-game-thumbnail" 
-                             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22 fill=%22%23dee2e6%22><rect width=%2260%22 height=%2260%22 fill=%22%23dee2e6%22/><text x=%2250%%22 y=%2250%%22 fill=%22%236c757d%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2212%22>IMG</text></svg>'">
-                    </div>
-                    <div class="flex-grow-1">
-                        <h6 class="card-title mb-1">${game.name}</h6>
-                        <div class="text-muted small">
-                            <div><i class="bi bi-calendar3 me-1"></i>${game.year || 'N/A'}</div>
+            <a href="https://boardgamegeek.com/boardgame/${game.game_id}" target="_blank" class="text-decoration-none">
+                <div class="card h-100 shame-game-card">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="flex-shrink-0 me-3">
+                            <img src="${thumbnailUrl}" alt="${game.name}" class="shame-game-thumbnail" 
+                                 onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22 fill=%22%23dee2e6%22><rect width=%2260%22 height=%2260%22 fill=%22%23dee2e6%22/><text x=%2250%%22 y=%2250%%22 fill=%22%236c757d%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2212%22>IMG</text></svg>'">
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="card-title mb-1 text-dark">${game.name}</h6>
+                            <div class="text-muted small">
+                                <div><i class="bi bi-calendar3 me-1"></i>${game.year || 'N/A'}</div>
+                            </div>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-box-arrow-up-right text-muted"></i>
                         </div>
                     </div>
                 </div>
-            </div>
+            </a>
         `;
         
         container.appendChild(gameElement);
