@@ -794,6 +794,89 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Lista da Vergonha Ludopédia -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card shadow-sm">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="mb-0">
+                                        <i class="bi bi-emoji-frown me-2 text-warning"></i>
+                                        Lista da Vergonha Ludopédia
+                                    </h5>
+                                    <small class="text-muted">Jogos da sua coleção que nunca viram mesa</small>
+                                </div>
+                                <button class="btn btn-outline-primary btn-sm" id="refreshShameListLudopediaBtn">
+                                    <i class="bi bi-eye me-1"></i>
+                                    Mostrar
+                                </button>
+                            </div>
+                            <div class="card-body">
+
+                                <!-- Loading State -->
+                                <div id="shameListLudopediaLoading" class="text-center py-4 d-none">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Carregando...</span>
+                                    </div>
+                                    <p class="mt-2 text-muted">Carregando lista da vergonha...</p>
+                                </div>
+
+                                <!-- Error State -->
+                                <div id="shameListLudopediaError" class="alert alert-warning d-none">
+                                    <i class="bi bi-exclamation-triangle me-2"></i>
+                                    <span id="shameListLudopediaErrorMessage"></span>
+                                </div>
+
+                                <!-- No Ludopedia Setup -->
+                                <div id="shameListLudopediaNoBgg" class="text-center py-4 d-none">
+                                    <div class="mb-3">
+                                        <i class="bi bi-gear" style="font-size: 3rem; color: #6c757d;"></i>
+                                    </div>
+                                    <h5 class="text-muted">Ludopedia Username não configurado</h5>
+                                    <p class="text-muted">Configure seu username da Ludopedia para ver este relatório.</p>
+                                    <button class="btn btn-primary" onclick="switchToTab('config')">
+                                        <i class="bi bi-gear me-1"></i>
+                                        Configurar Ludopedia
+                                    </button>
+                                </div>
+
+                                <!-- Success State - Header with Stats -->
+                                <div id="shameListLudopediaSuccess" class="d-none">
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <div class="d-flex align-items-center">
+                                                <i class="bi bi-person-fill me-2 text-primary"></i>
+                                                <span class="fw-bold">Ludopedia:</span>
+                                                <span class="ms-1" id="shameListLudopediaUsername"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 text-md-end">
+                                            <span class="badge bg-warning text-dark fs-6" id="shameListLudopediaCount">
+                                                <i class="bi bi-trophy me-1"></i>
+                                                0 jogos não jogados
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Empty State -->
+                                    <div id="shameListLudopediaEmpty" class="text-center py-4 d-none">
+                                        <div class="mb-3">
+                                            <i class="bi bi-emoji-smile" style="font-size: 3rem; color: #28a745;"></i>
+                                        </div>
+                                        <h5 class="text-success">Parabéns!</h5>
+                                        <p class="text-muted">Você já jogou todos os jogos base da sua coleção Ludopedia!</p>
+                                    </div>
+
+                                    <!-- Games List -->
+                                    <div id="shameListLudopediaGames" class="row g-3">
+                                        <!-- Games will be populated here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Matching Tab -->

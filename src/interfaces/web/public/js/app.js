@@ -100,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Event listeners para insights
     document.getElementById('refreshShameListBtn').addEventListener('click', toggleShameList);
+    document.getElementById('refreshShameListLudopediaBtn').addEventListener('click', toggleShameListLudopedia);
     
     // Event listeners para filtros e pareamento
     document.querySelectorAll('.filter-link').forEach(link => {
@@ -1433,6 +1434,138 @@ function renderShameListGames(games) {
                     </div>
                 </div>
             </a>
+        `;
+        
+        container.appendChild(gameElement);
+    });
+}
+
+// =================== LISTA DA VERGONHA LUDOPÉDIA ===================
+
+// Função para alternar entre mostrar e esconder a lista da Ludopédia
+function toggleShameListLudopedia() {
+    const btn = document.getElementById('refreshShameListLudopediaBtn');
+    const btnIcon = btn.querySelector('i');
+    const btnText = btn.childNodes[btn.childNodes.length - 1];
+    
+    // Verificar estado atual do botão
+    if (btnText.textContent.trim() === 'Mostrar') {
+        loadShameListLudopedia();
+    } else {
+        hideShameListLudopedia();
+    }
+}
+
+// Função para esconder a lista da Ludopédia e voltar ao estado inicial
+function hideShameListLudopedia() {
+    // Esconder todos os estados
+    document.getElementById('shameListLudopediaLoading').classList.add('d-none');
+    document.getElementById('shameListLudopediaError').classList.add('d-none');
+    document.getElementById('shameListLudopediaNoBgg').classList.add('d-none');
+    document.getElementById('shameListLudopediaSuccess').classList.add('d-none');
+    
+    // Voltar botão para "Mostrar"
+    const btn = document.getElementById('refreshShameListLudopediaBtn');
+    btn.innerHTML = '<i class="bi bi-eye me-1"></i>Mostrar';
+}
+
+// Função para carregar Lista da Vergonha Ludopédia
+async function loadShameListLudopedia() {
+    // Esconder todos os estados
+    document.getElementById('shameListLudopediaLoading').classList.remove('d-none');
+    document.getElementById('shameListLudopediaError').classList.add('d-none');
+    document.getElementById('shameListLudopediaNoBgg').classList.add('d-none');
+    document.getElementById('shameListLudopediaSuccess').classList.add('d-none');
+    
+    try {
+        const response = await fetch('/api/insights/shame-list-ludopedia', {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            }
+        });
+        
+        const data = await response.json();
+        
+        // Esconder loading
+        document.getElementById('shameListLudopediaLoading').classList.add('d-none');
+        
+        if (!response.ok) {
+            // Voltar botão para "Mostrar" em caso de erro
+            const btn = document.getElementById('refreshShameListLudopediaBtn');
+            btn.innerHTML = '<i class="bi bi-eye me-1"></i>Mostrar';
+            
+            if (data.needsLudopediaSetup) {
+                // Mostrar tela de configuração Ludopedia
+                document.getElementById('shameListLudopediaNoBgg').classList.remove('d-none');
+            } else {
+                // Mostrar erro
+                document.getElementById('shameListLudopediaErrorMessage').textContent = data.error || 'Erro ao carregar dados';
+                document.getElementById('shameListLudopediaError').classList.remove('d-none');
+            }
+            return;
+        }
+        
+        // Mostrar dados de sucesso
+        document.getElementById('shameListLudopediaSuccess').classList.remove('d-none');
+        document.getElementById('shameListLudopediaUsername').textContent = data.ludopediaUsername;
+        
+        // Mudar botão para "Esconder"
+        const btn = document.getElementById('refreshShameListLudopediaBtn');
+        btn.innerHTML = '<i class="bi bi-eye-slash me-1"></i>Esconder';
+        
+        // Atualizar contador
+        const countElement = document.getElementById('shameListLudopediaCount');
+        if (data.totalGames === 0) {
+            countElement.innerHTML = '<i class="bi bi-emoji-smile me-1"></i>Nenhum jogo não jogado!';
+            countElement.className = 'badge bg-success fs-6';
+            document.getElementById('shameListLudopediaEmpty').classList.remove('d-none');
+        } else {
+            countElement.innerHTML = `<i class="bi bi-emoji-frown me-1"></i>${data.totalGames} jogo${data.totalGames > 1 ? 's' : ''} não jogado${data.totalGames > 1 ? 's' : ''}`;
+            countElement.className = 'badge bg-warning text-dark fs-6';
+            
+            // Renderizar jogos
+            renderShameListLudopediaGames(data.games);
+        }
+        
+    } catch (error) {
+        console.error('Erro ao carregar lista da vergonha Ludopédia:', error);
+        document.getElementById('shameListLudopediaLoading').classList.add('d-none');
+        document.getElementById('shameListLudopediaErrorMessage').textContent = 'Erro de conexão. Tente novamente.';
+        document.getElementById('shameListLudopediaError').classList.remove('d-none');
+        
+        // Voltar botão para "Mostrar" em caso de erro
+        const btn = document.getElementById('refreshShameListLudopediaBtn');
+        btn.innerHTML = '<i class="bi bi-eye me-1"></i>Mostrar';
+    }
+}
+
+// Função para renderizar os jogos da lista da vergonha Ludopédia
+function renderShameListLudopediaGames(games) {
+    const container = document.getElementById('shameListLudopediaGames');
+    container.innerHTML = '';
+    
+    games.forEach(game => {
+        const gameElement = document.createElement('div');
+        gameElement.className = 'col-md-6 col-lg-4';
+        
+        // Link padrão caso não tenha link
+        const gameLink = game.link || '#';
+        const isValidLink = game.link && game.link.trim() !== '';
+        
+        gameElement.innerHTML = `
+            <${isValidLink ? 'a href="' + gameLink + '" target="_blank"' : 'div'} class="text-decoration-none">
+                <div class="card h-100 shame-game-card">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="card-title mb-1 text-dark">${game.name}</h6>
+                            <div class="text-muted small">
+                                <div><i class="bi bi-calendar3 me-1"></i>${game.year || 'N/A'}</div>
+                            </div>
+                        </div>
+                        ${isValidLink ? '<div class="flex-shrink-0"><i class="bi bi-box-arrow-up-right text-muted"></i></div>' : ''}
+                    </div>
+                </div>
+            </${isValidLink ? 'a' : 'div'}>
         `;
         
         container.appendChild(gameElement);

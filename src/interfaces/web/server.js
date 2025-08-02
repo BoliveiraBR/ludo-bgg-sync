@@ -949,6 +949,66 @@ app.get('/api/insights/shame-list', authenticateToken, async (req, res) => {
   }
 });
 
+// Rota para relatório "Lista da Vergonha Ludopédia"
+app.get('/api/insights/shame-list-ludopedia', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    
+    const userManager = new UserManager();
+    await userManager.connect();
+    
+    try {
+      // Verificar se usuário existe e tem Ludopedia username
+      const userData = await userManager.getUserById(userId);
+      
+      if (!userData) {
+        return res.status(404).json({ error: 'Usuário não encontrado' });
+      }
+      
+      if (!userData.ludopedia_username) {
+        return res.status(400).json({ 
+          error: 'Ludopedia username não configurado',
+          needsLudopediaSetup: true
+        });
+      }
+      
+      // Buscar jogos não jogados da coleção Ludopedia
+      const dbManager = new DatabaseManager();
+      await dbManager.connect();
+      
+      try {
+        const query = `
+          SELECT game_id, name, year, link, fl_jogou
+          FROM ludopedia_collection 
+          WHERE user_name = $1 
+            AND fl_jogou = 0 
+            AND is_expansion = false
+          ORDER BY name ASC
+        `;
+        
+        const result = await dbManager.client.query(query, [userData.ludopedia_username]);
+        const shameList = result.rows;
+        
+        res.json({
+          success: true,
+          ludopediaUsername: userData.ludopedia_username,
+          totalGames: shameList.length,
+          games: shameList
+        });
+        
+      } finally {
+        await dbManager.disconnect();
+      }
+      
+    } finally {
+      await userManager.disconnect();
+    }
+  } catch (error) {
+    console.error('Erro ao buscar lista da vergonha Ludopedia:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
 // Rota de callback do OAuth
 app.get('/callback', async (req, res) => {
   try {
