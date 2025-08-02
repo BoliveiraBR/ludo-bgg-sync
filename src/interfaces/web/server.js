@@ -923,7 +923,7 @@ app.get('/api/insights/shame-list', authenticateToken, async (req, res) => {
           WHERE user_name = $1 
             AND num_plays = 0 
             AND is_expansion = false
-          ORDER BY game_id ASC
+          ORDER BY name ASC
         `;
         
         const result = await dbManager.client.query(query, [userData.bgg_username]);

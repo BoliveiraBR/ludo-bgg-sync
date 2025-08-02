@@ -1307,7 +1307,8 @@ async function loadUserProfile() {
 // Função para carregar Lista da Vergonha BGG
 async function loadShameList() {
     // Esconder todos os estados
-    document.getElementById('shameListLoading').style.display = 'block';
+    document.getElementById('shameListInitial').classList.add('d-none');
+    document.getElementById('shameListLoading').classList.remove('d-none');
     document.getElementById('shameListError').classList.add('d-none');
     document.getElementById('shameListNoBgg').classList.add('d-none');
     document.getElementById('shameListSuccess').classList.add('d-none');
@@ -1322,7 +1323,7 @@ async function loadShameList() {
         const data = await response.json();
         
         // Esconder loading
-        document.getElementById('shameListLoading').style.display = 'none';
+        document.getElementById('shameListLoading').classList.add('d-none');
         
         if (!response.ok) {
             if (data.needsBggSetup) {
@@ -1347,7 +1348,7 @@ async function loadShameList() {
             countElement.className = 'badge bg-success fs-6';
             document.getElementById('shameListEmpty').classList.remove('d-none');
         } else {
-            countElement.innerHTML = `<i class="bi bi-trophy me-1"></i>${data.totalGames} jogo${data.totalGames > 1 ? 's' : ''} não jogado${data.totalGames > 1 ? 's' : ''}`;
+            countElement.innerHTML = `<i class="bi bi-emoji-frown me-1"></i>${data.totalGames} jogo${data.totalGames > 1 ? 's' : ''} não jogado${data.totalGames > 1 ? 's' : ''}`;
             countElement.className = 'badge bg-warning text-dark fs-6';
             
             // Renderizar jogos
@@ -1356,7 +1357,7 @@ async function loadShameList() {
         
     } catch (error) {
         console.error('Erro ao carregar lista da vergonha:', error);
-        document.getElementById('shameListLoading').style.display = 'none';
+        document.getElementById('shameListLoading').classList.add('d-none');
         document.getElementById('shameListErrorMessage').textContent = 'Erro de conexão. Tente novamente.';
         document.getElementById('shameListError').classList.remove('d-none');
     }
@@ -1385,11 +1386,6 @@ function renderShameListGames(games) {
                         <h6 class="card-title mb-1">${game.name}</h6>
                         <div class="text-muted small">
                             <div><i class="bi bi-calendar3 me-1"></i>${game.year || 'N/A'}</div>
-                            <div class="mt-1">
-                                <span class="badge bg-warning text-dark">
-                                    <i class="bi bi-controller me-1"></i>0 partidas
-                                </span>
-                            </div>
                         </div>
                     </div>
                 </div>
