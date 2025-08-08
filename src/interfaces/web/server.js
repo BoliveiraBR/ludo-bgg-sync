@@ -2078,9 +2078,12 @@ app.get('/api/import-bgg-games', async (req, res) => {
     let downloadUrl;
     
     try {
-      // Iniciar navegador
-      browser = await puppeteer.launch({
-        headless: true,
+      // Configuração otimizada do Puppeteer para produção
+      const isProduction = process.env.NODE_ENV === 'production';
+      console.log(`🌍 Ambiente detectado: ${isProduction ? 'PRODUÇÃO' : 'DESENVOLVIMENTO'}`);
+      
+      const puppeteerConfig = {
+        headless: 'new', // Usar novo modo headless
         defaultViewport: { width: 1280, height: 800 },
         args: [
           '--no-sandbox',
@@ -2089,9 +2092,58 @@ app.get('/api/import-bgg-games', async (req, res) => {
           '--disable-accelerated-2d-canvas',
           '--no-first-run',
           '--no-zygote',
-          '--disable-gpu'
+          '--disable-gpu',
+          '--disable-background-timer-throttling',
+          '--disable-backgrounding-occluded-windows',
+          '--disable-renderer-backgrounding',
+          '--disable-features=TranslateUI',
+          '--disable-ipc-flooding-protection',
+          '--enable-features=NetworkService,NetworkServiceLogging',
+          '--force-color-profile=srgb',
+          '--metrics-recording-only',
+          '--no-default-browser-check',
+          '--no-first-run',
+          '--password-store=basic',
+          '--use-mock-keychain',
+          '--single-process' // Importante para AWS EB
         ]
-      });
+      };
+      
+      // Se em produção, configurar executablePath
+      if (isProduction) {
+        console.log('🔧 Configurando Puppeteer para produção...');
+        
+        // Tentar encontrar Chrome instalado
+        const possiblePaths = [
+          '/usr/bin/chromium-browser',
+          '/usr/bin/chromium',
+          '/usr/bin/google-chrome-stable',
+          '/usr/bin/google-chrome',
+          process.env.PUPPETEER_EXECUTABLE_PATH
+        ].filter(Boolean);
+        
+        console.log(`🔍 Procurando Chrome em: ${possiblePaths.join(', ')}`);
+        
+        const fs = require('fs');
+        let chromePath = null;
+        
+        for (const path of possiblePaths) {
+          if (fs.existsSync(path)) {
+            chromePath = path;
+            console.log(`✅ Chrome encontrado em: ${chromePath}`);
+            break;
+          }
+        }
+        
+        if (chromePath) {
+          puppeteerConfig.executablePath = chromePath;
+        } else {
+          console.log('⚠️ Chrome não encontrado nos paths padrão, tentando usar Chromium bundled...');
+        }
+      }
+      
+      console.log('🚀 Iniciando navegador Puppeteer...');
+      browser = await puppeteer.launch(puppeteerConfig);
       
       const page = await browser.newPage();
       
@@ -2175,9 +2227,49 @@ app.get('/api/import-bgg-games', async (req, res) => {
         }
       }
       
+    } catch (puppeteerError) {
+      console.error('❌ Erro no Puppeteer:', puppeteerError.message);
+      
+      // Diagnosticar tipos específicos de erro
+      if (puppeteerError.message.includes('Could not find Chrome')) {
+        console.log(`\n🔧 DIAGNÓSTICO: Chrome não encontrado`);
+        console.log(`   - Erro completo: ${puppeteerError.message}`);
+        console.log(`   - Cache path: ${puppeteerError.message.match(/cache path is incorrectly configured[^)]+\)/)?.[0] || 'N/A'}`);
+        console.log(`\n💡 SOLUÇÕES POSSÍVEIS:`);
+        console.log(`   1. Execute: npm run install-chrome`);
+        console.log(`   2. Execute: npx puppeteer browsers install chrome`);
+        console.log(`   3. Configure PUPPETEER_EXECUTABLE_PATH=/path/to/chrome`);
+        console.log(`   4. Aguarde o deploy do .ebextensions (install Chrome automaticamente)`);
+        
+        throw new Error(`Chrome não está instalado no servidor. Execute 'npm run install-chrome' ou configure a variável PUPPETEER_EXECUTABLE_PATH. Detalhes: ${puppeteerError.message}`);
+        
+      } else if (puppeteerError.message.includes('Navigation timeout')) {
+        console.log(`\n🔧 DIAGNÓSTICO: Timeout de navegação`);
+        console.log(`   - Possível problema de conectividade ou BGG fora do ar`);
+        throw new Error(`Timeout ao navegar no BGG. Tente novamente em alguns minutos. Detalhes: ${puppeteerError.message}`);
+        
+      } else if (puppeteerError.message.includes('Target closed')) {
+        console.log(`\n🔧 DIAGNÓSTICO: Browser fechado inesperadamente`);
+        console.log(`   - Possível problema de memória ou recursos do servidor`);
+        throw new Error(`Navegador fechado inesperadamente. Possível falta de recursos no servidor. Detalhes: ${puppeteerError.message}`);
+        
+      } else {
+        console.log(`\n🔧 DIAGNÓSTICO: Erro genérico do Puppeteer`);
+        console.log(`   - Tipo: ${puppeteerError.constructor.name}`);
+        console.log(`   - Mensagem: ${puppeteerError.message}`);
+        console.log(`   - Stack: ${puppeteerError.stack?.split('\n').slice(0, 3).join('\n')}`);
+        
+        throw new Error(`Erro no Puppeteer: ${puppeteerError.message}`);
+      }
+      
     } finally {
       if (browser) {
-        await browser.close();
+        try {
+          await browser.close();
+          console.log('🔒 Navegador Puppeteer fechado');
+        } catch (closeError) {
+          console.warn(`⚠️ Erro ao fechar navegador: ${closeError.message}`);
+        }
       }
     }
     console.log(`📥 Link encontrado: ${downloadUrl}`);

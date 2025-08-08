@@ -9,7 +9,9 @@
     "dev": "nodemon src/scripts/sync.js",
     "web": "node src/interfaces/web/server.js",
     "web:dev": "nodemon src/interfaces/web/server.js",
-    "db:create": "node -e \"require('dotenv').config(); const DbManager = require('./src/database/dbManager'); new DbManager().createTables().then(() => process.exit(0)).catch(e => {console.error(e); process.exit(1);})\""
+    "db:create": "node -e \"require('dotenv').config(); const DbManager = require('./src/database/dbManager'); new DbManager().createTables().then(() => process.exit(0)).catch(e => {console.error(e); process.exit(1);})\"",
+    "install-chrome": "node scripts/install-chrome.js",
+    "postinstall": "npx puppeteer browsers install chrome"
   },
   "dependencies": {
     "adm-zip": "^0.5.16",
