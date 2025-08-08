@@ -1972,6 +1972,224 @@ app.post('/api/save-manual-match', authenticateToken, async (req, res) => {
   }
 });
 
+// Rota para importar dados do BGG (rankings globais)
+app.get('/api/import-bgg-games', async (req, res) => {
+  try {
+    console.log('🎯 Iniciando importação de dados do BGG...');
+    
+    const fs = require('fs');
+    const path = require('path');
+    const AdmZip = require('adm-zip');
+    const csv = require('csv-parser');
+    const { Readable } = require('stream');
+    
+    // Buscar link de download da página BGG
+    console.log('📡 Buscando página de data dumps do BGG...');
+    const pageResponse = await axios.get('https://boardgamegeek.com/data_dumps/bg_ranks');
+    const pageHtml = pageResponse.data;
+    
+    // Extrair link de download do ZIP
+    const downloadLinkMatch = pageHtml.match(/<a[^>]*href="([^"]*)"[^>]*>Click to download<\/a>/i);
+    if (!downloadLinkMatch) {
+      throw new Error('Não foi possível encontrar o link de download na página do BGG');
+    }
+    
+    const downloadUrl = downloadLinkMatch[1];
+    console.log(`📥 Link de download encontrado: ${downloadUrl.substring(0, 100)}...`);
+    
+    // Download do arquivo ZIP
+    console.log('📥 Fazendo download do arquivo ZIP...');
+    const zipResponse = await axios.get(downloadUrl, {
+      responseType: 'arraybuffer',
+      timeout: 300000, // 5 minutos
+      maxContentLength: 100 * 1024 * 1024, // 100MB max
+    });
+    
+    console.log(`📦 Arquivo baixado: ${(zipResponse.data.length / 1024 / 1024).toFixed(2)} MB`);
+    
+    // Descompactar ZIP
+    console.log('📂 Descompactando arquivo ZIP...');
+    const zip = new AdmZip(Buffer.from(zipResponse.data));
+    const zipEntries = zip.getEntries();
+    
+    // Encontrar arquivo CSV
+    const csvEntry = zipEntries.find(entry => 
+      entry.entryName.toLowerCase().endsWith('.csv') && !entry.isDirectory
+    );
+    
+    if (!csvEntry) {
+      throw new Error('Arquivo CSV não encontrado no ZIP');
+    }
+    
+    console.log(`📄 Arquivo CSV encontrado: ${csvEntry.entryName}`);
+    
+    // Extrair conteúdo do CSV
+    const csvContent = csvEntry.getData('utf8');
+    
+    // Conectar ao banco de dados
+    console.log('🗄️ Conectando ao banco de dados...');
+    const dbManager = new DatabaseManager();
+    await dbManager.connect();
+    
+    try {
+      // Limpar tabela antes da importação
+      console.log('🧹 Limpando tabela bgg_games...');
+      await dbManager.client.query('TRUNCATE TABLE bgg_games');
+      
+      // Processar CSV
+      console.log('📊 Processando dados do CSV...');
+      
+      let processedCount = 0;
+      let batchCount = 0;
+      const batchSize = 1000;
+      let batch = [];
+      
+      return new Promise((resolve, reject) => {
+        const stream = Readable.from([csvContent]);
+        
+        stream
+          .pipe(csv())
+          .on('data', async (row) => {
+            try {
+              // Mapear campos do CSV para a tabela
+              const gameData = {
+                id: parseInt(row.id) || null,
+                name: row.name || '',
+                yearpublished: parseInt(row.yearpublished) || null,
+                rank: parseInt(row.rank) || null,
+                bayesaverage: parseFloat(row.bayesaverage) || null,
+                average: parseFloat(row.average) || null,
+                usersrated: parseInt(row.usersrated) || null,
+                is_expansion: row.is_expansion === '1',
+                abstracts_rank: parseInt(row.abstracts_rank) || null,
+                cgs_rank: parseInt(row.cgs_rank) || null,
+                childrensgames_rank: parseInt(row.childrensgames_rank) || null,
+                familygames_rank: parseInt(row.familygames_rank) || null,
+                partygames_rank: parseInt(row.partygames_rank) || null,
+                strategygames_rank: parseInt(row.strategygames_rank) || null,
+                thematic_rank: parseInt(row.thematic_rank) || null,
+                wargames_rank: parseInt(row.wargames_rank) || null
+              };
+              
+              // Validar dados essenciais
+              if (!gameData.id || !gameData.name) {
+                return; // Pular registro inválido
+              }
+              
+              batch.push(gameData);
+              processedCount++;
+              
+              // Processar batch quando atingir o tamanho limite
+              if (batch.length >= batchSize) {
+                stream.pause();
+                await processBatch(batch, dbManager);
+                batchCount++;
+                console.log(`📈 Processados ${batchCount * batchSize} registros...`);
+                batch = [];
+                stream.resume();
+              }
+              
+            } catch (rowError) {
+              console.warn(`⚠️ Erro ao processar linha: ${rowError.message}`);
+            }
+          })
+          .on('end', async () => {
+            try {
+              // Processar último batch se houver dados
+              if (batch.length > 0) {
+                await processBatch(batch, dbManager);
+                batchCount++;
+              }
+              
+              console.log(`✅ Importação concluída: ${processedCount} jogos importados`);
+              
+              res.json({
+                success: true,
+                message: `Importação concluída com sucesso`,
+                gamesImported: processedCount,
+                batches: batchCount
+              });
+              
+              resolve();
+            } catch (endError) {
+              reject(endError);
+            }
+          })
+          .on('error', reject);
+      });
+      
+    } finally {
+      await dbManager.disconnect();
+    }
+    
+  } catch (error) {
+    console.error('❌ Erro na importação:', error);
+    res.status(500).json({
+      error: 'Erro na importação dos dados do BGG: ' + error.message
+    });
+  }
+});
+
+// Função auxiliar para processar batch de dados
+async function processBatch(batch, dbManager) {
+  if (batch.length === 0) return;
+  
+  // Construir query de inserção em lote
+  const values = [];
+  const placeholders = [];
+  
+  batch.forEach((game, index) => {
+    const baseIndex = index * 16;
+    placeholders.push(`($${baseIndex + 1}, $${baseIndex + 2}, $${baseIndex + 3}, $${baseIndex + 4}, $${baseIndex + 5}, $${baseIndex + 6}, $${baseIndex + 7}, $${baseIndex + 8}, $${baseIndex + 9}, $${baseIndex + 10}, $${baseIndex + 11}, $${baseIndex + 12}, $${baseIndex + 13}, $${baseIndex + 14}, $${baseIndex + 15}, $${baseIndex + 16})`);
+    
+    values.push(
+      game.id,
+      game.name,
+      game.yearpublished,
+      game.rank,
+      game.bayesaverage,
+      game.average,
+      game.usersrated,
+      game.is_expansion,
+      game.abstracts_rank,
+      game.cgs_rank,
+      game.childrensgames_rank,
+      game.familygames_rank,
+      game.partygames_rank,
+      game.strategygames_rank,
+      game.thematic_rank,
+      game.wargames_rank
+    );
+  });
+  
+  const query = `
+    INSERT INTO bgg_games (
+      id, name, yearpublished, rank, bayesaverage, average, usersrated, is_expansion,
+      abstracts_rank, cgs_rank, childrensgames_rank, familygames_rank, 
+      partygames_rank, strategygames_rank, thematic_rank, wargames_rank
+    ) VALUES ${placeholders.join(', ')}
+    ON CONFLICT (id) DO UPDATE SET
+      name = EXCLUDED.name,
+      yearpublished = EXCLUDED.yearpublished,
+      rank = EXCLUDED.rank,
+      bayesaverage = EXCLUDED.bayesaverage,
+      average = EXCLUDED.average,
+      usersrated = EXCLUDED.usersrated,
+      is_expansion = EXCLUDED.is_expansion,
+      abstracts_rank = EXCLUDED.abstracts_rank,
+      cgs_rank = EXCLUDED.cgs_rank,
+      childrensgames_rank = EXCLUDED.childrensgames_rank,
+      familygames_rank = EXCLUDED.familygames_rank,
+      partygames_rank = EXCLUDED.partygames_rank,
+      strategygames_rank = EXCLUDED.strategygames_rank,
+      thematic_rank = EXCLUDED.thematic_rank,
+      wargames_rank = EXCLUDED.wargames_rank,
+      updated_at = CURRENT_TIMESTAMP
+  `;
+  
+  await dbManager.client.query(query, values);
+}
+
 // Limpeza de sessões expiradas (executa a cada hora)
 setInterval(async () => {
   try {

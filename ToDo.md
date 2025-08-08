@@ -6,7 +6,7 @@ Próximo Prompt:
 ## TODO Urgente
 - [ ] Confirmar e-mail por PIN (Vide ChatGPT: Plano de envio de PIN por e-mail no Board Game Guru)
 - [ ] Colocar em algum lugar discreto a versão da aplicação deployada (pode ser uma API para isso)
-3- [ ] Resetar senha
+- [ ] Resetar senha
 - [ ] Confirmar senha no cadastro
 - [ ] Corrigir excesso de conexões com o banco: implementar um padrão singleton para garantir reutilização da instância de conexão
 
@@ -31,7 +31,6 @@ Próximo Prompt:
 ### Novas Funcionalidades
 🧠 Inteligência de uso da coleção
 1. Jogos que merecem sair da estante
-	•	Lista de jogos que você jogou poucas vezes ou nunca jogou (usando dados de partidas jogadas).
 	•	Destaque para os jogos que estão há mais tempo sem serem jogados.
 2. Recomendações para a próxima jogatina
 	•	Sugestões personalizadas de jogos com base no número de jogadores disponíveis e tempo disponível.
