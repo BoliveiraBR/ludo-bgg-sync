@@ -1,0 +1,7 @@
+{
+  "success": true,
+  "downloadUrl": "https://geek-export-stats.s3.amazonaws.com/boardgames_export/boardgames_ranks_2025-08-08.zip?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJYFNCT7FKCE4O6TA%2F20250808%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250808T183146Z&X-Amz-SignedHeaders=host&X-Amz-Expires=600&X-Amz-Signature=2295eae609f4fde6f3dc80dbcbac6a89dab25e33a5f658a755fa41e54ea4501e",
+  "method": "puppeteer",
+  "timeElapsed": 0,
+  "timestamp": "2025-08-08T18:31:49.046Z"
+}

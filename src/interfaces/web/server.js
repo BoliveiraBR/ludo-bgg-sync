@@ -13,6 +13,7 @@ const ChatGPTMatcher = require('../../comparison/chatGptMatch');
 const DatabaseManager = require('../../database/dbManager');
 const MatchManager = require('../../database/matchManager');
 const UserManager = require('../../database/userManager');
+const puppeteer = require('puppeteer');
 
 // JWT Configuration
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production';
@@ -2070,84 +2071,115 @@ app.get('/api/import-bgg-games', async (req, res) => {
       console.log(`🔄 Cookies no jar após correção: ${updatedCookies.length}`);
     }
     
-    // Buscar página de data dumps autenticado
-    console.log('📡 Buscando página de data dumps do BGG (autenticado)...');
-    const pageResponse = await client.get('https://boardgamegeek.com/data_dumps/bg_ranks', {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
-      },
-      timeout: 15000
-    });
+    // Usar Puppeteer para obter link dinâmico do BGG
+    console.log('🤖 Usando Puppeteer para obter link de download dinâmico...');
     
-    const pageHtml = pageResponse.data;
+    let browser;
+    let downloadUrl;
     
-    // Debug: Analisar conteúdo da página
-    console.log(`📄 Página carregada: ${pageHtml.length} caracteres`);
-    console.log(`📄 Primeiros 200 chars: ${pageHtml.substring(0, 200)}`);
-    
-    // Procurar por variações do texto download
-    const downloadPatterns = [
-      'Click to Download',
-      'click to download', 
-      'Click to download',
-      'CLICK TO DOWNLOAD',
-      'Download',
-      'download',
-      '.csv',
-      '.zip'
-    ];
-    
-    console.log(`🔍 Procurando por padrões de download:`);
-    downloadPatterns.forEach(pattern => {
-      const found = pageHtml.toLowerCase().includes(pattern.toLowerCase());
-      console.log(`   "${pattern}": ${found ? '✅ ENCONTRADO' : '❌ NÃO ENCONTRADO'}`);
-    });
-    
-    // Procurar pelo link "Click to Download" (case-insensitive)
-    let downloadLinkMatch = pageHtml.match(/<a[^>]*href="([^"]*)"[^>]*>Click to Download<\/a>/i);
-    
-    if (!downloadLinkMatch) {
-      // Tentar padrões alternativos mais flexíveis
-      const alternativePatterns = [
-        /<a[^>]*href="([^"]*)"[^>]*>\s*Click\s*to\s*Download\s*<\/a>/i,
-        /<a[^>]*href="([^"]*)"[^>]*>[^<]*download[^<]*<\/a>/i,
-        /<a[^>]*href="([^"]*\.zip)"[^>]*>/i,
-        /<a[^>]*href="([^"]*\.csv)"[^>]*>/i
-      ];
+    try {
+      // Iniciar navegador
+      browser = await puppeteer.launch({
+        headless: true,
+        defaultViewport: { width: 1280, height: 800 },
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-accelerated-2d-canvas',
+          '--no-first-run',
+          '--no-zygote',
+          '--disable-gpu'
+        ]
+      });
       
-      console.log(`🔄 Tentando padrões alternativos:`);
-      for (let i = 0; i < alternativePatterns.length; i++) {
-        downloadLinkMatch = pageHtml.match(alternativePatterns[i]);
-        if (downloadLinkMatch) {
-          console.log(`   ✅ Padrão ${i+1} funcionou: ${downloadLinkMatch[0].substring(0, 100)}...`);
+      const page = await browser.newPage();
+      
+      // Configurar User-Agent
+      await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
+      
+      // Fazer login
+      console.log('🔐 Fazendo login via Puppeteer...');
+      await page.goto('https://boardgamegeek.com/login', { 
+        waitUntil: 'networkidle0',
+        timeout: 30000 
+      });
+      
+      // Aguardar e preencher campos de login
+      await page.waitForSelector('input[name="username"]', { timeout: 10000 });
+      await page.waitForSelector('input[name="password"]', { timeout: 10000 });
+      
+      await page.type('input[name="username"]', bggLogin);
+      await page.type('input[name="password"]', bggPassword);
+      
+      // Submeter login
+      await Promise.all([
+        page.waitForNavigation({ waitUntil: 'networkidle0', timeout: 30000 }),
+        page.click('button[type="submit"], input[type="submit"]')
+      ]);
+      
+      console.log('✅ Login Puppeteer realizado');
+      
+      // Navegar para página de data dumps
+      console.log('📡 Navegando para página de data dumps...');
+      await page.goto('https://boardgamegeek.com/data_dumps/bg_ranks', {
+        waitUntil: 'networkidle0',
+        timeout: 30000
+      });
+      
+      // Procurar link "Click to Download" (aguardar até 30 segundos)
+      console.log('🔍 Procurando link "Click to Download"...');
+      
+      const maxWaitTime = 30000;
+      const startTime = Date.now();
+      
+      while (Date.now() - startTime < maxWaitTime) {
+        // Procurar por link com texto "Click to Download"
+        const clickToDownloadLink = await page.evaluate(() => {
+          const links = document.querySelectorAll('a');
+          for (const link of links) {
+            if (link.textContent && link.textContent.toLowerCase().includes('click to download')) {
+              return link.href;
+            }
+          }
+          return null;
+        });
+        
+        if (clickToDownloadLink) {
+          console.log('✅ Link "Click to Download" encontrado via Puppeteer!');
+          downloadUrl = clickToDownloadLink;
           break;
+        }
+        
+        // Aguardar 2 segundos antes de tentar novamente
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      }
+      
+      if (!downloadUrl) {
+        // Fallback: procurar por qualquer link S3
+        const s3Link = await page.evaluate(() => {
+          const links = document.querySelectorAll('a');
+          for (const link of links) {
+            if (link.href && link.href.includes('geek-export-stats.s3.amazonaws.com')) {
+              return link.href;
+            }
+          }
+          return null;
+        });
+        
+        if (s3Link) {
+          console.log('✅ Link S3 encontrado como fallback');
+          downloadUrl = s3Link;
         } else {
-          console.log(`   ❌ Padrão ${i+1} falhou`);
+          throw new Error('Link "Click to Download" não encontrado via Puppeteer após 30 segundos');
         }
       }
-    }
-    
-    if (!downloadLinkMatch) {
-      // Debug adicional: salvar página para análise
-      console.log(`❌ Nenhum link de download encontrado`);
-      console.log(`📄 Últimos 200 chars: ${pageHtml.substring(pageHtml.length - 200)}`);
       
-      // Procurar por todos os links <a> na página
-      const allLinks = pageHtml.match(/<a[^>]*href="([^"]*)"[^>]*>([^<]*)<\/a>/gi);
-      if (allLinks && allLinks.length > 0) {
-        console.log(`🔗 Todos os links encontrados (${allLinks.length}):`);
-        allLinks.slice(0, 10).forEach((link, i) => {
-          console.log(`   ${i+1}: ${link.substring(0, 150)}...`);
-        });
-      } else {
-        console.log(`🔗 Nenhum link <a> encontrado na página`);
+    } finally {
+      if (browser) {
+        await browser.close();
       }
-      
-      throw new Error(`Link "Click to Download" não encontrado na página. A página pode estar carregando via JavaScript ou ter estrutura diferente. Tamanho da página: ${pageHtml.length} chars.`);
     }
-    
-    const downloadUrl = downloadLinkMatch[1];
     console.log(`📥 Link encontrado: ${downloadUrl}`);
     
     // Download do arquivo ZIP usando cliente autenticado
