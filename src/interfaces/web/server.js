@@ -2021,19 +2021,53 @@ app.get('/api/import-bgg-games', async (req, res) => {
       throw new Error(`Falha no login BGG: ${loginResponse.status} - ${loginResponse.statusText}`);
     }
     
-    // Log dos cookies recebidos para debug
-    const cookies = cookieJar.getCookiesSync('https://boardgamegeek.com');
-    console.log(`🍪 Cookies recebidos: ${cookies.length} cookies`);
-    cookies.forEach(cookie => {
-      console.log(`   - ${cookie.key}: ${cookie.value.substring(0, 20)}...`);
+    // Processar cookies manualmente dos headers Set-Cookie
+    const setCookieHeaders = loginResponse.headers['set-cookie'] || [];
+    console.log(`🍪 Headers Set-Cookie recebidos: ${setCookieHeaders.length}`);
+    
+    // Extrair cookies válidos (não os "deleted")
+    const validCookies = {};
+    setCookieHeaders.forEach(cookieHeader => {
+      // Pegar apenas a primeira parte (nome=valor)
+      const cookiePart = cookieHeader.split(';')[0];
+      const [name, value] = cookiePart.split('=', 2);
+      
+      // Ignorar cookies "deleted" ou vazios
+      if (value && value !== 'deleted' && value.trim() !== '') {
+        validCookies[name] = value;
+        console.log(`   - ${name}: ${value.substring(0, 20)}...`);
+      }
     });
     
-    // Verificar se temos os cookies essenciais
-    const hasSessionId = cookies.some(c => c.key === 'SessionID');
-    const hasBggUsername = cookies.some(c => c.key === 'bgg_username');
+    // Verificar cookies essenciais
+    const hasSessionId = 'SessionID' in validCookies;
+    const hasBggUsername = 'bggusername' in validCookies;
+    const hasBggPassword = 'bggpassword' in validCookies;
     
-    if (!hasSessionId || !hasBggUsername) {
-      throw new Error('Login BGG falhou - cookies de sessão não recebidos. Verifique suas credenciais.');
+    console.log(`🔍 Cookies válidos encontrados:`);
+    console.log(`   SessionID: ${hasSessionId ? '✅' : '❌'}`);
+    console.log(`   bggusername: ${hasBggUsername ? '✅' : '❌'}`);
+    console.log(`   bggpassword: ${hasBggPassword ? '✅' : '❌'}`);
+    
+    if (!hasSessionId) {
+      throw new Error('Login BGG falhou - SessionID não recebido. Verifique suas credenciais.');
+    }
+    
+    // Se não temos os cookies bgg_username/bgg_password no jar, adicionar manualmente
+    if (!hasBggUsername || !hasBggPassword) {
+      console.log('⚠️ Cookies bgg não estão no jar, tentando adicionar manualmente...');
+      
+      // Adicionar cookies manualmente ao jar
+      if (validCookies['bggusername']) {
+        cookieJar.setCookieSync(`bggusername=${validCookies['bggusername']}; Path=/; Domain=boardgamegeek.com`, 'https://boardgamegeek.com');
+      }
+      if (validCookies['bggpassword']) {
+        cookieJar.setCookieSync(`bggpassword=${validCookies['bggpassword']}; Path=/; Domain=boardgamegeek.com`, 'https://boardgamegeek.com');
+      }
+      
+      // Verificar se funcionou
+      const updatedCookies = cookieJar.getCookiesSync('https://boardgamegeek.com');
+      console.log(`🔄 Cookies no jar após correção: ${updatedCookies.length}`);
     }
     
     // Buscar página de data dumps autenticado
