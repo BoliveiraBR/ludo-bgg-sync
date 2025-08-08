@@ -2082,11 +2082,69 @@ app.get('/api/import-bgg-games', async (req, res) => {
     
     const pageHtml = pageResponse.data;
     
-    // Procurar pelo link "Click to Download"
-    const downloadLinkMatch = pageHtml.match(/<a[^>]*href="([^"]*)"[^>]*>Click to Download<\/a>/);
+    // Debug: Analisar conteúdo da página
+    console.log(`📄 Página carregada: ${pageHtml.length} caracteres`);
+    console.log(`📄 Primeiros 200 chars: ${pageHtml.substring(0, 200)}`);
+    
+    // Procurar por variações do texto download
+    const downloadPatterns = [
+      'Click to Download',
+      'click to download', 
+      'Click to download',
+      'CLICK TO DOWNLOAD',
+      'Download',
+      'download',
+      '.csv',
+      '.zip'
+    ];
+    
+    console.log(`🔍 Procurando por padrões de download:`);
+    downloadPatterns.forEach(pattern => {
+      const found = pageHtml.toLowerCase().includes(pattern.toLowerCase());
+      console.log(`   "${pattern}": ${found ? '✅ ENCONTRADO' : '❌ NÃO ENCONTRADO'}`);
+    });
+    
+    // Procurar pelo link "Click to Download" (case-insensitive)
+    let downloadLinkMatch = pageHtml.match(/<a[^>]*href="([^"]*)"[^>]*>Click to Download<\/a>/i);
     
     if (!downloadLinkMatch) {
-      throw new Error('Link "Click to Download" não encontrado na página. Verifique se suas credenciais têm acesso aos data dumps.');
+      // Tentar padrões alternativos mais flexíveis
+      const alternativePatterns = [
+        /<a[^>]*href="([^"]*)"[^>]*>\s*Click\s*to\s*Download\s*<\/a>/i,
+        /<a[^>]*href="([^"]*)"[^>]*>[^<]*download[^<]*<\/a>/i,
+        /<a[^>]*href="([^"]*\.zip)"[^>]*>/i,
+        /<a[^>]*href="([^"]*\.csv)"[^>]*>/i
+      ];
+      
+      console.log(`🔄 Tentando padrões alternativos:`);
+      for (let i = 0; i < alternativePatterns.length; i++) {
+        downloadLinkMatch = pageHtml.match(alternativePatterns[i]);
+        if (downloadLinkMatch) {
+          console.log(`   ✅ Padrão ${i+1} funcionou: ${downloadLinkMatch[0].substring(0, 100)}...`);
+          break;
+        } else {
+          console.log(`   ❌ Padrão ${i+1} falhou`);
+        }
+      }
+    }
+    
+    if (!downloadLinkMatch) {
+      // Debug adicional: salvar página para análise
+      console.log(`❌ Nenhum link de download encontrado`);
+      console.log(`📄 Últimos 200 chars: ${pageHtml.substring(pageHtml.length - 200)}`);
+      
+      // Procurar por todos os links <a> na página
+      const allLinks = pageHtml.match(/<a[^>]*href="([^"]*)"[^>]*>([^<]*)<\/a>/gi);
+      if (allLinks && allLinks.length > 0) {
+        console.log(`🔗 Todos os links encontrados (${allLinks.length}):`);
+        allLinks.slice(0, 10).forEach((link, i) => {
+          console.log(`   ${i+1}: ${link.substring(0, 150)}...`);
+        });
+      } else {
+        console.log(`🔗 Nenhum link <a> encontrado na página`);
+      }
+      
+      throw new Error(`Link "Click to Download" não encontrado na página. A página pode estar carregando via JavaScript ou ter estrutura diferente. Tamanho da página: ${pageHtml.length} chars.`);
     }
     
     const downloadUrl = downloadLinkMatch[1];
