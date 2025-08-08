@@ -1983,23 +1983,81 @@ app.get('/api/import-bgg-games', async (req, res) => {
     const csv = require('csv-parser');
     const { Readable } = require('stream');
     
-    // Buscar link de download da página BGG
-    console.log('📡 Buscando página de data dumps do BGG...');
-    const pageResponse = await axios.get('https://boardgamegeek.com/data_dumps/bg_ranks');
-    const pageHtml = pageResponse.data;
+    // Verificar credenciais BGG
+    const bggLogin = process.env.MASTER_BGG_LOGIN;
+    const bggPassword = process.env.MASTER_BGG_PASSWORD;
     
-    // Extrair link de download do ZIP
-    const downloadLinkMatch = pageHtml.match(/<a[^>]*href="([^"]*)"[^>]*>Click to download<\/a>/i);
-    if (!downloadLinkMatch) {
-      throw new Error('Não foi possível encontrar o link de download na página do BGG');
+    if (!bggLogin || !bggPassword) {
+      throw new Error('Credenciais BGG não configuradas. Configure MASTER_BGG_LOGIN e MASTER_BGG_PASSWORD nas variáveis de ambiente.');
     }
     
-    const downloadUrl = downloadLinkMatch[1];
-    console.log(`📥 Link de download encontrado: ${downloadUrl.substring(0, 100)}...`);
+    // Criar cookie jar para manter sessão
+    const tough = require('tough-cookie');
+    const { wrapper } = require('axios-cookiejar-support');
+    const cookieJar = new tough.CookieJar();
+    const client = wrapper(axios.create({ jar: cookieJar }));
     
-    // Download do arquivo ZIP
+    // Fazer login no BGG
+    console.log('🔐 Fazendo login no BGG...');
+    const loginResponse = await client.post('https://boardgamegeek.com/login', 
+      new URLSearchParams({
+        'username': bggLogin,
+        'password': bggPassword,
+        'B1': 'Login'
+      }), 
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        },
+        maxRedirects: 5,
+        timeout: 15000
+      }
+    );
+    
+    console.log(`✅ Login realizado (status: ${loginResponse.status})`);
+    
+    // Buscar página de data dumps autenticado
+    console.log('📡 Buscando página de data dumps do BGG (autenticado)...');
+    const pageResponse = await client.get('https://boardgamegeek.com/data_dumps/bg_ranks', {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+      },
+      timeout: 15000
+    });
+    
+    const pageHtml = pageResponse.data;
+    
+    // Múltiplas tentativas para encontrar o link de download
+    const regexPatterns = [
+      /<a[^>]*href="([^"]*)"[^>]*>Click to download<\/a>/i,
+      /<a[^>]*href="([^"]*\.csv\.zip)"[^>]*>.*?download.*?<\/a>/i,
+      /href="(https:\/\/cf\.geekdo-files\.com\/dumps\/[^"]*\.csv\.zip)"/i,
+      /href="([^"]*bgg_db[^"]*\.csv\.zip)"/i,
+      /<a[^>]*href="([^"]*)"[^>]*class="[^"]*download[^"]*"/i
+    ];
+    
+    let downloadUrl = null;
+    for (const pattern of regexPatterns) {
+      const match = pageHtml.match(pattern);
+      if (match) {
+        downloadUrl = match[1];
+        console.log(`📥 Link encontrado: ${downloadUrl.substring(0, 100)}...`);
+        break;
+      }
+    }
+    
+    if (!downloadUrl) {
+      // Debug: salvar HTML para análise
+      console.log('❌ Link não encontrado. Primeiros 500 chars da página:');
+      console.log(pageHtml.substring(0, 500));
+      throw new Error('Não foi possível encontrar o link de download na página do BGG. Verifique se as credenciais estão corretas e se você tem acesso aos data dumps.');
+    }
+    
+    // Download do arquivo ZIP usando cliente autenticado
     console.log('📥 Fazendo download do arquivo ZIP...');
-    const zipResponse = await axios.get(downloadUrl, {
+    const zipResponse = await client.get(downloadUrl, {
       responseType: 'arraybuffer',
       timeout: 300000, // 5 minutos
       maxContentLength: 100 * 1024 * 1024, // 100MB max
