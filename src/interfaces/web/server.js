@@ -1977,9 +1977,6 @@ app.get('/api/import-bgg-games', async (req, res) => {
   try {
     console.log('🎯 Iniciando importação de dados do BGG...');
     
-    const fs = require('fs');
-    const path = require('path');
-    const AdmZip = require('adm-zip');
     const csv = require('csv-parser');
     const { Readable } = require('stream');
     
@@ -2019,8 +2016,8 @@ app.get('/api/import-bgg-games', async (req, res) => {
     
     console.log(`✅ Login realizado (status: ${loginResponse.status})`);
     
-    // Verificar se login foi bem-sucedido
-    if (loginResponse.status !== 200) {
+    // Verificar se login foi bem-sucedido (204 No Content é sucesso para esta API)
+    if (loginResponse.status !== 204 && loginResponse.status !== 200) {
       throw new Error(`Falha no login BGG: ${loginResponse.status} - ${loginResponse.statusText}`);
     }
     
@@ -2073,6 +2070,7 @@ app.get('/api/import-bgg-games', async (req, res) => {
     
     // Descompactar ZIP
     console.log('📂 Descompactando arquivo ZIP...');
+    const AdmZip = require('adm-zip');
     const zip = new AdmZip(Buffer.from(zipResponse.data));
     const zipEntries = zip.getEntries();
     
