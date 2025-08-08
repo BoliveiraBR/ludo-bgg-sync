@@ -1997,18 +1997,20 @@ app.get('/api/import-bgg-games', async (req, res) => {
     const cookieJar = new tough.CookieJar();
     const client = wrapper(axios.create({ jar: cookieJar }));
     
-    // Fazer login no BGG
-    console.log('🔐 Fazendo login no BGG...');
-    const loginResponse = await client.post('https://boardgamegeek.com/login', 
-      new URLSearchParams({
-        'username': bggLogin,
-        'password': bggPassword,
-        'B1': 'Login'
-      }), 
+    // Fazer login no BGG usando API JSON moderna
+    console.log('🔐 Fazendo login no BGG via API JSON...');
+    const loginResponse = await client.post('https://boardgamegeek.com/login/api/v1', 
+      {
+        credentials: {
+          username: bggLogin,
+          password: bggPassword
+        }
+      }, 
       {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+          'Content-Type': 'application/json',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+          'Accept': 'application/json'
         },
         maxRedirects: 5,
         timeout: 15000
@@ -2016,6 +2018,26 @@ app.get('/api/import-bgg-games', async (req, res) => {
     );
     
     console.log(`✅ Login realizado (status: ${loginResponse.status})`);
+    
+    // Verificar se login foi bem-sucedido
+    if (loginResponse.status !== 200) {
+      throw new Error(`Falha no login BGG: ${loginResponse.status} - ${loginResponse.statusText}`);
+    }
+    
+    // Log dos cookies recebidos para debug
+    const cookies = cookieJar.getCookiesSync('https://boardgamegeek.com');
+    console.log(`🍪 Cookies recebidos: ${cookies.length} cookies`);
+    cookies.forEach(cookie => {
+      console.log(`   - ${cookie.key}: ${cookie.value.substring(0, 20)}...`);
+    });
+    
+    // Verificar se temos os cookies essenciais
+    const hasSessionId = cookies.some(c => c.key === 'SessionID');
+    const hasBggUsername = cookies.some(c => c.key === 'bgg_username');
+    
+    if (!hasSessionId || !hasBggUsername) {
+      throw new Error('Login BGG falhou - cookies de sessão não recebidos. Verifique suas credenciais.');
+    }
     
     // Buscar página de data dumps autenticado
     console.log('📡 Buscando página de data dumps do BGG (autenticado)...');
@@ -2029,31 +2051,15 @@ app.get('/api/import-bgg-games', async (req, res) => {
     
     const pageHtml = pageResponse.data;
     
-    // Múltiplas tentativas para encontrar o link de download
-    const regexPatterns = [
-      /<a[^>]*href="([^"]*)"[^>]*>Click to download<\/a>/i,
-      /<a[^>]*href="([^"]*\.csv\.zip)"[^>]*>.*?download.*?<\/a>/i,
-      /href="(https:\/\/cf\.geekdo-files\.com\/dumps\/[^"]*\.csv\.zip)"/i,
-      /href="([^"]*bgg_db[^"]*\.csv\.zip)"/i,
-      /<a[^>]*href="([^"]*)"[^>]*class="[^"]*download[^"]*"/i
-    ];
+    // Procurar pelo link "Click to Download"
+    const downloadLinkMatch = pageHtml.match(/<a[^>]*href="([^"]*)"[^>]*>Click to Download<\/a>/);
     
-    let downloadUrl = null;
-    for (const pattern of regexPatterns) {
-      const match = pageHtml.match(pattern);
-      if (match) {
-        downloadUrl = match[1];
-        console.log(`📥 Link encontrado: ${downloadUrl.substring(0, 100)}...`);
-        break;
-      }
+    if (!downloadLinkMatch) {
+      throw new Error('Link "Click to Download" não encontrado na página. Verifique se suas credenciais têm acesso aos data dumps.');
     }
     
-    if (!downloadUrl) {
-      // Debug: salvar HTML para análise
-      console.log('❌ Link não encontrado. Primeiros 500 chars da página:');
-      console.log(pageHtml.substring(0, 500));
-      throw new Error('Não foi possível encontrar o link de download na página do BGG. Verifique se as credenciais estão corretas e se você tem acesso aos data dumps.');
-    }
+    const downloadUrl = downloadLinkMatch[1];
+    console.log(`📥 Link encontrado: ${downloadUrl}`);
     
     // Download do arquivo ZIP usando cliente autenticado
     console.log('📥 Fazendo download do arquivo ZIP...');
