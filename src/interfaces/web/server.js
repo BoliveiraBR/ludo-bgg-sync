@@ -2096,13 +2096,16 @@ app.get('/api/import-bgg-games', async (req, res) => {
           '--disable-background-timer-throttling',
           '--disable-backgrounding-occluded-windows',
           '--disable-renderer-backgrounding',
+          '--disable-extensions',
+          '--disable-plugins',
+          '--disable-web-security',
           '--disable-features=TranslateUI',
           '--disable-ipc-flooding-protection',
-          '--enable-features=NetworkService,NetworkServiceLogging',
-          '--force-color-profile=srgb',
+          '--memory-pressure-off',
+          '--disable-background-networking',
+          '--aggressive-cache-discard',
           '--metrics-recording-only',
           '--no-default-browser-check',
-          '--no-first-run',
           '--password-store=basic',
           '--use-mock-keychain',
           '--single-process' // Importante para AWS EB
@@ -2174,26 +2177,61 @@ app.get('/api/import-bgg-games', async (req, res) => {
       
       // Navegar para página de data dumps
       console.log('📡 Navegando para página de data dumps...');
-      await page.goto('https://boardgamegeek.com/data_dumps/bg_ranks', {
-        waitUntil: 'networkidle0',
-        timeout: 30000
-      });
       
-      // Procurar link "Click to Download" (aguardar até 30 segundos)
+      // Tentar múltiplas estratégias de carregamento
+      let pageLoaded = false;
+      const navigationStrategies = [
+        { waitUntil: 'domcontentloaded', timeout: 60000 },
+        { waitUntil: 'networkidle2', timeout: 45000 },
+        { waitUntil: 'load', timeout: 30000 }
+      ];
+      
+      for (let i = 0; i < navigationStrategies.length && !pageLoaded; i++) {
+        try {
+          console.log(`🔄 Tentativa ${i + 1}/3: Estratégia ${navigationStrategies[i].waitUntil} (${navigationStrategies[i].timeout}ms)`);
+          await page.goto('https://boardgamegeek.com/data_dumps/bg_ranks', navigationStrategies[i]);
+          pageLoaded = true;
+          console.log(`✅ Página carregada com estratégia ${navigationStrategies[i].waitUntil}`);
+        } catch (navError) {
+          console.log(`⚠️  Estratégia ${i + 1} falhou: ${navError.message}`);
+          if (i === navigationStrategies.length - 1) {
+            throw navError;
+          }
+          // Aguardar 2 segundos antes da próxima tentativa
+          await new Promise(resolve => setTimeout(resolve, 2000));
+        }
+      }
+      
+      // Procurar link "Click to Download" (aguardar até 45 segundos)
       console.log('🔍 Procurando link "Click to Download"...');
       
-      const maxWaitTime = 30000;
+      // Aguardar alguns segundos para que a página termine de carregar completamente
+      console.log('⏱️  Aguardando página estabilizar...');
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      
+      const maxWaitTime = 45000;
       const startTime = Date.now();
       
+      let attemptCount = 0;
       while (Date.now() - startTime < maxWaitTime) {
-        // Procurar por link com texto "Click to Download"
+        attemptCount++;
+        console.log(`🔍 Tentativa ${attemptCount} - Buscando links na página...`);
+        
+        // Estratégia 1: Procurar por link com texto "Click to Download"
         const clickToDownloadLink = await page.evaluate(() => {
           const links = document.querySelectorAll('a');
+          const foundLinks = [];
           for (const link of links) {
+            foundLinks.push({
+              text: link.textContent?.trim().toLowerCase() || '',
+              href: link.href || ''
+            });
             if (link.textContent && link.textContent.toLowerCase().includes('click to download')) {
               return link.href;
             }
           }
+          // Log para debug - mostrar alguns links encontrados
+          console.log('Links encontrados na página:', foundLinks.slice(0, 5));
           return null;
         });
         
@@ -2203,12 +2241,7 @@ app.get('/api/import-bgg-games', async (req, res) => {
           break;
         }
         
-        // Aguardar 2 segundos antes de tentar novamente
-        await new Promise(resolve => setTimeout(resolve, 2000));
-      }
-      
-      if (!downloadUrl) {
-        // Fallback: procurar por qualquer link S3
+        // Estratégia 2: Procurar diretamente por links S3 (mais rápido)
         const s3Link = await page.evaluate(() => {
           const links = document.querySelectorAll('a');
           for (const link of links) {
@@ -2220,11 +2253,31 @@ app.get('/api/import-bgg-games', async (req, res) => {
         });
         
         if (s3Link) {
-          console.log('✅ Link S3 encontrado como fallback');
+          console.log('✅ Link S3 encontrado diretamente!');
           downloadUrl = s3Link;
-        } else {
-          throw new Error('Link "Click to Download" não encontrado via Puppeteer após 30 segundos');
+          break;
         }
+        
+        console.log(`⏱️  Aguardando 3 segundos antes da próxima tentativa...`);
+        await new Promise(resolve => setTimeout(resolve, 3000));
+      }
+      
+      if (!downloadUrl) {
+        // Fallback final: tentar capturar o conteúdo da página para debug
+        console.log('🚨 Nenhum link encontrado! Capturando página para análise...');
+        
+        const pageContent = await page.evaluate(() => {
+          return {
+            title: document.title,
+            url: window.location.href,
+            bodyText: document.body.innerText.substring(0, 500),
+            linkCount: document.querySelectorAll('a').length
+          };
+        });
+        
+        console.log('📄 Informações da página:', JSON.stringify(pageContent, null, 2));
+        
+        throw new Error(`Link "Click to Download" não encontrado via Puppeteer após ${maxWaitTime/1000} segundos. Tentativas realizadas: ${attemptCount}`);
       }
       
     } catch (puppeteerError) {
