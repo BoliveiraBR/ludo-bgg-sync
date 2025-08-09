@@ -2301,9 +2301,6 @@ app.get('/api/import-bgg-games', async (req, res) => {
     
     console.log(`📄 Arquivo CSV encontrado: ${csvEntry.entryName}`);
     
-    // Extrair conteúdo do CSV
-    const csvContent = csvEntry.getData('utf8');
-    
     // Conectar ao banco de dados
     console.log('🗄️ Conectando ao banco de dados...');
     const dbManager = new DatabaseManager();
@@ -2314,18 +2311,19 @@ app.get('/api/import-bgg-games', async (req, res) => {
       console.log('🧹 Limpando tabela bgg_games...');
       await dbManager.client.query('TRUNCATE TABLE bgg_games');
       
-      // Processar CSV
-      console.log('📊 Processando dados do CSV...');
+      // Processar CSV com streaming real (sem carregar tudo na memória)
+      console.log('📊 Processando dados do CSV via streaming...');
       
       let processedCount = 0;
       let batchCount = 0;
-      const batchSize = 1000;
+      const batchSize = 200; // Reduzido de 1000 para 200 para usar menos memória
       let batch = [];
       
       return new Promise((resolve, reject) => {
-        const stream = Readable.from([csvContent]);
+        // Criar stream diretamente do ZIP entry (sem carregar na memória)
+        const csvStream = csvEntry.openReadStream();
         
-        stream
+        csvStream
           .pipe(csv())
           .on('data', async (row) => {
             try {
@@ -2359,12 +2357,25 @@ app.get('/api/import-bgg-games', async (req, res) => {
               
               // Processar batch quando atingir o tamanho limite
               if (batch.length >= batchSize) {
-                stream.pause();
+                csvStream.pause();
                 await processBatch(batch, dbManager);
                 batchCount++;
-                console.log(`📈 Processados ${batchCount * batchSize} registros...`);
+                // Monitorar uso de memória
+                const memUsage = process.memoryUsage();
+                const usedMB = Math.round(memUsage.heapUsed / 1024 / 1024);
+                console.log(`📈 Processados ${processedCount} registros (${Math.floor(processedCount/1000)}k) - Memória: ${usedMB}MB`);
+                
+                // Limpar batch e forçar garbage collection para liberar memória
                 batch = [];
-                stream.resume();
+                if (global.gc) {
+                  global.gc();
+                }
+                
+                // Se memória ainda alta após GC, aguardar mais tempo
+                const memAfterGC = process.memoryUsage().heapUsed / 1024 / 1024;
+                const delay = memAfterGC > 300 ? 50 : 10; // Delay maior se memória alta
+                await new Promise(resolve => setTimeout(resolve, delay));
+                csvStream.resume();
               }
               
             } catch (rowError) {
@@ -2379,13 +2390,19 @@ app.get('/api/import-bgg-games', async (req, res) => {
                 batchCount++;
               }
               
+              // Monitorar uso final de memória
+              const finalMemUsage = process.memoryUsage();
+              const finalUsedMB = Math.round(finalMemUsage.heapUsed / 1024 / 1024);
+              
               console.log(`✅ Importação concluída: ${processedCount} jogos importados`);
+              console.log(`📊 Estatísticas: ${batchCount} batches processados, memória final: ${finalUsedMB}MB`);
               
               res.json({
                 success: true,
                 message: `Importação concluída com sucesso`,
                 gamesImported: processedCount,
-                batches: batchCount
+                batches: batchCount,
+                memoryUsedMB: finalUsedMB
               });
               
               resolve();
