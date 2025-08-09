@@ -2369,21 +2369,48 @@ app.get('/api/import-bgg-games', async (req, res) => {
       
       let processedCount = 0;
       let batchCount = 0;
-      const batchSize = 200; // Reduzido de 1000 para 200 para usar menos memória
+      const batchSize = 50; // Reduzido drasticamente para evitar out of memory
       let batch = [];
       
       return new Promise((resolve, reject) => {
-        // Obter dados do CSV do ZIP
-        const csvData = csvEntry.getData();
+        // Usar streaming para não carregar todo o arquivo na memória
+        const { PassThrough } = require('stream');
+        const csvStream = new PassThrough();
         
-        // Criar stream a partir dos dados
-        const { Readable } = require('stream');
-        const csvStream = Readable.from(csvData.toString());
+        // Processar o arquivo em chunks para evitar out of memory
+        const csvData = csvEntry.getData();
+        const chunkSize = 512 * 1024; // 512KB por chunk (reduzido)
+        let offset = 0;
+        
+        const writeNextChunk = () => {
+          if (offset >= csvData.length) {
+            csvStream.end();
+            return;
+          }
+          
+          const chunk = csvData.subarray(offset, offset + chunkSize);
+          csvStream.write(chunk);
+          offset += chunkSize;
+          
+          // Usar setImmediate para não bloquear o event loop
+          setImmediate(writeNextChunk);
+        };
+        
+        writeNextChunk();
         
         csvStream
           .pipe(csv())
           .on('data', async (row) => {
             try {
+              // Monitorar memória durante processamento
+              const currentMem = process.memoryUsage().heapUsed / 1024 / 1024;
+              if (currentMem > 450) { // Se memória crítica
+                console.log(`🚨 Memória crítica (${Math.round(currentMem)}MB), pausando...`);
+                csvStream.pause();
+                if (global.gc) global.gc();
+                await new Promise(resolve => setTimeout(resolve, 200));
+                csvStream.resume();
+              }
               // Mapear campos do CSV para a tabela
               const gameData = {
                 id: parseInt(row.id) || null,
@@ -2428,10 +2455,17 @@ app.get('/api/import-bgg-games', async (req, res) => {
                   global.gc();
                 }
                 
-                // Se memória ainda alta após GC, aguardar mais tempo
-                const memAfterGC = process.memoryUsage().heapUsed / 1024 / 1024;
-                const delay = memAfterGC > 300 ? 50 : 10; // Delay maior se memória alta
-                await new Promise(resolve => setTimeout(resolve, delay));
+                // Aguardar um pouco para liberar memória
+                await new Promise(resolve => setTimeout(resolve, 10));
+                
+                // Se memória muito alta, aguardar mais tempo
+                const memAfterGC = process.memoryUsage();
+                const usedAfterGC = Math.round(memAfterGC.heapUsed / 1024 / 1024);
+                if (usedAfterGC > 400) { // Se usar mais de 400MB
+                  console.log(`⚠️  Memória alta (${usedAfterGC}MB), pausando por 100ms...`);
+                  await new Promise(resolve => setTimeout(resolve, 100));
+                }
+                
                 csvStream.resume();
               }
               
