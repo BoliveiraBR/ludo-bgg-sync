@@ -2373,8 +2373,12 @@ app.get('/api/import-bgg-games', async (req, res) => {
       let batch = [];
       
       return new Promise((resolve, reject) => {
-        // Criar stream diretamente do ZIP entry (sem carregar na memória)
-        const csvStream = csvEntry.openReadStream();
+        // Obter dados do CSV do ZIP
+        const csvData = csvEntry.getData();
+        
+        // Criar stream a partir dos dados
+        const { Readable } = require('stream');
+        const csvStream = Readable.from(csvData.toString());
         
         csvStream
           .pipe(csv())
