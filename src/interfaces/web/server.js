@@ -2369,7 +2369,7 @@ app.get('/api/import-bgg-games', async (req, res) => {
       
       let processedCount = 0;
       let batchCount = 0;
-      const batchSize = 10; // Reduzido para apenas 10 registros para evitar out of memory
+      const batchSize = 100; // Otimizado para velocidade com risco calculado
       let batch = [];
       
       return new Promise((resolve, reject) => {
@@ -2390,10 +2390,10 @@ app.get('/api/import-bgg-games', async (req, res) => {
         
         console.log(`✅ CSV salvo (${(csvData.length / 1024 / 1024).toFixed(2)}MB), iniciando streaming...`);
         
-        // Usar fs.createReadStream (mais eficiente)
+        // Usar fs.createReadStream com buffer ultra pequeno
         const csvStream = fs.createReadStream(tempFilePath, { 
           encoding: 'utf8',
-          highWaterMark: 64 * 1024 // 64KB buffer (bem pequeno)
+          highWaterMark: 16 * 1024 // 16KB buffer (ultra pequeno)
         });
         
         // Limpar arquivo temporário quando terminar
@@ -2413,12 +2413,13 @@ app.get('/api/import-bgg-games', async (req, res) => {
           .on('data', async (row) => {
             try {
               // Monitorar memória durante processamento
+              // Manter apenas controle crítico de memória
               const currentMem = process.memoryUsage().heapUsed / 1024 / 1024;
-              if (currentMem > 450) { // Se memória crítica
-                console.log(`🚨 Memória crítica (${Math.round(currentMem)}MB), pausando...`);
+              if (currentMem > 420) { // Limite crítico mais alto
+                console.log(`🚨 Memória crítica (${Math.round(currentMem)}MB), forçando GC...`);
                 csvStream.pause();
                 if (global.gc) global.gc();
-                await new Promise(resolve => setTimeout(resolve, 200));
+                await new Promise(resolve => setTimeout(resolve, 100)); // Pausa mínima
                 csvStream.resume();
               }
               // Mapear campos do CSV para a tabela
@@ -2454,10 +2455,14 @@ app.get('/api/import-bgg-games', async (req, res) => {
                 csvStream.pause();
                 await processBatch(batch, dbManager);
                 batchCount++;
-                // Monitorar uso de memória
-                const memUsage = process.memoryUsage();
-                const usedMB = Math.round(memUsage.heapUsed / 1024 / 1024);
-                console.log(`📈 Processados ${processedCount} registros (${Math.floor(processedCount/1000)}k) - Memória: ${usedMB}MB`);
+                
+                // Log progresso a cada 50 batches
+                if (batchCount % 50 === 0 || batchCount === 1) {
+                  const memUsage = process.memoryUsage();
+                  const usedMB = Math.round(memUsage.heapUsed / 1024 / 1024);
+                  const percentProgress = ((processedCount / 167635) * 100).toFixed(1);
+                  console.log(`📈 Batch ${batchCount}/1676 - ${processedCount} registros (${percentProgress}%) - Memória: ${usedMB}MB`);
+                }
                 
                 // Limpar batch e forçar garbage collection para liberar memória
                 batch = [];
@@ -2465,16 +2470,8 @@ app.get('/api/import-bgg-games', async (req, res) => {
                   global.gc();
                 }
                 
-                // Aguardar um pouco para liberar memória
-                await new Promise(resolve => setTimeout(resolve, 10));
-                
-                // Se memória muito alta, aguardar mais tempo
-                const memAfterGC = process.memoryUsage();
-                const usedAfterGC = Math.round(memAfterGC.heapUsed / 1024 / 1024);
-                if (usedAfterGC > 400) { // Se usar mais de 400MB
-                  console.log(`⚠️  Memória alta (${usedAfterGC}MB), pausando por 100ms...`);
-                  await new Promise(resolve => setTimeout(resolve, 100));
-                }
+                // Skip pausas desnecessárias - apenas GC básico
+                // Remover delays para velocidade otimizada
                 
                 csvStream.resume();
               }
