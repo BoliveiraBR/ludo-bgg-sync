@@ -2453,7 +2453,22 @@ app.get('/api/import-bgg-games', async (req, res) => {
               // Processar batch quando atingir o tamanho limite
               if (batch.length >= batchSize) {
                 csvStream.pause();
-                await processBatch(batch, dbManager);
+                
+                // Tentar processar batch com reconexão automática
+                try {
+                  await processBatch(batch, dbManager);
+                } catch (batchError) {
+                  if (batchError.message.includes('Client was closed') || 
+                      batchError.message.includes('Connection terminated')) {
+                    console.log(`🔄 Conexão perdida no batch, reconectando...`);
+                    await dbManager.disconnect();
+                    await dbManager.connect();
+                    console.log(`✅ Reconexão realizada, reprocessando batch`);
+                    await processBatch(batch, dbManager); // Retry
+                  } else {
+                    throw batchError;
+                  }
+                }
                 batchCount++;
                 
                 // Log progresso a cada 50 batches
@@ -2477,7 +2492,28 @@ app.get('/api/import-bgg-games', async (req, res) => {
               }
               
             } catch (rowError) {
-              console.warn(`⚠️ Erro ao processar linha: ${rowError.message}`);
+              // Se conexão com banco foi perdida, tentar reconectar
+              if (rowError.message.includes('Client was closed') || 
+                  rowError.message.includes('Connection terminated')) {
+                console.log(`🔄 Conexão perdida, tentando reconectar...`);
+                
+                try {
+                  await dbManager.disconnect();
+                  await dbManager.connect();
+                  console.log(`✅ Reconexão com banco realizada`);
+                  
+                  // Tentar processar a linha novamente
+                  batch.push(gameData);
+                  processedCount++;
+                } catch (reconnectError) {
+                  console.error(`❌ Erro na reconexão: ${reconnectError.message}`);
+                  csvStream.pause();
+                  reject(new Error(`Falha na reconexão com banco: ${reconnectError.message}`));
+                  return;
+                }
+              } else {
+                console.warn(`⚠️ Erro ao processar linha: ${rowError.message}`);
+              }
             }
           })
           .on('end', async () => {
