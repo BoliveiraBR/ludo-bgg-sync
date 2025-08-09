@@ -2369,34 +2369,44 @@ app.get('/api/import-bgg-games', async (req, res) => {
       
       let processedCount = 0;
       let batchCount = 0;
-      const batchSize = 50; // Reduzido drasticamente para evitar out of memory
+      const batchSize = 10; // Reduzido para apenas 10 registros para evitar out of memory
       let batch = [];
       
       return new Promise((resolve, reject) => {
-        // Usar streaming para não carregar todo o arquivo na memória
-        const { PassThrough } = require('stream');
-        const csvStream = new PassThrough();
+        // ABORDAGEM RADICAL: Salvar em arquivo temporário para usar fs.createReadStream
+        const fs = require('fs');
+        const path = require('path');
+        const os = require('os');
         
-        // Processar o arquivo em chunks para evitar out of memory
+        // Criar arquivo temporário
+        const tempDir = os.tmpdir();
+        const tempFilePath = path.join(tempDir, `bgg_data_${Date.now()}.csv`);
+        
+        console.log(`💾 Salvando CSV em arquivo temporário: ${tempFilePath}`);
+        
+        // Salvar dados do ZIP em arquivo temporário
         const csvData = csvEntry.getData();
-        const chunkSize = 512 * 1024; // 512KB por chunk (reduzido)
-        let offset = 0;
+        fs.writeFileSync(tempFilePath, csvData);
         
-        const writeNextChunk = () => {
-          if (offset >= csvData.length) {
-            csvStream.end();
-            return;
+        console.log(`✅ CSV salvo (${(csvData.length / 1024 / 1024).toFixed(2)}MB), iniciando streaming...`);
+        
+        // Usar fs.createReadStream (mais eficiente)
+        const csvStream = fs.createReadStream(tempFilePath, { 
+          encoding: 'utf8',
+          highWaterMark: 64 * 1024 // 64KB buffer (bem pequeno)
+        });
+        
+        // Limpar arquivo temporário quando terminar
+        const cleanup = () => {
+          try {
+            if (fs.existsSync(tempFilePath)) {
+              fs.unlinkSync(tempFilePath);
+              console.log(`🗑️  Arquivo temporário removido: ${tempFilePath}`);
+            }
+          } catch (cleanupError) {
+            console.warn(`⚠️ Erro ao remover arquivo temporário: ${cleanupError.message}`);
           }
-          
-          const chunk = csvData.subarray(offset, offset + chunkSize);
-          csvStream.write(chunk);
-          offset += chunkSize;
-          
-          // Usar setImmediate para não bloquear o event loop
-          setImmediate(writeNextChunk);
         };
-        
-        writeNextChunk();
         
         csvStream
           .pipe(csv())
@@ -2481,6 +2491,8 @@ app.get('/api/import-bgg-games', async (req, res) => {
                 batchCount++;
               }
               
+              cleanup(); // Limpar arquivo temporário
+              
               // Monitorar uso final de memória
               const finalMemUsage = process.memoryUsage();
               const finalUsedMB = Math.round(finalMemUsage.heapUsed / 1024 / 1024);
@@ -2501,7 +2513,10 @@ app.get('/api/import-bgg-games', async (req, res) => {
               reject(endError);
             }
           })
-          .on('error', reject);
+          .on('error', (error) => {
+            cleanup(); // Limpar arquivo temporário em caso de erro
+            reject(error);
+          });
       });
       
     } finally {
