@@ -2372,6 +2372,11 @@ app.get('/api/import-bgg-games', async (req, res) => {
       const batchSize = 100; // Otimizado para velocidade com risco calculado
       let batch = [];
       
+      // Controle de reconexão
+      let reconnectAttempts = 0;
+      const maxReconnectAttempts = 3;
+      const baseDelay = 5000; // 5 segundos
+      
       return new Promise((resolve, reject) => {
         // ABORDAGEM RADICAL: Salvar em arquivo temporário para usar fs.createReadStream
         const fs = require('fs');
@@ -2459,12 +2464,26 @@ app.get('/api/import-bgg-games', async (req, res) => {
                   await processBatch(batch, dbManager);
                 } catch (batchError) {
                   if (batchError.message.includes('Client was closed') || 
-                      batchError.message.includes('Connection terminated')) {
-                    console.log(`🔄 Conexão perdida no batch, reconectando...`);
+                      batchError.message.includes('Connection terminated') ||
+                      batchError.message.includes('too many clients') ||
+                      batchError.message.includes('connection slots are reserved')) {
+                    
+                    if (reconnectAttempts >= maxReconnectAttempts) {
+                      console.error(`❌ Limite de reconexões atingido no batch`);
+                      throw new Error(`Batch falhou após ${maxReconnectAttempts} tentativas: ${batchError.message}`);
+                    }
+                    
+                    reconnectAttempts++;
+                    const delay = baseDelay * Math.pow(2, reconnectAttempts - 1);
+                    console.log(`🔄 Batch - Tentativa ${reconnectAttempts}/${maxReconnectAttempts} em ${delay/1000}s...`);
+                    
+                    await new Promise(resolve => setTimeout(resolve, delay));
                     await dbManager.disconnect();
+                    await new Promise(resolve => setTimeout(resolve, 1000));
                     await dbManager.connect();
-                    console.log(`✅ Reconexão realizada, reprocessando batch`);
+                    console.log(`✅ Reconexão batch realizada, reprocessando...`);
                     await processBatch(batch, dbManager); // Retry
+                    reconnectAttempts = 0; // Reset após sucesso
                   } else {
                     throw batchError;
                   }
@@ -2492,25 +2511,45 @@ app.get('/api/import-bgg-games', async (req, res) => {
               }
               
             } catch (rowError) {
-              // Se conexão com banco foi perdida, tentar reconectar
+              // Se conexão com banco foi perdida ou limite atingido
               if (rowError.message.includes('Client was closed') || 
-                  rowError.message.includes('Connection terminated')) {
-                console.log(`🔄 Conexão perdida, tentando reconectar...`);
+                  rowError.message.includes('Connection terminated') ||
+                  rowError.message.includes('too many clients') ||
+                  rowError.message.includes('connection slots are reserved')) {
                 
-                try {
-                  await dbManager.disconnect();
-                  await dbManager.connect();
-                  console.log(`✅ Reconexão com banco realizada`);
-                  
-                  // Tentar processar a linha novamente
-                  batch.push(gameData);
-                  processedCount++;
-                } catch (reconnectError) {
-                  console.error(`❌ Erro na reconexão: ${reconnectError.message}`);
+                if (reconnectAttempts >= maxReconnectAttempts) {
+                  console.error(`❌ Limite de ${maxReconnectAttempts} tentativas de reconexão atingido`);
                   csvStream.pause();
-                  reject(new Error(`Falha na reconexão com banco: ${reconnectError.message}`));
+                  reject(new Error(`Muitas tentativas de reconexão falharam: ${rowError.message}`));
                   return;
                 }
+                
+                reconnectAttempts++;
+                const delay = baseDelay * Math.pow(2, reconnectAttempts - 1); // Delay exponencial
+                console.log(`🔄 Tentativa ${reconnectAttempts}/${maxReconnectAttempts} - Aguardando ${delay/1000}s antes de reconectar...`);
+                
+                csvStream.pause();
+                
+                setTimeout(async () => {
+                  try {
+                    await dbManager.disconnect();
+                    await new Promise(resolve => setTimeout(resolve, 1000)); // Aguarda 1s
+                    await dbManager.connect();
+                    console.log(`✅ Reconexão ${reconnectAttempts} realizada com sucesso`);
+                    
+                    // Reset contador após sucesso
+                    reconnectAttempts = 0;
+                    
+                    // Tentar processar a linha novamente
+                    batch.push(gameData);
+                    processedCount++;
+                    csvStream.resume();
+                  } catch (reconnectError) {
+                    console.error(`❌ Erro na reconexão ${reconnectAttempts}: ${reconnectError.message}`);
+                    csvStream.resume(); // Continua processamento mesmo com erro
+                  }
+                }, delay);
+                
               } else {
                 console.warn(`⚠️ Erro ao processar linha: ${rowError.message}`);
               }
